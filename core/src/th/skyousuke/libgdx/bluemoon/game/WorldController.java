@@ -14,20 +14,22 @@
  * limitations under the License.
  ****************************************************************/
 
-package th.skyousuke.libgdx.bluemoon.desktop;
+package th.skyousuke.libgdx.bluemoon.game;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.InputAdapter;
 
-import th.skyousuke.libgdx.bluemoon.BlueMoon;
-import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
+import th.skyousuke.libgdx.bluemoon.utils.CameraHelper;
 
-public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Blue moon";
-        config.width = WorldRenderer.SCENE_WIDTH;
-        config.height = WorldRenderer.SCENE_HEIGHT;
-		new LwjglApplication(new BlueMoon(), config);
-	}
+public class WorldController extends InputAdapter {
+
+    public CameraHelper cameraHelper;
+
+    public WorldController() {
+        init();
+    }
+
+    public void init() {
+
+    }
+
 }

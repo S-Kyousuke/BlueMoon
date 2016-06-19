@@ -14,20 +14,41 @@
  * limitations under the License.
  ****************************************************************/
 
-package th.skyousuke.libgdx.bluemoon.desktop;
+package th.skyousuke.libgdx.bluemoon.screens;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.Game;
 
-import th.skyousuke.libgdx.bluemoon.BlueMoon;
+import th.skyousuke.libgdx.bluemoon.game.WorldController;
 import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
 
-public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Blue moon";
-        config.width = WorldRenderer.SCENE_WIDTH;
-        config.height = WorldRenderer.SCENE_HEIGHT;
-		new LwjglApplication(new BlueMoon(), config);
-	}
+public class WorldScreen extends AbstractGameScreen {
+
+    private WorldController worldController;
+    private WorldRenderer worldRenderer;
+
+    public WorldScreen(Game game) {
+        super(game);
+    }
+
+    @Override
+    public void show() {
+        worldController = new WorldController();
+        worldRenderer = new WorldRenderer(worldController);
+    }
+
+    @Override
+    public void render(float deltaTime) {
+        worldRenderer.render();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        worldRenderer.resize(width, height);
+    }
+
+    @Override
+    public void hide() {
+        worldRenderer.dispose();
+    }
+
 }
