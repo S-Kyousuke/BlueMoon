@@ -20,7 +20,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import th.skyousuke.libgdx.bluemoon.game.objects.AbstractGameObject;
+import th.skyousuke.libgdx.bluemoon.game.object.AbstractGameObject;
 
 public class CameraHelper {
 
@@ -52,12 +52,12 @@ public class CameraHelper {
         setZoom(zoom + amount);
     }
 
-    public void setZoom (float zoom) {
-        this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
-    }
-
     public float getZoom () {
         return zoom;
+    }
+
+    public void setZoom(float zoom) {
+        this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
     }
 
     public void applyTo (OrthographicCamera camera) {
@@ -67,12 +67,12 @@ public class CameraHelper {
         camera.update();
     }
 
-    public void setTarget (AbstractGameObject target) {
-        this.target = target;
-    }
-
     public AbstractGameObject getTarget () {
         return target;
+    }
+
+    public void setTarget(AbstractGameObject target) {
+        this.target = target;
     }
 
     public boolean hasTarget () {

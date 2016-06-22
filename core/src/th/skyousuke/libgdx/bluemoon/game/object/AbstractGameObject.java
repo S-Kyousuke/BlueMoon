@@ -14,7 +14,7 @@
  * limitations under the License.
  ****************************************************************/
 
-package th.skyousuke.libgdx.bluemoon.game.objects;
+package th.skyousuke.libgdx.bluemoon.game.object;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,17 +26,17 @@ import th.skyousuke.libgdx.bluemoon.utils.collisions.NullCollsionCheck;
 
 public abstract class AbstractGameObject {
 
-    protected Vector2 scale;
+    protected Vector2 friction;
     protected CollisionCheck collisionCheck;
 
     private Vector2 position;
     private Vector2 dimension;
     private Vector2 origin;
+    private Vector2 scale;
+    private Vector2 velocity;
+    private Vector2 acceleration;
     private Rectangle bounds;
     private float rotation;
-    private Vector2 velocity;
-    private Vector2 friction;
-    private Vector2 acceleration;
 
     public AbstractGameObject (float width, float height) {
         position = new Vector2();
@@ -74,8 +74,6 @@ public abstract class AbstractGameObject {
         }
     }
 
-    //public abstract void render (SpriteBatch batch);
-
     protected void responseCollisionX (float oldPositionX) {
         setPositionX(oldPositionX);
     }
@@ -83,6 +81,8 @@ public abstract class AbstractGameObject {
     protected void responseCollisionY (float oldPositionY) {
         setPositionY(oldPositionY);
     }
+
+    public abstract void render(SpriteBatch batch);
 
     protected void render(SpriteBatch batch, TextureRegion region) {
         batch.draw(region,
@@ -135,7 +135,11 @@ public abstract class AbstractGameObject {
         return origin;
     }
 
-    protected void setDimension(float width, float height) {
+    public void setScale(float x, float y) {
+        scale.set(x, y);
+    }
+
+    private void setDimension(float width, float height) {
         dimension.x =  width * scale.x;
         dimension.y =  height * scale.y;
 

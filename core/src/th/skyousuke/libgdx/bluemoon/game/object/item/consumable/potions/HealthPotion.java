@@ -1,12 +1,12 @@
 /****************************************************************
  * Copyright 2016 Surasek Nusati <surasek@gmail.com>
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,20 +14,16 @@
  * limitations under the License.
  ****************************************************************/
 
-package th.skyousuke.libgdx.bluemoon.desktop;
+package th.skyousuke.libgdx.bluemoon.game.object.item.consumable.potions;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import th.skyousuke.libgdx.bluemoon.BlueMoon;
-import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
+import th.skyousuke.libgdx.bluemoon.game.object.item.consumable.AbstractConsumable;
 
-public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Blue Moon";
-		config.width = WorldRenderer.SCENE_WIDTH;
-		config.height = WorldRenderer.SCENE_HEIGHT;
-		new LwjglApplication(new BlueMoon(), config);
-	}
+public class HealthPotion extends AbstractConsumable {
+
+    public HealthPotion(TextureAtlas atlas) {
+        super(atlas);
+    }
+
 }

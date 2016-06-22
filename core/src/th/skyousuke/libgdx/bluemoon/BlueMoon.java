@@ -24,6 +24,7 @@ public class BlueMoon extends Game {
 
 	@Override
 	public void create () {
+        Gdx.app.log("", "START APPLICATION");
 
 	}
 
