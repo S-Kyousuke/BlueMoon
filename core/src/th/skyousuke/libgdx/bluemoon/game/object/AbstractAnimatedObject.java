@@ -29,6 +29,7 @@ import java.util.Comparator;
 
 public abstract class AbstractAnimatedObject extends AbstractGameObject {
 
+
     private IntMap<Animation> animations;
     private int currentAnimation;
 
@@ -42,9 +43,9 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         super(atlas.getRegions().first().getRegionWidth(),
                 atlas.getRegions().first().getRegionHeight());
 
-        animations = new IntMap<Animation>();
+        animations = new IntMap<>();
 
-        regions = new Array<AtlasRegion>(atlas.getRegions());
+        regions = new Array<>(atlas.getRegions());
         regions.sort(new regionComparator());
 
         resetAnimation();
@@ -62,10 +63,10 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         render(batch, currentRegion);
     }
 
-    protected void addAnimation(AnimationList name, float frameDuration, int regionStart, int size, PlayMode mode) {
-        Array<AtlasRegion> animationRegions = new Array<AtlasRegion>();
+    protected void addAnimation(int key, float frameDuration, int regionStart, int size, PlayMode mode) {
+        Array<AtlasRegion> animationRegions = new Array<>();
         animationRegions.addAll(regions, regionStart, size);
-        animations.put(name.ordinal(), new Animation(frameDuration, animationRegions, mode));
+        animations.put(key, new Animation(frameDuration, animationRegions, mode));
     }
 
     protected abstract void setAnimation();
@@ -82,29 +83,18 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         animationTime = 0.0f;
     }
 
-    public void setCurrentAnimation(AnimationList name) {
+    public void setCurrentAnimation(int key) {
         resetAnimation();
-        currentAnimation = name.ordinal();
+        currentAnimation = key;
     }
 
-    public boolean isAnimationFinished(AnimationList name) {
-        return animations.get(name.ordinal()).isAnimationFinished(animationTime);
+    public boolean isAnimationFinished(int key) {
+        return animations.get(key).isAnimationFinished(animationTime);
     }
 
     protected void updateKeyFrame(float deltaTime) {
         if (!freeze) animationTime += deltaTime;
         currentRegion = animations.get(currentAnimation).getKeyFrame(animationTime);
-    }
-
-    public enum AnimationList {
-        IDLE_LEFT,
-        IDLE_RIGHT,
-        IDLE_UP,
-        IDLE_DOWN,
-        WALK_LEFT,
-        WALK_RIGHT,
-        WALK_UP,
-        WALK_DOWN
     }
 
     private static class regionComparator implements Comparator<AtlasRegion> {
