@@ -18,21 +18,21 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.math.MathUtils;
 
-public class CharacterStatus {
+public class CharacterState {
 
-    private float[] status;
+    private float[] allState;
     private CharacterAttribute characterAttribute;
 
-    public CharacterStatus(CharacterAttribute characterAttribute) {
-        status = new float[StatusType.values().length];
+    public CharacterState(CharacterAttribute characterAttribute) {
+        allState = new float[StateType.values().length];
         this.characterAttribute = characterAttribute;
     }
 
-    public void setStatus(StatusType statusType, float value) {
+    public void setState(StateType stateType, float value) {
         float minValue = 0f;
         float maxValue;
 
-        switch (statusType) {
+        switch (stateType) {
             case HEALTH:
                 maxValue = characterAttribute.getDerived(CharacterAttribute.DerivedAttribute.MAX_HEALTH);
                 break;
@@ -49,18 +49,18 @@ public class CharacterStatus {
                 maxValue = Float.MAX_VALUE;
         }
 
-        status[statusType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
+        allState[stateType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
     }
 
-    public float getStatus(StatusType statusType) {
-        return status[statusType.ordinal()];
+    public float getState(StateType stateType) {
+        return allState[stateType.ordinal()];
     }
 
-    public void changeStatus(StatusType statusType, float changeValue) {
-        setStatus(statusType, getStatus(statusType) + changeValue);
+    public void addValue(StateType stateType, float changeValue) {
+        setState(stateType, getState(stateType) + changeValue);
     }
 
-    public enum StatusType {
+    public enum StateType {
         HEALTH,
         MANA,
         STAMINA,

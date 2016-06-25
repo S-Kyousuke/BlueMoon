@@ -17,32 +17,94 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute.DerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState.StateType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     private static final float FRICTION = 500f;
 
-    protected CharacterStatus status;
+    protected Direction viewDirection;
+    protected boolean moveable;
+
+    protected CharacterState state;
     protected CharacterAttribute attribute;
+    protected Array<AbstractEffect> effects;
 
     public AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
 
         attribute = new CharacterAttribute();
-        status = new CharacterStatus(attribute);
+        state = new CharacterState(attribute);
+        effects = new Array<>();
+
+        viewDirection = Direction.DOWN;
+        moveable = true;
 
         friction.set(FRICTION, FRICTION);
     }
 
     @Override
     public void update(float deltaTime) {
-        super.update(deltaTime);
 
-        // Fullness drain
-        status.changeStatus(CharacterStatus.StatusType.FULLNESS, -attribute.getDerived(CharacterAttribute
-                .DerivedAttribute.FULLNESS_DRAIN) * deltaTime);
+        //Apply any effects on character
+        drainFullness(deltaTime);
+        for (AbstractEffect effect : effects) {
+            effect.apply(deltaTime);
+        }
+
+        // Moving Logic
+        super.update(deltaTime);
     }
+
+    public void move(Direction direction) {
+
+        // Exit method if can't move.
+        if (!moveable) return;
+
+        viewDirection = direction;
+        float movingSpeed = attribute.getDerived(DerivedAttribute.MOVING_SPEED);
+        switch (direction) {
+            case LEFT:
+                velocity.x = -movingSpeed;
+                break;
+            case RIGHT:
+                velocity.x = movingSpeed;
+                break;
+            case UP:
+                velocity.y = movingSpeed;
+                break;
+            case DOWN:
+                velocity.y = -movingSpeed;
+                break;
+        }
+        velocity.setLength(movingSpeed);
+    }
+
+    public void changeState(StateType stateType, float value) {
+        state.addValue(stateType, value);
+    }
+
+    public void drainFullness(float deltaTime) {
+        changeState(StateType.FULLNESS, -attribute.getDerived(DerivedAttribute.FULLNESS_DRAIN) * deltaTime);
+    }
+
+    public CharacterAttribute getAttribute() {
+        return attribute;
+    }
+
+    public CharacterState getState() {
+        return state;
+    }
+
+    public Direction getViewDirection() {
+        return viewDirection;
+    }
+
 
 }

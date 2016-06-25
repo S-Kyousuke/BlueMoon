@@ -27,16 +27,15 @@ import th.skyousuke.libgdx.bluemoon.utils.collisions.NullCollsionCheck;
 public abstract class AbstractGameObject {
 
     protected Vector2 friction;
+    protected Vector2 position;
+    protected Vector2 dimension;
+    protected Vector2 origin;
+    protected Vector2 scale;
+    protected Vector2 velocity;
+    protected Vector2 acceleration;
+    protected Rectangle bounds;
+    protected float rotation;
     protected CollisionCheck collisionCheck;
-
-    private Vector2 position;
-    private Vector2 dimension;
-    private Vector2 origin;
-    private Vector2 scale;
-    private Vector2 velocity;
-    private Vector2 acceleration;
-    private Rectangle bounds;
-    private float rotation;
 
     public AbstractGameObject (float width, float height) {
         position = new Vector2();
@@ -52,7 +51,7 @@ public abstract class AbstractGameObject {
         collisionCheck = new NullCollsionCheck();
 
         if (width == 0 || height == 0)
-            throw new IllegalArgumentException("Invaild object dimension");
+            throw new IllegalArgumentException("Invalid object dimension");
         setDimension(width, height);
     }
 

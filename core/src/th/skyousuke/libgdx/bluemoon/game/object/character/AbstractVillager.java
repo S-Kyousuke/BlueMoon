@@ -16,10 +16,12 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-public abstract class AbstractEffect {
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-    private float duration;
+public abstract class AbstractVillager extends AbstractCharacter {
 
-    public abstract void applyTo(AbstractCharacter character);
+    public AbstractVillager(TextureAtlas atlas) {
+        super(atlas);
+    }
 
 }

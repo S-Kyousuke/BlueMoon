@@ -16,21 +16,24 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import com.badlogic.gdx.utils.Array;
+
 public class CharacterAttribute {
 
     // 2 length array for base value and additional value
 
     private int[] basePrimaryAttribute;
-    private int[] additionalPrimaryAttribute;
     private float[] baseDerivedAttribute;
-    private float[] additionalDerivedAttribute;
+
+    private Array<int[]> additionalPrimaryAttribute;
+    private Array<float[]> additionalDerivedAttribute;
 
     public CharacterAttribute() {
         basePrimaryAttribute = new int[PrimaryAttribute.values().length];
-        additionalPrimaryAttribute = new int[PrimaryAttribute.values().length];
-
         baseDerivedAttribute = new float[DerivedAttribute.values().length];
-        additionalDerivedAttribute = new float[DerivedAttribute.values().length];
+
+        additionalPrimaryAttribute = new Array<>();
+        additionalDerivedAttribute = new Array<>();
 
         // Initialize Attribute
         for (PrimaryAttribute primaryAttribute : PrimaryAttribute.values()) {
@@ -119,53 +122,64 @@ public class CharacterAttribute {
         calculateBaseDerived();
     }
 
-    // Calculate derived value from formula in GDD
-
-    public void setAdditionalPrimary(PrimaryAttribute primaryAttribute, int value) {
-        additionalPrimaryAttribute[primaryAttribute.ordinal()] = value;
-        calculateBaseDerived();
-    }
-
     //  Set/Change value methods
-
-    public void setAdditionalDerived(DerivedAttribute derivedAttribute, float value) {
-        baseDerivedAttribute[derivedAttribute.ordinal()] = value;
-    }
 
     public void changeBasePrimary(PrimaryAttribute primaryAttribute, int changeValue) {
         setBasePrimary(primaryAttribute, getBasePrimary(primaryAttribute) + changeValue);
     }
 
-    public void changeAdditionalPrimary(PrimaryAttribute primaryAttribute, int changeValue) {
-        setAdditionalPrimary(primaryAttribute, getAdditionalPrimary(primaryAttribute) + changeValue);
+    public void addAdditionalPrimary(int[] value) {
+        if (value.length != PrimaryAttribute.values().length) {
+            throw new IllegalArgumentException("addAdditionalPrimary: Invalid array size!");
+        }
+        additionalPrimaryAttribute.add(value);
     }
 
-    public void changeAdditionalDerived(DerivedAttribute derivedAttribute, float changeValue) {
-        setAdditionalDerived(derivedAttribute, getAdditionalDerived(derivedAttribute) + changeValue);
+    public void addAdditionalDerived(float[] value) {
+        if (value.length != DerivedAttribute.values().length) {
+            throw new IllegalArgumentException("addAdditionalDerived: Invalid array size!");
+        }
+        additionalDerivedAttribute.add(value);
+    }
+
+    public void removeAdditionalPrimary(int[] value) {
+        additionalPrimaryAttribute.removeValue(value, true);
+    }
+
+    public void removeAdditionalDerived(float[] value) {
+        additionalDerivedAttribute.removeValue(value, true);
     }
 
     public int getBasePrimary(PrimaryAttribute primaryAttribute) {
         return basePrimaryAttribute[primaryAttribute.ordinal()];
     }
 
-    public int getAdditionalPrimary(PrimaryAttribute primaryAttribute) {
-        return additionalPrimaryAttribute[primaryAttribute.ordinal()];
+    public int getTotalAdditionalPrimary(PrimaryAttribute primaryAttribute) {
+        int totalAdditionalPrimary = 0;
+        for (int[] additionalPrimary : additionalPrimaryAttribute) {
+            totalAdditionalPrimary += additionalPrimary[primaryAttribute.ordinal()];
+        }
+        return totalAdditionalPrimary;
     }
 
     public int getPrimary(PrimaryAttribute primaryAttribute) {
-        return getBasePrimary(primaryAttribute) + getAdditionalPrimary(primaryAttribute);
+        return getBasePrimary(primaryAttribute) + getTotalAdditionalPrimary(primaryAttribute);
     }
 
     public float getBaseDerived(DerivedAttribute derivedAttribute) {
         return baseDerivedAttribute[derivedAttribute.ordinal()];
     }
 
-    public float getAdditionalDerived(DerivedAttribute derivedAttribute) {
-        return additionalDerivedAttribute[derivedAttribute.ordinal()];
+    public float getTotalAdditionalDerived(DerivedAttribute derivedAttribute) {
+        float totalAdditionalDerived = 0;
+        for (float[] additionalDerived : additionalDerivedAttribute) {
+            totalAdditionalDerived += additionalDerived[derivedAttribute.ordinal()];
+        }
+        return totalAdditionalDerived;
     }
 
     public float getDerived(DerivedAttribute derivedAttribute) {
-        return getBaseDerived(derivedAttribute) + getAdditionalDerived(derivedAttribute);
+        return getBaseDerived(derivedAttribute) + getTotalAdditionalDerived(derivedAttribute);
     }
 
     public enum PrimaryAttribute {

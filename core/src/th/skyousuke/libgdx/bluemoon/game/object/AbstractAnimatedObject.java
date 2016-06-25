@@ -29,7 +29,6 @@ import java.util.Comparator;
 
 public abstract class AbstractAnimatedObject extends AbstractGameObject {
 
-
     private IntMap<Animation> animations;
     private int currentAnimation;
 
