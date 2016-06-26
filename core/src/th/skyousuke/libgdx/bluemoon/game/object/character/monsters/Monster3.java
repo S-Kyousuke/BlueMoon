@@ -26,8 +26,4 @@ public class Monster3 extends AbstractCharacter {
 
     }
 
-    @Override
-    protected void setAnimation() {
-    }
-
 }

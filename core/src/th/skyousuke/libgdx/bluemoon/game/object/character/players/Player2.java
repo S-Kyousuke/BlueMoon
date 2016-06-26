@@ -27,8 +27,4 @@ public class Player2 extends AbstractCharacter {
 
     }
 
-    @Override
-    protected void setAnimation() {
-    }
-
 }

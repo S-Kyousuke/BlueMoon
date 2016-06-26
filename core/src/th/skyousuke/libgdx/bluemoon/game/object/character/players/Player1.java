@@ -16,18 +16,24 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 
-import th.skyousuke.libgdx.bluemoon.game.Assets;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import com.badlogic.gdx.graphics.g2d.Animation;
 
-public class Player1 extends AbstractCharacter {
+import th.skyousuke.libgdx.bluemoon.game.Assets;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
+
+public class Player1 extends AbstractPlayer {
 
     public Player1() {
         super(Assets.instance.player1Altas);
+
+        addAnimation(AnimationKey.WALK_DOWN, 0.25f, 0, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_UP, 0.25f, 4, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_LEFT, 0.25f, 8, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_RIGHT, 0.25f, 12, 4, Animation.PlayMode.LOOP);
     }
 
     @Override
-    protected void setAnimation() {
+    public void interact() {
 
     }
-
 }

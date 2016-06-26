@@ -27,8 +27,4 @@ public class Villager3 extends AbstractCharacter {
 
     }
 
-    @Override
-    protected void setAnimation() {
-    }
-
 }

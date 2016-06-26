@@ -47,6 +47,7 @@ public abstract class AbstractGameObject {
         velocity = new Vector2();
         friction = new Vector2();
         acceleration = new Vector2();
+        bounds = new Rectangle();
 
         collisionCheck = new NullCollsionCheck();
 

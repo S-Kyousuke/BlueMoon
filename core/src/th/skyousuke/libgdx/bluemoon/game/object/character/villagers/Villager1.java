@@ -24,11 +24,6 @@ public class Villager1 extends AbstractCharacter {
     public Villager1() {
         super(Assets.instance.villager1Altas);
 
-
-    }
-
-    @Override
-    protected void setAnimation() {
     }
 
 }

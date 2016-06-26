@@ -17,25 +17,21 @@
 package th.skyousuke.libgdx.bluemoon;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+
+import th.skyousuke.libgdx.bluemoon.game.Assets;
+import th.skyousuke.libgdx.bluemoon.screens.WorldScreen;
 
 public class BlueMoon extends Game {
 
 	@Override
 	public void create () {
-        Gdx.app.log("", "START APPLICATION");
+        Assets.instance.init();
 
-	}
-
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        setScreen(new WorldScreen(this));
 	}
 
 	@Override
     public void dispose () {
-
+        Assets.instance.dispose();
     }
 }

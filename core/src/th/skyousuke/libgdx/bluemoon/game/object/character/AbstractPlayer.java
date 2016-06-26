@@ -24,4 +24,6 @@ public abstract class AbstractPlayer extends AbstractCharacter {
         super(atlas);
     }
 
+    public abstract void interact();
+
 }

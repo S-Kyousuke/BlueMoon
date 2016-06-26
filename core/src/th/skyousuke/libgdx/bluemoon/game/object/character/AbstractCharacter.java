@@ -30,11 +30,13 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     private static final float FRICTION = 500f;
 
     protected Direction viewDirection;
-    protected boolean moveable;
+    protected boolean movable;
 
     protected CharacterState state;
     protected CharacterAttribute attribute;
     protected Array<AbstractEffect> effects;
+
+
 
     public AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
@@ -44,7 +46,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         effects = new Array<>();
 
         viewDirection = Direction.DOWN;
-        moveable = true;
+        movable = true;
 
         friction.set(FRICTION, FRICTION);
     }
@@ -65,7 +67,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     public void move(Direction direction) {
 
         // Exit method if can't move.
-        if (!moveable) return;
+        if (!movable) return;
 
         viewDirection = direction;
         float movingSpeed = attribute.getDerived(DerivedAttribute.MOVING_SPEED);
@@ -85,6 +87,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         }
         velocity.setLength(movingSpeed);
     }
+
 
     public void changeState(StateType stateType, float value) {
         state.addValue(stateType, value);
@@ -106,5 +109,25 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         return viewDirection;
     }
 
+
+    @Override
+    protected void updateAnimation() {
+
+        switch (viewDirection) {
+            case LEFT:
+                setAnimation(AnimationKey.WALK_LEFT);
+                break;
+            case RIGHT:
+                setAnimation(AnimationKey.WALK_RIGHT);
+                break;
+            case UP:
+                setAnimation(AnimationKey.WALK_UP);
+                break;
+            case DOWN:
+                setAnimation(AnimationKey.WALK_DOWN);
+                break;
+        }
+
+    }
 
 }

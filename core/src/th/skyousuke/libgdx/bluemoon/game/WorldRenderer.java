@@ -56,6 +56,8 @@ public class WorldRenderer implements Disposable {
         batch.setProjectionMatrix(camera.combined);
         tiledRenderer.setView(camera);
         shapeRenderer.setProjectionMatrix(camera.combined);
+
+        worldController.level.render(batch, tiledRenderer, shapeRenderer);
     }
 
     public void resize(int width, int height) {

@@ -17,6 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
 import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
@@ -38,6 +40,10 @@ public class WorldScreen extends AbstractGameScreen {
 
     @Override
     public void render(float deltaTime) {
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        worldController.update(deltaTime);
         worldRenderer.render();
     }
 

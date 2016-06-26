@@ -38,6 +38,13 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
     private float animationTime;
     private boolean freeze;
 
+    public enum AnimationKey {
+        WALK_LEFT,
+        WALK_RIGHT,
+        WALK_UP,
+        WALK_DOWN
+    }
+
     public AbstractAnimatedObject(TextureAtlas atlas) {
         super(atlas.getRegions().first().getRegionWidth(),
                 atlas.getRegions().first().getRegionHeight());
@@ -53,7 +60,7 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
 
     @Override
     public void update(float deltaTime) {
-        setAnimation();
+        updateAnimation();
         updateKeyFrame(deltaTime);
         super.update(deltaTime);
     }
@@ -62,13 +69,14 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         render(batch, currentRegion);
     }
 
-    protected void addAnimation(int key, float frameDuration, int regionStart, int size, PlayMode mode) {
+    protected void addAnimation(AnimationKey key, float frameDuration, int regionStart, int size, PlayMode mode) {
         Array<AtlasRegion> animationRegions = new Array<>();
         animationRegions.addAll(regions, regionStart, size);
-        animations.put(key, new Animation(frameDuration, animationRegions, mode));
+        animations.put(key.ordinal(), new Animation(frameDuration, animationRegions, mode));
+        setAnimation(key);
     }
 
-    protected abstract void setAnimation();
+    protected abstract void updateAnimation();
 
     protected void freezeAnimation() {
         freeze = true;
@@ -82,18 +90,27 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         animationTime = 0.0f;
     }
 
-    public void setCurrentAnimation(int key) {
-        resetAnimation();
-        currentAnimation = key;
+    public void setAnimation(AnimationKey key) {
+        if (!isValidKey(key)) {
+            throw new IllegalArgumentException("setAnimation: Invalid Key!");
+        }
+        currentAnimation = key.ordinal();
     }
 
-    public boolean isAnimationFinished(int key) {
-        return animations.get(key).isAnimationFinished(animationTime);
+    public boolean isAnimationFinished(AnimationKey key) {
+        if (!isValidKey(key)) {
+            throw new IllegalArgumentException("isAnimationFinished: Invalid Key!");
+        }
+        return animations.get(key.ordinal()).isAnimationFinished(animationTime);
     }
 
     protected void updateKeyFrame(float deltaTime) {
         if (!freeze) animationTime += deltaTime;
         currentRegion = animations.get(currentAnimation).getKeyFrame(animationTime);
+    }
+
+    private boolean isValidKey(AnimationKey key) {
+        return animations.containsKey(key.ordinal());
     }
 
     private static class regionComparator implements Comparator<AtlasRegion> {
