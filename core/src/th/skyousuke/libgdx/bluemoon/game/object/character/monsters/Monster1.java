@@ -26,5 +26,8 @@ public class Monster1 extends AbstractCharacter {
 
     }
 
-
+    @Override
+    protected String getName() {
+        return "Monster1";
+    }
 }

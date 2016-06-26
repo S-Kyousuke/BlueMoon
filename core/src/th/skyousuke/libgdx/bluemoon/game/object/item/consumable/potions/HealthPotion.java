@@ -26,4 +26,9 @@ public class HealthPotion extends AbstractConsumable {
         super(atlas);
     }
 
+    @Override
+    protected String getName() {
+        return "Health Potion";
+    }
+
 }

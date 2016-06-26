@@ -16,7 +16,11 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
+import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 public abstract class AbstractPlayer extends AbstractCharacter {
 
@@ -25,5 +29,15 @@ public abstract class AbstractPlayer extends AbstractCharacter {
     }
 
     public abstract void interact();
+
+    public void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) move(Direction.UP);
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) move(Direction.DOWN);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) move(Direction.LEFT);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) move(Direction.RIGHT);
+        //if (Gdx.input.isKeyPressed(Input.Keys.Z));
+        //if (Gdx.input.isKeyPressed(Input.Keys.X));
+        //if (Gdx.input.isKeyPressed(Input.Keys.C));
+    }
 
 }

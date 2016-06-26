@@ -16,12 +16,12 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 
@@ -33,12 +33,15 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
     private int currentAnimation;
 
     private Array<AtlasRegion> regions;
-    private TextureRegion currentRegion;
 
     private float animationTime;
     private boolean freeze;
 
     public enum AnimationKey {
+        IDLE_LEFT,
+        IDLE_RIGHT,
+        IDLE_UP,
+        IDLE_DOWN,
         WALK_LEFT,
         WALK_RIGHT,
         WALK_UP,
@@ -61,15 +64,18 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
     @Override
     public void update(float deltaTime) {
         updateAnimation();
-        updateKeyFrame(deltaTime);
+        if (!freeze) animationTime += deltaTime;
         super.update(deltaTime);
     }
 
     public void render(SpriteBatch batch) {
-        render(batch, currentRegion);
+        render(batch, animations.get(currentAnimation).getKeyFrame(animationTime));
     }
 
     protected void addAnimation(AnimationKey key, float frameDuration, int regionStart, int size, PlayMode mode) {
+        if (hasKey(key)) {
+            Gdx.app.error(getName(), String.format("addAnimation() ERROR: Duplicate Key %s", key.name()));
+        }
         Array<AtlasRegion> animationRegions = new Array<>();
         animationRegions.addAll(regions, regionStart, size);
         animations.put(key.ordinal(), new Animation(frameDuration, animationRegions, mode));
@@ -91,25 +97,14 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
     }
 
     public void setAnimation(AnimationKey key) {
-        if (!isValidKey(key)) {
-            throw new IllegalArgumentException("setAnimation: Invalid Key!");
-        }
         currentAnimation = key.ordinal();
     }
 
     public boolean isAnimationFinished(AnimationKey key) {
-        if (!isValidKey(key)) {
-            throw new IllegalArgumentException("isAnimationFinished: Invalid Key!");
-        }
         return animations.get(key.ordinal()).isAnimationFinished(animationTime);
     }
 
-    protected void updateKeyFrame(float deltaTime) {
-        if (!freeze) animationTime += deltaTime;
-        currentRegion = animations.get(currentAnimation).getKeyFrame(animationTime);
-    }
-
-    private boolean isValidKey(AnimationKey key) {
+    private boolean hasKey(AnimationKey key) {
         return animations.containsKey(key.ordinal());
     }
 

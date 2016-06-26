@@ -26,4 +26,9 @@ public class ManaPotion extends AbstractConsumable {
         super(atlas);
     }
 
+    @Override
+    protected String getName() {
+        return "Mana Potion";
+    }
+
 }

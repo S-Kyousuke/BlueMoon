@@ -27,4 +27,9 @@ public class Player2 extends AbstractCharacter {
 
     }
 
+    @Override
+    protected String getName() {
+        return "Player2";
+    }
+
 }

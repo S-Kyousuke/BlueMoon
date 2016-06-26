@@ -146,4 +146,6 @@ public abstract class AbstractGameObject {
         origin.set(dimension.x / 2, dimension.y / 2);
     }
 
+    protected abstract String getName();
+
 }

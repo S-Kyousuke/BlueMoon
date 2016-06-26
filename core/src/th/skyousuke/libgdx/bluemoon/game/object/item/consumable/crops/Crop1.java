@@ -26,4 +26,9 @@ public class Crop1 extends AbstractConsumable {
         super(atlas);
     }
 
+    @Override
+    protected String getName() {
+        return "Crop1";
+    }
+
 }

@@ -26,4 +26,9 @@ public class Tool1 extends AbstractEquipment {
         super(atlas);
     }
 
+    @Override
+    protected String getName() {
+        return "Tool1";
+    }
+
 }

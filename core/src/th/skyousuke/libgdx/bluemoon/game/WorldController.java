@@ -21,7 +21,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 
 import th.skyousuke.libgdx.bluemoon.utils.CameraHelper;
-import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 public class WorldController extends InputAdapter {
 
@@ -50,12 +49,7 @@ public class WorldController extends InputAdapter {
     }
 
     private void handleInputPlayer(float deltaTime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) level.player.move(Direction.UP);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) level.player.move(Direction.DOWN);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) level.player.move(Direction.LEFT);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) level.player.move(Direction.RIGHT);
-        //if (Gdx.input.isKeyPressed(Input.Keys.Z));
-        //if (Gdx.input.isKeyPressed(Input.Keys.X));
+        level.player.handleInput();
     }
 
     private void handleInput(float deltaTime) {

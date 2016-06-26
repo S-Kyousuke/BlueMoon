@@ -16,6 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
@@ -36,8 +37,6 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     protected CharacterAttribute attribute;
     protected Array<AbstractEffect> effects;
 
-
-
     public AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
 
@@ -49,6 +48,16 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         movable = true;
 
         friction.set(FRICTION, FRICTION);
+
+        addAnimation(AnimationKey.IDLE_LEFT, 0, 0, 1, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_RIGHT, 0, 1, 1, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_UP, 0, 2, 1, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_DOWN, 0, 3, 1, Animation.PlayMode.LOOP);
+
+        addAnimation(AnimationKey.WALK_DOWN, 0.25f, 4, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_UP, 0.25f, 8, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_LEFT, 0.25f, 12, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_RIGHT, 0.25f, 16, 4, Animation.PlayMode.LOOP);
     }
 
     @Override
@@ -109,23 +118,41 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         return viewDirection;
     }
 
-
     @Override
     protected void updateAnimation() {
 
-        switch (viewDirection) {
-            case LEFT:
-                setAnimation(AnimationKey.WALK_LEFT);
-                break;
-            case RIGHT:
-                setAnimation(AnimationKey.WALK_RIGHT);
-                break;
-            case UP:
-                setAnimation(AnimationKey.WALK_UP);
-                break;
-            case DOWN:
-                setAnimation(AnimationKey.WALK_DOWN);
-                break;
+        boolean moving = !velocity.isZero();
+        if (moving) {
+            switch (viewDirection) {
+                case LEFT:
+                    setAnimation(AnimationKey.WALK_LEFT);
+                    break;
+                case RIGHT:
+                    setAnimation(AnimationKey.WALK_RIGHT);
+                    break;
+                case UP:
+                    setAnimation(AnimationKey.WALK_UP);
+                    break;
+                case DOWN:
+                    setAnimation(AnimationKey.WALK_DOWN);
+                    break;
+            }
+        }
+        else {
+            switch (viewDirection) {
+                case LEFT:
+                    setAnimation(AnimationKey.IDLE_LEFT);
+                    break;
+                case RIGHT:
+                    setAnimation(AnimationKey.IDLE_RIGHT);
+                    break;
+                case UP:
+                    setAnimation(AnimationKey.IDLE_UP);
+                    break;
+                case DOWN:
+                    setAnimation(AnimationKey.IDLE_DOWN);
+                    break;
+            }
         }
 
     }

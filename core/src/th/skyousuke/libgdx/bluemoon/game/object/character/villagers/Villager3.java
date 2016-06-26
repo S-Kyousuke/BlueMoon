@@ -27,4 +27,9 @@ public class Villager3 extends AbstractCharacter {
 
     }
 
+    @Override
+    protected String getName() {
+        return "Villager3";
+    }
+
 }

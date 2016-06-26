@@ -26,4 +26,9 @@ public class Armor1 extends AbstractEquipment {
         super(atlas);
     }
 
+    @Override
+    protected String getName() {
+        return "Armor1";
+    }
+
 }
