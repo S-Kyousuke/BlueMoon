@@ -29,114 +29,114 @@ public class CharacterAttribute {
     private Array<float[]> additionalDerivedAttribute;
 
     public CharacterAttribute() {
-        basePrimaryAttribute = new int[PrimaryAttribute.values().length];
-        baseDerivedAttribute = new float[DerivedAttribute.values().length];
+        basePrimaryAttribute = new int[CharacterPrimaryAttribute.values().length];
+        baseDerivedAttribute = new float[CharacterDerivedAttribute.values().length];
 
         additionalPrimaryAttribute = new Array<>();
         additionalDerivedAttribute = new Array<>();
 
         // Initialize Attribute
-        for (PrimaryAttribute primaryAttribute : PrimaryAttribute.values()) {
+        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             setBasePrimary(primaryAttribute, 1);
         }
     }
 
     private void calculateBaseDerived() {
-        int strength = getPrimary(PrimaryAttribute.STRENGTH);
-        int agility = getPrimary(PrimaryAttribute.AGILITY);
-        int intelligence = getPrimary(PrimaryAttribute.INTELLIGENCE);
-        int vitality = getPrimary(PrimaryAttribute.VITALITY);
-        int charisma = getPrimary(PrimaryAttribute.CHARISMA);
-        int luck = getPrimary(PrimaryAttribute.LUCK);
-        int survival = getPrimary(PrimaryAttribute.SURVIVAL);
+        int strength = getPrimary(CharacterPrimaryAttribute.STRENGTH);
+        int agility = getPrimary(CharacterPrimaryAttribute.AGILITY);
+        int intelligence = getPrimary(CharacterPrimaryAttribute.INTELLIGENCE);
+        int vitality = getPrimary(CharacterPrimaryAttribute.VITALITY);
+        int charisma = getPrimary(CharacterPrimaryAttribute.CHARISMA);
+        int luck = getPrimary(CharacterPrimaryAttribute.LUCK);
+        int survival = getPrimary(CharacterPrimaryAttribute.SURVIVAL);
 
-        baseDerivedAttribute[DerivedAttribute.MOVING_SPEED.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MOVING_SPEED.ordinal()] =
                 120 + (agility * 10.0f);
 
-        baseDerivedAttribute[DerivedAttribute.MAX_STAMINA.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MAX_STAMINA.ordinal()] =
                 100 + (vitality * 5.0f);
 
-        baseDerivedAttribute[DerivedAttribute.MAX_HEALTH.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MAX_HEALTH.ordinal()] =
                 100 + (vitality * 10.0f);
 
-        baseDerivedAttribute[DerivedAttribute.HEALTH_REGENERATION.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.HEALTH_REGENERATION.ordinal()] =
                 2 + (vitality * 0.5f);
 
-        baseDerivedAttribute[DerivedAttribute.MAX_MANA.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MAX_MANA.ordinal()] =
                 10 + (intelligence * 1.0f);
 
-        baseDerivedAttribute[DerivedAttribute.MANA_REGENERATION.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MANA_REGENERATION.ordinal()] =
                 10 + (intelligence * 0.2f);
 
-        baseDerivedAttribute[DerivedAttribute.PHYSICAL_DAMAGE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.PHYSICAL_DAMAGE.ordinal()] =
                 1 + (strength * 1.0f);
 
-        baseDerivedAttribute[DerivedAttribute.MAGICAL_DAMAGE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MAGICAL_DAMAGE.ordinal()] =
                 1 + (intelligence * 1.0f);
 
-        baseDerivedAttribute[DerivedAttribute.PHYSICAL_DEFENSE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.PHYSICAL_DEFENSE.ordinal()] =
                 1 + (vitality * 1.0f);
 
-        baseDerivedAttribute[DerivedAttribute.MAGICAL_DEFENSE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.MAGICAL_DEFENSE.ordinal()] =
                 1 + (intelligence * 1.0f);
 
-        baseDerivedAttribute[DerivedAttribute.ATTACK_SPEED.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.ATTACK_SPEED.ordinal()] =
                 1 / (float) (1 - Math.sqrt(agility * 0.06f));
 
-        baseDerivedAttribute[DerivedAttribute.FULLNESS_DRAIN.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.FULLNESS_DRAIN.ordinal()] =
                 1 / (float) (1 - Math.sqrt(survival * 0.05f));
 
-        baseDerivedAttribute[DerivedAttribute.CRAFTING.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.CRAFTING.ordinal()] =
                 1.0f + survival;
 
-        baseDerivedAttribute[DerivedAttribute.FISHING.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.FISHING.ordinal()] =
                 1.0f + survival;
 
-        baseDerivedAttribute[DerivedAttribute.TOOLS_EFFICIENCY.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.TOOLS_EFFICIENCY.ordinal()] =
                 1 / (float) (1 - Math.sqrt(strength * 0.08f));
 
-        baseDerivedAttribute[DerivedAttribute.TOOLS_SPEED.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.TOOLS_SPEED.ordinal()] =
                 1 / (float) (1 - Math.sqrt(agility * 0.05f));
 
-        baseDerivedAttribute[DerivedAttribute.TOOLS_LEVEL.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.TOOLS_LEVEL.ordinal()] =
                 1.0f + intelligence;
 
-        baseDerivedAttribute[DerivedAttribute.ITEM_CHANCE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.ITEM_CHANCE.ordinal()] =
                 1 / (float) (1 - Math.sqrt(luck * 0.07f));
 
-        baseDerivedAttribute[DerivedAttribute.UPGRADE_CHANCE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.UPGRADE_CHANCE.ordinal()] =
                 1 / (float) (1 - Math.sqrt(luck * 0.05f));
 
-        baseDerivedAttribute[DerivedAttribute.EVENT_CHANCE.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.EVENT_CHANCE.ordinal()] =
                 1 / (float) (1 - Math.sqrt(luck * 0.06f));
 
-        baseDerivedAttribute[DerivedAttribute.FRIENDSHIP.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.FRIENDSHIP.ordinal()] =
                 1 / (float) (1 - Math.sqrt(charisma * 0.06f));
 
-        baseDerivedAttribute[DerivedAttribute.SHOPPING.ordinal()] =
+        baseDerivedAttribute[CharacterDerivedAttribute.SHOPPING.ordinal()] =
                 (float) (1 - Math.sqrt(charisma * 0.06f));
     }
 
-    public void setBasePrimary(PrimaryAttribute primaryAttribute, int value) {
+    public void setBasePrimary(CharacterPrimaryAttribute primaryAttribute, int value) {
         basePrimaryAttribute[primaryAttribute.ordinal()] = value;
         calculateBaseDerived();
     }
 
     //  Set/Change value methods
 
-    public void changeBasePrimary(PrimaryAttribute primaryAttribute, int changeValue) {
+    public void changeBasePrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
         setBasePrimary(primaryAttribute, getBasePrimary(primaryAttribute) + changeValue);
     }
 
     public void addAdditionalPrimary(int[] value) {
-        if (value.length != PrimaryAttribute.values().length) {
+        if (value.length != CharacterPrimaryAttribute.values().length) {
             throw new IllegalArgumentException("addAdditionalPrimary: Invalid array size!");
         }
         additionalPrimaryAttribute.add(value);
     }
 
     public void addAdditionalDerived(float[] value) {
-        if (value.length != DerivedAttribute.values().length) {
+        if (value.length != CharacterDerivedAttribute.values().length) {
             throw new IllegalArgumentException("addAdditionalDerived: Invalid array size!");
         }
         additionalDerivedAttribute.add(value);
@@ -150,11 +150,11 @@ public class CharacterAttribute {
         additionalDerivedAttribute.removeValue(value, true);
     }
 
-    public int getBasePrimary(PrimaryAttribute primaryAttribute) {
+    public int getBasePrimary(CharacterPrimaryAttribute primaryAttribute) {
         return basePrimaryAttribute[primaryAttribute.ordinal()];
     }
 
-    public int getTotalAdditionalPrimary(PrimaryAttribute primaryAttribute) {
+    public int getTotalAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute) {
         int totalAdditionalPrimary = 0;
         for (int[] additionalPrimary : additionalPrimaryAttribute) {
             totalAdditionalPrimary += additionalPrimary[primaryAttribute.ordinal()];
@@ -162,15 +162,15 @@ public class CharacterAttribute {
         return totalAdditionalPrimary;
     }
 
-    public int getPrimary(PrimaryAttribute primaryAttribute) {
+    public int getPrimary(CharacterPrimaryAttribute primaryAttribute) {
         return getBasePrimary(primaryAttribute) + getTotalAdditionalPrimary(primaryAttribute);
     }
 
-    public float getBaseDerived(DerivedAttribute derivedAttribute) {
+    public float getBaseDerived(CharacterDerivedAttribute derivedAttribute) {
         return baseDerivedAttribute[derivedAttribute.ordinal()];
     }
 
-    public float getTotalAdditionalDerived(DerivedAttribute derivedAttribute) {
+    public float getTotalAdditionalDerived(CharacterDerivedAttribute derivedAttribute) {
         float totalAdditionalDerived = 0;
         for (float[] additionalDerived : additionalDerivedAttribute) {
             totalAdditionalDerived += additionalDerived[derivedAttribute.ordinal()];
@@ -178,43 +178,9 @@ public class CharacterAttribute {
         return totalAdditionalDerived;
     }
 
-    public float getDerived(DerivedAttribute derivedAttribute) {
+    public float getDerived(CharacterDerivedAttribute derivedAttribute) {
         return getBaseDerived(derivedAttribute) + getTotalAdditionalDerived(derivedAttribute);
     }
 
-    public enum PrimaryAttribute {
-        STRENGTH,
-        AGILITY,
-        VITALITY,
-        INTELLIGENCE,
-        CHARISMA,
-        LUCK,
-        SURVIVAL
-    }
-
-    public enum DerivedAttribute {
-        MOVING_SPEED,
-        MAX_STAMINA,
-        MAX_HEALTH,
-        MAX_MANA,
-        HEALTH_REGENERATION,
-        MANA_REGENERATION,
-        PHYSICAL_DAMAGE,
-        MAGICAL_DAMAGE,
-        PHYSICAL_DEFENSE,
-        MAGICAL_DEFENSE,
-        ATTACK_SPEED,
-        CRAFTING,
-        FISHING,
-        FULLNESS_DRAIN,
-        TOOLS_EFFICIENCY,
-        TOOLS_SPEED,
-        TOOLS_LEVEL,
-        ITEM_CHANCE,
-        UPGRADE_CHANCE,
-        EVENT_CHANCE,
-        FRIENDSHIP,
-        SHOPPING
-    }
 
 }

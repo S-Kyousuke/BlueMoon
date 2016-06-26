@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.utils.collisions;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-public class NullCollsionCheck implements CollisionCheck {
-
-    @Override
-    public boolean isCollidesRight() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesLeft() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesTop() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesBottom() {
-        return false;
-    }
-
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ */
+public enum CharacterDerivedAttribute {
+    MOVING_SPEED,
+    MAX_STAMINA,
+    MAX_HEALTH,
+    MAX_MANA,
+    HEALTH_REGENERATION,
+    MANA_REGENERATION,
+    PHYSICAL_DAMAGE,
+    MAGICAL_DAMAGE,
+    PHYSICAL_DEFENSE,
+    MAGICAL_DEFENSE,
+    ATTACK_SPEED,
+    CRAFTING,
+    FISHING,
+    FULLNESS_DRAIN,
+    TOOLS_EFFICIENCY,
+    TOOLS_SPEED,
+    TOOLS_LEVEL,
+    ITEM_CHANCE,
+    UPGRADE_CHANCE,
+    EVENT_CHANCE,
+    FRIENDSHIP,
+    SHOPPING
 }

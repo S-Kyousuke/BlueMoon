@@ -24,23 +24,23 @@ public class CharacterState {
     private CharacterAttribute characterAttribute;
 
     public CharacterState(CharacterAttribute characterAttribute) {
-        allState = new float[StateType.values().length];
+        allState = new float[CharacterStateType.values().length];
         this.characterAttribute = characterAttribute;
     }
 
-    public void setState(StateType stateType, float value) {
+    public void setState(CharacterStateType stateType, float value) {
         float minValue = 0f;
         float maxValue;
 
         switch (stateType) {
             case HEALTH:
-                maxValue = characterAttribute.getDerived(CharacterAttribute.DerivedAttribute.MAX_HEALTH);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
                 break;
             case MANA:
-                maxValue = characterAttribute.getDerived(CharacterAttribute.DerivedAttribute.MAX_MANA);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_MANA);
                 break;
             case STAMINA:
-                maxValue = characterAttribute.getDerived(CharacterAttribute.DerivedAttribute.MAX_STAMINA);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_STAMINA);
                 break;
             case FULLNESS:
                 maxValue = 100f;
@@ -52,19 +52,12 @@ public class CharacterState {
         allState[stateType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
     }
 
-    public float getState(StateType stateType) {
+    public float getState(CharacterStateType stateType) {
         return allState[stateType.ordinal()];
     }
 
-    public void addValue(StateType stateType, float changeValue) {
+    public void addValue(CharacterStateType stateType, float changeValue) {
         setState(stateType, getState(stateType) + changeValue);
-    }
-
-    public enum StateType {
-        HEALTH,
-        MANA,
-        STAMINA,
-        FULLNESS
     }
 
 }

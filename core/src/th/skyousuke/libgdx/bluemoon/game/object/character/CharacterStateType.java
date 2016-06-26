@@ -14,28 +14,14 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.utils.collisions;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-public class NullCollsionCheck implements CollisionCheck {
-
-    @Override
-    public boolean isCollidesRight() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesLeft() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesTop() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesBottom() {
-        return false;
-    }
-
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ */
+public enum CharacterStateType {
+    HEALTH,
+    MANA,
+    STAMINA,
+    FULLNESS
 }

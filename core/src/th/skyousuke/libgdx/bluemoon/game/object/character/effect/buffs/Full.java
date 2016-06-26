@@ -17,9 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
-
-import static th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute.PrimaryAttribute;
 
 public class Full extends AbstractEffect {
 
@@ -28,7 +27,7 @@ public class Full extends AbstractEffect {
 
     public Full(AbstractCharacter character, float duration) {
         super(character, duration);
-        primaryBonus = new int[PrimaryAttribute.values().length];
+        primaryBonus = new int[CharacterPrimaryAttribute.values().length];
     }
 
     @Override
@@ -38,12 +37,12 @@ public class Full extends AbstractEffect {
 
     @Override
     protected void overTimeEffect(float activeTime) {
-        primaryBonus[PrimaryAttribute.STRENGTH.ordinal()] =
-                (int) (character.getAttribute().getBasePrimary(PrimaryAttribute.STRENGTH) * 0.20);
-        primaryBonus[PrimaryAttribute.VITALITY.ordinal()] =
-                (int) (character.getAttribute().getBasePrimary(PrimaryAttribute.VITALITY) * 0.20);
-        primaryBonus[PrimaryAttribute.AGILITY.ordinal()] =
-                (int) (character.getAttribute().getBasePrimary(PrimaryAttribute.AGILITY) * 0.05);
+        primaryBonus[CharacterPrimaryAttribute.STRENGTH.ordinal()] =
+                (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
+        primaryBonus[CharacterPrimaryAttribute.VITALITY.ordinal()] =
+                (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.VITALITY) * 0.20);
+        primaryBonus[CharacterPrimaryAttribute.AGILITY.ordinal()] =
+                (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.AGILITY) * 0.05);
     }
 
     @Override

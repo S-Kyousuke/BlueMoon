@@ -21,8 +21,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute.DerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState.StateType;
+import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
@@ -79,7 +78,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         if (!movable) return;
 
         viewDirection = direction;
-        float movingSpeed = attribute.getDerived(DerivedAttribute.MOVING_SPEED);
+        float movingSpeed = attribute.getDerived(CharacterDerivedAttribute.MOVING_SPEED);
         switch (direction) {
             case LEFT:
                 velocity.x = -movingSpeed;
@@ -98,12 +97,13 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     }
 
 
-    public void changeState(StateType stateType, float value) {
+    public void changeState(CharacterStateType stateType, float value) {
         state.addValue(stateType, value);
     }
 
     public void drainFullness(float deltaTime) {
-        changeState(StateType.FULLNESS, -attribute.getDerived(DerivedAttribute.FULLNESS_DRAIN) * deltaTime);
+        changeState(CharacterStateType.FULLNESS, -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) *
+                deltaTime);
     }
 
     public CharacterAttribute getAttribute() {
@@ -120,41 +120,45 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     @Override
     protected void updateAnimation() {
-
         boolean moving = !velocity.isZero();
         if (moving) {
-            switch (viewDirection) {
-                case LEFT:
-                    setAnimation(AnimationKey.WALK_LEFT);
-                    break;
-                case RIGHT:
-                    setAnimation(AnimationKey.WALK_RIGHT);
-                    break;
-                case UP:
-                    setAnimation(AnimationKey.WALK_UP);
-                    break;
-                case DOWN:
-                    setAnimation(AnimationKey.WALK_DOWN);
-                    break;
-            }
+            walkAnimation();
+        } else {
+            idleAnimation();
         }
-        else {
-            switch (viewDirection) {
-                case LEFT:
-                    setAnimation(AnimationKey.IDLE_LEFT);
-                    break;
-                case RIGHT:
-                    setAnimation(AnimationKey.IDLE_RIGHT);
-                    break;
-                case UP:
-                    setAnimation(AnimationKey.IDLE_UP);
-                    break;
-                case DOWN:
-                    setAnimation(AnimationKey.IDLE_DOWN);
-                    break;
-            }
-        }
-
     }
 
+    private void idleAnimation() {
+        switch (viewDirection) {
+            case LEFT:
+                setAnimation(AnimationKey.IDLE_LEFT);
+                break;
+            case RIGHT:
+                setAnimation(AnimationKey.IDLE_RIGHT);
+                break;
+            case UP:
+                setAnimation(AnimationKey.IDLE_UP);
+                break;
+            case DOWN:
+                setAnimation(AnimationKey.IDLE_DOWN);
+                break;
+        }
+    }
+
+    private void walkAnimation() {
+        switch (viewDirection) {
+            case LEFT:
+                setAnimation(AnimationKey.WALK_LEFT);
+                break;
+            case RIGHT:
+                setAnimation(AnimationKey.WALK_RIGHT);
+                break;
+            case UP:
+                setAnimation(AnimationKey.WALK_UP);
+                break;
+            case DOWN:
+                setAnimation(AnimationKey.WALK_DOWN);
+                break;
+        }
+    }
 }

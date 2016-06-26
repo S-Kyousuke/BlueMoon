@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.utils.collisions;
+package th.skyousuke.libgdx.bluemoon.game.object;
 
-public class NullCollsionCheck implements CollisionCheck {
-
-    @Override
-    public boolean isCollidesRight() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesLeft() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesTop() {
-        return false;
-    }
-
-    @Override
-    public boolean isCollidesBottom() {
-        return false;
-    }
-
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ */
+public enum AnimationKey {
+    IDLE_LEFT,
+    IDLE_RIGHT,
+    IDLE_UP,
+    IDLE_DOWN,
+    WALK_LEFT,
+    WALK_RIGHT,
+    WALK_UP,
+    WALK_DOWN
 }
