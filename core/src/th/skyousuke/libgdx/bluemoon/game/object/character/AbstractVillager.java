@@ -24,4 +24,8 @@ public abstract class AbstractVillager extends AbstractCharacter {
         super(atlas);
     }
 
+    @Override
+    public void interact() {
+    }
+
 }

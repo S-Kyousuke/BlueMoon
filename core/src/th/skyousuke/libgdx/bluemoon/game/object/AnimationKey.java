@@ -27,5 +27,9 @@ public enum AnimationKey {
     WALK_LEFT,
     WALK_RIGHT,
     WALK_UP,
-    WALK_DOWN
+    WALK_DOWN,
+    ATK_LEFT,
+    ATK_RIGHT,
+    ATK_UP,
+    ATK_DOWN
 }

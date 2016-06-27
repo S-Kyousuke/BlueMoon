@@ -16,48 +16,26 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.math.MathUtils;
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ */
+public abstract class CharacterState {
 
-public class CharacterState {
-
-    private float[] allState;
-    private CharacterAttribute characterAttribute;
-
-    public CharacterState(CharacterAttribute characterAttribute) {
-        allState = new float[CharacterStateType.values().length];
-        this.characterAttribute = characterAttribute;
+    public void update(AbstractCharacter character) {
+        setAnimation(character);
+        updateCharacter(character);
     }
 
-    public void setState(CharacterStateType stateType, float value) {
-        float minValue = 0f;
-        float maxValue;
+    public abstract void handleInput(AbstractCharacter character);
 
-        switch (stateType) {
-            case HEALTH:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
-                break;
-            case MANA:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_MANA);
-                break;
-            case STAMINA:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_STAMINA);
-                break;
-            case FULLNESS:
-                maxValue = 100f;
-                break;
-            default:
-                maxValue = Float.MAX_VALUE;
-        }
+    protected abstract void updateCharacter(AbstractCharacter character);
 
-        allState[stateType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
+    protected abstract void setAnimation(AbstractCharacter character);
+
+    public void enter(AbstractCharacter character) {
     }
 
-    public float getState(CharacterStateType stateType) {
-        return allState[stateType.ordinal()];
-    }
-
-    public void addValue(CharacterStateType stateType, float changeValue) {
-        setState(stateType, getState(stateType) + changeValue);
+    public void exit(AbstractCharacter character) {
     }
 
 }

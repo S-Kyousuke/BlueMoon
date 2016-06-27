@@ -41,7 +41,7 @@ public class Level {
         player = new Player1();
 
         map = Assets.instance.mainMap;
-        allObjects = new Array<AbstractGameObject>();
+        allObjects = new Array<>();
         zOrderComparator = new ZOrderComparator();
     }
 

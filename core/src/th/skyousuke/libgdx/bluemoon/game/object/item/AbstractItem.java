@@ -30,8 +30,4 @@ public abstract class AbstractItem extends AbstractAnimatedObject {
         friction.set(FRICTION, FRICTION);
     }
 
-    @Override
-    protected void updateAnimation() {
-
-    }
 }

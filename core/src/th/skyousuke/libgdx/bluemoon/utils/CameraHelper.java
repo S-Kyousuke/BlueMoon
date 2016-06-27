@@ -24,10 +24,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.AbstractGameObject;
 
 public class CameraHelper {
 
-    private final float MAX_ZOOM_IN = 0.25f;
-    private final float MAX_ZOOM_OUT = 1.35f;
-
-    private Vector2 position;
+    private final Vector2 position;
     private float zoom;
     private AbstractGameObject target;
 
@@ -57,6 +54,8 @@ public class CameraHelper {
     }
 
     public void setZoom(float zoom) {
+        float MAX_ZOOM_OUT = 1.35f;
+        float MAX_ZOOM_IN = 0.25f;
         this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
     }
 

@@ -22,11 +22,11 @@ public class CharacterAttribute {
 
     // 2 length array for base value and additional value
 
-    private int[] basePrimaryAttribute;
-    private float[] baseDerivedAttribute;
+    private final int[] basePrimaryAttribute;
+    private final float[] baseDerivedAttribute;
 
-    private Array<int[]> additionalPrimaryAttribute;
-    private Array<float[]> additionalDerivedAttribute;
+    private final Array<int[]> additionalPrimaryAttribute;
+    private final Array<float[]> additionalDerivedAttribute;
 
     public CharacterAttribute() {
         basePrimaryAttribute = new int[CharacterPrimaryAttribute.values().length];

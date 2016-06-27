@@ -30,8 +30,4 @@ public class Player1 extends AbstractPlayer {
         return "Player1";
     }
 
-    @Override
-    public void interact() {
-
-    }
 }

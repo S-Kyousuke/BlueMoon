@@ -16,28 +16,20 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import th.skyousuke.libgdx.bluemoon.utils.Direction;
-
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ */
 public abstract class AbstractPlayer extends AbstractCharacter {
 
     public AbstractPlayer(TextureAtlas atlas) {
         super(atlas);
     }
 
-    public abstract void interact();
+    @Override
+    public void interact() {
 
-    public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) move(Direction.UP);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) move(Direction.DOWN);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) move(Direction.LEFT);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) move(Direction.RIGHT);
-        //if (Gdx.input.isKeyPressed(Input.Keys.Z));
-        //if (Gdx.input.isKeyPressed(Input.Keys.X));
-        //if (Gdx.input.isKeyPressed(Input.Keys.C));
     }
 
 }

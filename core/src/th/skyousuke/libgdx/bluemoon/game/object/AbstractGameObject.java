@@ -26,13 +26,13 @@ import th.skyousuke.libgdx.bluemoon.utils.collisions.NullCollsionCheck;
 
 public abstract class AbstractGameObject {
 
-    protected Vector2 friction;
-    protected Vector2 position;
-    protected Vector2 dimension;
-    protected Vector2 origin;
-    protected Vector2 scale;
-    protected Vector2 velocity;
-    protected Vector2 acceleration;
+    protected final Vector2 friction;
+    protected final Vector2 position;
+    protected final Vector2 dimension;
+    protected final Vector2 origin;
+    protected final Vector2 scale;
+    protected final Vector2 velocity;
+    protected final Vector2 acceleration;
     protected Rectangle bounds;
     protected float rotation;
     protected CollisionCheck collisionCheck;

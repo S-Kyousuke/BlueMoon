@@ -19,7 +19,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 /**
  * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
  */
-public enum CharacterStateType {
+public enum CharacterStatusType {
     HEALTH,
     MANA,
     STAMINA,

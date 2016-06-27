@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.item.consumable;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import th.skyousuke.libgdx.bluemoon.game.object.item.AbstractItem;
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ */
+public class AbstractMonster extends AbstractCharacter {
 
-public abstract class AbstractConsumable extends AbstractItem {
-
-    protected AbstractConsumable(TextureAtlas atlas) {
+    public AbstractMonster(TextureAtlas atlas) {
         super(atlas);
+    }
+
+    @Override
+    public void interact() {
+
+    }
+
+    @Override
+    protected String getName() {
+        return null;
     }
 
 }

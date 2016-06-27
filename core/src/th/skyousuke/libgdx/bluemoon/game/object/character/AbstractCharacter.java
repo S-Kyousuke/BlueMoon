@@ -16,60 +16,72 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
+import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
+
     private static final float FRICTION = 500f;
+    private final Array<AbstractEffect> effects;
+    private CharacterState state;
+    private Direction viewDirection;
+    private boolean movable;
+    private CharacterStatus status;
+    private CharacterAttribute attribute;
 
-    protected Direction viewDirection;
-    protected boolean movable;
-
-    protected CharacterState state;
-    protected CharacterAttribute attribute;
-    protected Array<AbstractEffect> effects;
-
-    public AbstractCharacter(TextureAtlas atlas) {
+    protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
 
         attribute = new CharacterAttribute();
-        state = new CharacterState(attribute);
+        status = new CharacterStatus(attribute);
         effects = new Array<>();
 
+        setState(new IdlingState());
         viewDirection = Direction.DOWN;
         movable = true;
 
         friction.set(FRICTION, FRICTION);
 
-        addAnimation(AnimationKey.IDLE_LEFT, 0, 0, 1, Animation.PlayMode.LOOP);
-        addAnimation(AnimationKey.IDLE_RIGHT, 0, 1, 1, Animation.PlayMode.LOOP);
-        addAnimation(AnimationKey.IDLE_UP, 0, 2, 1, Animation.PlayMode.LOOP);
-        addAnimation(AnimationKey.IDLE_DOWN, 0, 3, 1, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_LEFT, 0, 1, PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_RIGHT, 1, 1, PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_UP, 2, 1, PlayMode.LOOP);
+        addAnimation(AnimationKey.IDLE_DOWN, 3, 1, PlayMode.LOOP);
 
-        addAnimation(AnimationKey.WALK_DOWN, 0.25f, 4, 4, Animation.PlayMode.LOOP);
-        addAnimation(AnimationKey.WALK_UP, 0.25f, 8, 4, Animation.PlayMode.LOOP);
-        addAnimation(AnimationKey.WALK_LEFT, 0.25f, 12, 4, Animation.PlayMode.LOOP);
-        addAnimation(AnimationKey.WALK_RIGHT, 0.25f, 16, 4, Animation.PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_DOWN, 4, 4, PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_UP, 8, 4, PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_LEFT, 12, 4, PlayMode.LOOP);
+        addAnimation(AnimationKey.WALK_RIGHT, 16, 4, PlayMode.LOOP);
+
+        addAnimation(AnimationKey.ATK_DOWN, 20, 4, PlayMode.NORMAL);
+        addAnimation(AnimationKey.ATK_UP, 24, 4, PlayMode.NORMAL);
+        addAnimation(AnimationKey.ATK_LEFT, 28, 4, PlayMode.NORMAL);
+        addAnimation(AnimationKey.ATK_RIGHT, 32, 4, PlayMode.NORMAL);
     }
 
     @Override
     public void update(float deltaTime) {
-
         //Apply any effects on character
         drainFullness(deltaTime);
         for (AbstractEffect effect : effects) {
             effect.apply(deltaTime);
         }
+        state.update(this);
 
-        // Moving Logic
+        // Moving
         super.update(deltaTime);
+    }
+
+    public void handleInput() {
+        state.handleInput(this);
     }
 
     public void move(Direction direction) {
@@ -96,13 +108,12 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         velocity.setLength(movingSpeed);
     }
 
-
-    public void changeState(CharacterStateType stateType, float value) {
-        state.addValue(stateType, value);
+    public void changeStatus(CharacterStatusType statusType, float value) {
+        status.addValue(statusType, value);
     }
 
     public void drainFullness(float deltaTime) {
-        changeState(CharacterStateType.FULLNESS, -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) *
+        changeStatus(CharacterStatusType.FULLNESS, -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) *
                 deltaTime);
     }
 
@@ -110,55 +121,29 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         return attribute;
     }
 
-    public CharacterState getState() {
-        return state;
+    public CharacterStatus getStatus() {
+        return status;
     }
 
     public Direction getViewDirection() {
         return viewDirection;
     }
 
-    @Override
-    protected void updateAnimation() {
-        boolean moving = !velocity.isZero();
-        if (moving) {
-            walkAnimation();
-        } else {
-            idleAnimation();
-        }
+    public boolean isMoving() {
+        return !velocity.isZero();
     }
 
-    private void idleAnimation() {
-        switch (viewDirection) {
-            case LEFT:
-                setAnimation(AnimationKey.IDLE_LEFT);
-                break;
-            case RIGHT:
-                setAnimation(AnimationKey.IDLE_RIGHT);
-                break;
-            case UP:
-                setAnimation(AnimationKey.IDLE_UP);
-                break;
-            case DOWN:
-                setAnimation(AnimationKey.IDLE_DOWN);
-                break;
-        }
+    public void setState(CharacterState state) {
+        if (this.state != null) this.state.exit(this);
+        this.state = state;
+        this.state.enter(this);
+        resetAnimation();
     }
 
-    private void walkAnimation() {
-        switch (viewDirection) {
-            case LEFT:
-                setAnimation(AnimationKey.WALK_LEFT);
-                break;
-            case RIGHT:
-                setAnimation(AnimationKey.WALK_RIGHT);
-                break;
-            case UP:
-                setAnimation(AnimationKey.WALK_UP);
-                break;
-            case DOWN:
-                setAnimation(AnimationKey.WALK_DOWN);
-                break;
-        }
+    public void attack() {
+        setState(new AttackingState());
     }
+
+    public abstract void interact();
+
 }

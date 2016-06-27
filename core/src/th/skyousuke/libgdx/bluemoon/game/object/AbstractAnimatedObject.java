@@ -27,22 +27,20 @@ import com.badlogic.gdx.utils.IntMap;
 
 import java.util.Comparator;
 
+
 public abstract class AbstractAnimatedObject extends AbstractGameObject {
 
-    private IntMap<Animation> animations;
+    private final IntMap<Animation> animations;
+    private final Array<AtlasRegion> regions;
     private int currentAnimation;
-
-    private Array<AtlasRegion> regions;
-
     private float animationTime;
     private boolean freeze;
 
-    public AbstractAnimatedObject(TextureAtlas atlas) {
+    protected AbstractAnimatedObject(TextureAtlas atlas) {
         super(atlas.getRegions().first().getRegionWidth(),
                 atlas.getRegions().first().getRegionHeight());
 
         animations = new IntMap<>();
-
         regions = new Array<>(atlas.getRegions());
         regions.sort(new regionComparator());
 
@@ -52,7 +50,6 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
 
     @Override
     public void update(float deltaTime) {
-        updateAnimation();
         if (!freeze) animationTime += deltaTime;
         super.update(deltaTime);
     }
@@ -61,17 +58,14 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         render(batch, animations.get(currentAnimation).getKeyFrame(animationTime));
     }
 
-    protected void addAnimation(AnimationKey key, float frameDuration, int regionStart, int size, PlayMode mode) {
+    protected void addAnimation(AnimationKey key, int regionStart, int size, PlayMode mode) {
         if (hasKey(key)) {
             Gdx.app.error(getName(), String.format("addAnimation() ERROR: Duplicate Key %s", key.name()));
         }
         Array<AtlasRegion> animationRegions = new Array<>();
         animationRegions.addAll(regions, regionStart, size);
-        animations.put(key.ordinal(), new Animation(frameDuration, animationRegions, mode));
-        setAnimation(key);
+        animations.put(key.ordinal(), new Animation(0, animationRegions, mode));
     }
-
-    protected abstract void updateAnimation();
 
     protected void freezeAnimation() {
         freeze = true;
@@ -85,8 +79,9 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
         animationTime = 0.0f;
     }
 
-    public void setAnimation(AnimationKey key) {
+    public void setAnimation(AnimationKey key, float frameDuration) {
         currentAnimation = key.ordinal();
+        animations.get(key.ordinal()).setFrameDuration(frameDuration);
     }
 
     public boolean isAnimationFinished(AnimationKey key) {

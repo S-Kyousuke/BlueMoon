@@ -17,9 +17,9 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.villagers;
 
 import th.skyousuke.libgdx.bluemoon.game.Assets;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractVillager;
 
-public class Villager2 extends AbstractCharacter {
+public class Villager2 extends AbstractVillager {
 
     public Villager2() {
         super(Assets.instance.villager2Altas);

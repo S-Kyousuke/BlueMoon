@@ -17,9 +17,9 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 
 import th.skyousuke.libgdx.bluemoon.game.Assets;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
-public class Player4 extends AbstractCharacter {
+public class Player4 extends AbstractPlayer {
 
     public Player4() {
         super(Assets.instance.player4Altas);
