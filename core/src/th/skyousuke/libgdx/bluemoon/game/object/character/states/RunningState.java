@@ -20,9 +20,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 /**
@@ -33,7 +33,7 @@ public class RunningState extends CharacterState {
     private float[] bonusDerivedAttribute;
 
     @Override
-    public void enter(AbstractCharacter character) {
+    public void enter() {
         bonusDerivedAttribute = new float[CharacterDerivedAttribute.values().length];
         bonusDerivedAttribute[CharacterDerivedAttribute.MOVING_SPEED.ordinal()] =
                 character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
@@ -41,12 +41,12 @@ public class RunningState extends CharacterState {
     }
 
     @Override
-    public void exit(AbstractCharacter character) {
+    public void exit() {
         character.getAttribute().removeAdditionalDerived(bonusDerivedAttribute);
     }
 
     @Override
-    public void handleInput(AbstractCharacter character) {
+    public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) character.move(Direction.UP);
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) character.move(Direction.DOWN);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) character.move(Direction.LEFT);
@@ -57,12 +57,14 @@ public class RunningState extends CharacterState {
     }
 
     @Override
-    protected void updateCharacter(AbstractCharacter character) {
-
+    protected void updateCharacter(float deltaTime) {
+        //Drain stamina every second
+        character.changeStatus(CharacterStatusType.STAMINA,
+                -character.getAttribute().getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime);
     }
 
     @Override
-    protected void setAnimation(AbstractCharacter character) {
+    protected void setAnimation() {
         float runTimeFactor = 12.5f;
         float runTime = runTimeFactor / character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
 

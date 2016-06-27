@@ -17,7 +17,6 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.states;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 
@@ -27,11 +26,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 public class AttackingState extends CharacterState {
 
     @Override
-    public void handleInput(AbstractCharacter character) {
-    }
-
-    @Override
-    protected void updateCharacter(AbstractCharacter character) {
+    protected void updateCharacter(float deltaTime) {
         if (character.isAnimationFinished(AnimationKey.ATK_DOWN)
                 && character.isAnimationFinished(AnimationKey.ATK_UP)
                 && character.isAnimationFinished(AnimationKey.ATK_LEFT)
@@ -41,7 +36,7 @@ public class AttackingState extends CharacterState {
     }
 
     @Override
-    protected void setAnimation(AbstractCharacter character) {
+    protected void setAnimation() {
         float attackTimeFactor = 0.25f;
         float attackTime = attackTimeFactor / character.getAttribute()
                 .getDerived(CharacterDerivedAttribute.ATTACK_SPEED);

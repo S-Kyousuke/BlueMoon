@@ -74,14 +74,14 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         for (AbstractEffect effect : effects) {
             effect.apply(deltaTime);
         }
-        state.update(this);
+        state.update(deltaTime);
 
         // Moving
         super.update(deltaTime);
     }
 
     public void handleInput() {
-        state.handleInput(this);
+        state.handleInput();
     }
 
     public void move(Direction direction) {
@@ -134,9 +134,10 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     }
 
     public void setState(CharacterState state) {
-        if (this.state != null) this.state.exit(this);
+        if (this.state != null) this.state.exit();
+        state.setCharacter(this);
         this.state = state;
-        this.state.enter(this);
+        this.state.enter();
         resetAnimation();
     }
 

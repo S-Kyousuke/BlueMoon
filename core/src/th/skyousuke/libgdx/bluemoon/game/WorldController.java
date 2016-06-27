@@ -18,14 +18,17 @@ package th.skyousuke.libgdx.bluemoon.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 import th.skyousuke.libgdx.bluemoon.utils.CameraHelper;
 
 public class WorldController extends InputAdapter {
 
     public CameraHelper cameraHelper;
     public Level level;
+    private AbstractPlayer controlledPlayer;
 
     public WorldController() {
         init();
@@ -34,6 +37,7 @@ public class WorldController extends InputAdapter {
     public void init() {
         cameraHelper = new CameraHelper();
         level = new Level();
+        controlledPlayer = level.player;
     }
 
     private void handleInputCamera(float deltaTime) {
@@ -49,19 +53,28 @@ public class WorldController extends InputAdapter {
     }
 
     private void handleInputPlayer(float deltaTime) {
-        level.player.handleInput();
+        controlledPlayer.handleInput();
     }
 
     private void handleInput(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
             if (cameraHelper.hasTarget())
                 cameraHelper.setTarget(null);
             else
-                cameraHelper.setTarget(level.player);
+                cameraHelper.setTarget(controlledPlayer);
         }
-
-        if (!cameraHelper.hasTarget()) handleInputCamera(deltaTime);
-        else handleInputPlayer(deltaTime);
+        if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+            if (!cameraHelper.hasTarget()) return;
+            if (controlledPlayer == level.player)
+                controlledPlayer = level.player2;
+            else
+                controlledPlayer = level.player;
+            cameraHelper.setTarget(controlledPlayer);
+        }
+        if (!cameraHelper.hasTarget())
+            handleInputCamera(deltaTime);
+        else
+            handleInputPlayer(deltaTime);
     }
 
     public void update(float deltaTime) {

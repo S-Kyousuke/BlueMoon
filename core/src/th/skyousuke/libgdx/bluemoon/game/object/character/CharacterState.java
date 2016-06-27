@@ -21,21 +21,28 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
  */
 public abstract class CharacterState {
 
-    public void update(AbstractCharacter character) {
-        setAnimation(character);
-        updateCharacter(character);
+    protected AbstractCharacter character;
+
+    public void update(float deltaTime) {
+        setAnimation();
+        updateCharacter(deltaTime);
     }
 
-    public abstract void handleInput(AbstractCharacter character);
+    protected abstract void updateCharacter(float deltaTime);
 
-    protected abstract void updateCharacter(AbstractCharacter character);
+    protected abstract void setAnimation();
 
-    protected abstract void setAnimation(AbstractCharacter character);
-
-    public void enter(AbstractCharacter character) {
+    public void handleInput() {
     }
 
-    public void exit(AbstractCharacter character) {
+    public void enter() {
+    }
+
+    public void exit() {
+    }
+
+    public void setCharacter(AbstractCharacter character) {
+        this.character = character;
     }
 
 }

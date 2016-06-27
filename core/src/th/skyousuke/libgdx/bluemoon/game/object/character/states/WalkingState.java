@@ -20,7 +20,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
@@ -31,7 +30,7 @@ import th.skyousuke.libgdx.bluemoon.utils.Direction;
 public class WalkingState extends CharacterState {
 
     @Override
-    public void handleInput(AbstractCharacter character) {
+    public void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) character.move(Direction.UP);
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) character.move(Direction.DOWN);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) character.move(Direction.LEFT);
@@ -41,12 +40,12 @@ public class WalkingState extends CharacterState {
     }
 
     @Override
-    public void updateCharacter(AbstractCharacter character) {
+    public void updateCharacter(float deltaTime) {
         if (!character.isMoving()) character.setState(new IdlingState());
     }
 
     @Override
-    public void setAnimation(AbstractCharacter character) {
+    public void setAnimation() {
         float walkTimeFactor = 25.0f;
         float walkTime = walkTimeFactor / character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
 

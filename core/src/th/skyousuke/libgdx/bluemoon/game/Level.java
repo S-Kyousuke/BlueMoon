@@ -28,10 +28,12 @@ import java.util.Comparator;
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractGameObject;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 import th.skyousuke.libgdx.bluemoon.game.object.character.players.Player1;
+import th.skyousuke.libgdx.bluemoon.game.object.character.players.Player2;
 
 public class Level {
 
     public AbstractPlayer player;
+    public AbstractPlayer player2;
 
     private TiledMap map;
     private Array<AbstractGameObject> allObjects;
@@ -39,10 +41,16 @@ public class Level {
 
     public Level() {
         player = new Player1();
+        player2 = new Player2();
 
         map = Assets.instance.mainMap;
         allObjects = new Array<>();
         zOrderComparator = new ZOrderComparator();
+
+        // add all object here
+        //...
+        allObjects.add(player);
+        allObjects.add(player2);
     }
 
     public void update(float deltaTime) {
@@ -50,10 +58,9 @@ public class Level {
         // add logic here
         //...
         player.update(deltaTime);
+        player2.update(deltaTime);
 
-        // add all object here
-        //...
-        //allObjects.add(player);
+
         allObjects.sort(zOrderComparator);
     }
 
@@ -65,7 +72,6 @@ public class Level {
         for (AbstractGameObject o : allObjects) {
             o.render(batch);
         }
-        player.render(batch);
         batch.end();
 
         // for debugging only
@@ -77,7 +83,7 @@ public class Level {
     private static class ZOrderComparator implements Comparator<AbstractGameObject> {
         @Override
         public int compare(AbstractGameObject object1, AbstractGameObject object2) {
-            return Float.compare(object1.getPosition().y, object2.getPosition().y);
+            return Float.compare(object2.getPosition().y, object1.getPosition().y);
         }
     }
 
