@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-up" width="30" height="30" tilewidth="48" tileheight="48" nextobjectid="1">
+ <tileset firstgid="1" name="floorpack" tilewidth="48" tileheight="48" tilecount="2" columns="2">
+  <image source="../images/maps/floorpack.png" width="128" height="64"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC62UOxKEMAxDs9z/0LQ7jC09CYo0kETWL9c554Lr97em789v9L50nzqX3PflItzU/mmuiY+7d9KKeDedUfptvhBc9Y1kjmi46enyMp1XnB1umv+kY02XnL5b9t52lXYo4b2db/BSfkozmk2lF+1B2lfnU5orMm+DS7lPHFUmyNyki5vvKhuJR+puN5/DaPxLsqZ8In5QXsl+5XWio3ufyFtF8kU03LKT5M75TTg3GBvmhqV66HRWWOSdSPpCdCVvRINLtCX/nR5qT4OZZMflj3TRZajJtZs57c4XczXrBu3G+TYQDgAA
+  </data>
+ </layer>
+</map>
