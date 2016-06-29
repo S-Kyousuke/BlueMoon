@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -53,6 +54,16 @@ public class WorldScreen extends AbstractGameScreen {
 
     private List<String> effectsList;
     private ScrollPane effectsPane;
+
+    private TextButton addHealthButton;
+    private TextButton subtractHealthButton;
+    private TextButton addManaButton;
+    private TextButton subtractManaButton;
+    private TextButton addStaminaButton;
+    private TextButton subtractStaminaButton;
+    private TextButton addFullnessButton;
+    private TextButton subtractFullnessButton;
+    private TextButton showAttributeButton;
 
     public WorldScreen(Game game) {
         super(game);
@@ -127,30 +138,50 @@ public class WorldScreen extends AbstractGameScreen {
             }
         });
         effectsPane = new ScrollPane(effectsList, Assets.instance.skin);
-        effectsPane.setForceScroll(false, true);
-        effectsPane.setFadeScrollBars(false);
+        //effectsPane.setForceScroll(false, true);
+        //effectsPane.setFadeScrollBars(false);
         effectLabel = new Label("Effects:", Assets.instance.skin);
+
+        addHealthButton = new TextButton("+", Assets.instance.skin);
+        addManaButton = new TextButton("+", Assets.instance.skin);
+        addStaminaButton = new TextButton("+", Assets.instance.skin);
+        addFullnessButton = new TextButton("+", Assets.instance.skin);
+        subtractHealthButton = new TextButton("-", Assets.instance.skin);
+        subtractManaButton = new TextButton("-", Assets.instance.skin);
+        subtractStaminaButton = new TextButton("-", Assets.instance.skin);
+        subtractFullnessButton = new TextButton("-", Assets.instance.skin);
+        showAttributeButton = new TextButton("Show Attribute", Assets.instance.skin);
 
         statusWindow = new Window("", Assets.instance.skin);
         statusWindow.padLeft(10f);
         statusWindow.padRight(15f);
         statusWindow.padBottom(10f);
         statusWindow.align(Align.left);
+        statusWindow.row().padTop(10f);
+        statusWindow.add(healthLabel).align(Align.left).fillX().expandX();
+        statusWindow.add(addHealthButton).width(20f).height(20f).padRight(5f);
+        statusWindow.add(subtractHealthButton).width(20f).height(20f);
         statusWindow.row();
-        statusWindow.add(healthLabel).align(Align.left);
+        statusWindow.add(manaLabel).align(Align.left).fillX().expandX();
+        statusWindow.add(addManaButton).width(20f).height(20f).padRight(5f);
+        statusWindow.add(subtractManaButton).width(20f).height(20f);
         statusWindow.row();
-        statusWindow.add(manaLabel).align(Align.left);
+        statusWindow.add(staminaLabel).align(Align.left).fillX().expandX();
+        statusWindow.add(addStaminaButton).width(20f).height(20f).padRight(5f);
+        statusWindow.add(subtractStaminaButton).width(20f).height(20f);
         statusWindow.row();
-        statusWindow.add(staminaLabel).align(Align.left);
-        statusWindow.row();
-        statusWindow.add(fullnessLabel).align(Align.left);
-        statusWindow.row();
-        statusWindow.add(effectLabel).align(Align.left);
-        statusWindow.row();
+        statusWindow.add(fullnessLabel).align(Align.left).fillX().expandX();
+        statusWindow.add(addFullnessButton).width(20f).height(20f).padRight(5f);
+        statusWindow.add(subtractFullnessButton).width(20f).height(20f);
+        statusWindow.row().colspan(3);
+        statusWindow.add(effectLabel).align(Align.left).padTop(5f);
+        statusWindow.row().colspan(3);
         statusWindow.add(effectsPane).fill().expand();
+        statusWindow.row().colspan(3);
+        statusWindow.add(showAttributeButton).width(130f).height(25f).padTop(10f);
         statusWindow.pack();
-        statusWindow.setWidth(180f);
-        statusWindow.setHeight(250f);
+        statusWindow.setWidth(240f);
+        statusWindow.setHeight(280f);
         statusWindow.setPosition(100, 256f);
 
         statusWindow.addAction(new Action() {
@@ -161,6 +192,7 @@ public class WorldScreen extends AbstractGameScreen {
             }
         });
 
+        //stage.setDebugAll(true);
         stage.addActor(statusWindow);
         Gdx.input.setInputProcessor(stage);
     }
