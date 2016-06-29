@@ -31,7 +31,6 @@ public class Regeneration extends AbstractEffect {
         this.type = type;
     }
 
-
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         switch (type) {
@@ -50,4 +49,8 @@ public class Regeneration extends AbstractEffect {
         }
     }
 
+    @Override
+    public String getName() {
+        return type.name().substring(0, 1) + type.name().toLowerCase().substring(1) + " Regeneration";
+    }
 }

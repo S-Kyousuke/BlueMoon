@@ -24,11 +24,11 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
 /**
  * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
  */
-public class Run extends AbstractEffect {
+public class Running extends AbstractEffect {
 
     private float[] bonusDerivedAttribute;
 
-    public Run() {
+    public Running() {
         super();
         bonusDerivedAttribute = new float[CharacterDerivedAttribute.values().length];
     }
@@ -42,11 +42,19 @@ public class Run extends AbstractEffect {
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        character.changeStatus(CharacterStatusType.STAMINA, -1.0f * activeTime);
+        if (character.getStatus(CharacterStatusType.STAMINA) > 0) {
+            character.changeStatus(CharacterStatusType.STAMINA, -1.0f * activeTime);
+        }
+        else expire();
     }
 
     @Override
     public void exit(AbstractCharacter character) {
         character.getAttribute().removeAdditionalDerived(bonusDerivedAttribute);
+    }
+
+    @Override
+    public String getName() {
+        return "Running";
     }
 }

@@ -27,7 +27,7 @@ public class Crop1 extends AbstractConsumable {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Crop1";
     }
 

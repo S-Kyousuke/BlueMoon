@@ -27,7 +27,7 @@ public class HealthPotion extends AbstractConsumable {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Health Potion";
     }
 

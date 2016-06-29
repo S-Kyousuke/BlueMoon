@@ -27,7 +27,7 @@ public class Armor1 extends AbstractEquipment {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Armor1";
     }
 

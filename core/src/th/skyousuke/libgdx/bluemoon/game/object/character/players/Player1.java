@@ -26,7 +26,7 @@ public class Player1 extends AbstractPlayer {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Player1";
     }
 

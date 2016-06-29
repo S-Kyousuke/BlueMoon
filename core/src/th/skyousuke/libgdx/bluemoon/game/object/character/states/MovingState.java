@@ -23,7 +23,8 @@ import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.others.Run;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.others.Running;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 /**
@@ -31,11 +32,11 @@ import th.skyousuke.libgdx.bluemoon.utils.Direction;
  */
 public class MovingState extends CharacterState {
 
-    private Run run;
+    private Running running;
 
     public MovingState(AbstractCharacter character) {
         super(character);
-        run = new Run();
+        running = new Running();
     }
 
     @Override
@@ -46,15 +47,16 @@ public class MovingState extends CharacterState {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) character.move(Direction.RIGHT);
         if (Gdx.input.isKeyPressed(Input.Keys.C)) character.attack();
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-            character.addEffect(run);
+            if (character.getStatus(CharacterStatusType.STAMINA) > 0)
+                character.addEffect(running);
         }
     }
 
     @Override
     public void updateCharacter(float deltaTime) {
-        if (character.hasEffect(run)) {
+        if (character.hasEffect(running)) {
             if (!Gdx.input.isKeyPressed(Input.Keys.Z)) {
-                character.removeEffect(run);
+                character.removeEffect(running);
             }
         }
         if (!character.isMoving()) {
@@ -85,6 +87,6 @@ public class MovingState extends CharacterState {
 
     @Override
     public void exit() {
-        character.removeEffect(run);
+        character.removeEffect(running);
     }
 }

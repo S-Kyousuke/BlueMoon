@@ -28,7 +28,7 @@ public class Villager2 extends AbstractVillager {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Villager2";
     }
 

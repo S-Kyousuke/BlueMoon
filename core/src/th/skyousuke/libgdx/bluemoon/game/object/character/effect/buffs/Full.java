@@ -50,4 +50,8 @@ public class Full extends AbstractEffect {
         character.getAttribute().removeAdditionalPrimary(primaryBonus);
     }
 
+    @Override
+    public String getName() {
+        return "Full";
+    }
 }

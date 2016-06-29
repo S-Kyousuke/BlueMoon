@@ -33,7 +33,7 @@ public class AbstractMonster extends AbstractCharacter {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return null;
     }
 

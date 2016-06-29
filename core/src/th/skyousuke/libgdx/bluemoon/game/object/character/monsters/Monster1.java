@@ -27,7 +27,7 @@ public class Monster1 extends AbstractMonster {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Monster1";
     }
 }

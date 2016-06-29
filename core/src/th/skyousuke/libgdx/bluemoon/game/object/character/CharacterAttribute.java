@@ -185,5 +185,4 @@ public class CharacterAttribute {
         return getBaseDerived(derivedAttribute) + getTotalAdditionalDerived(derivedAttribute);
     }
 
-
 }

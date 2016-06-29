@@ -27,7 +27,7 @@ public class Tool1 extends AbstractEquipment {
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Tool1";
     }
 

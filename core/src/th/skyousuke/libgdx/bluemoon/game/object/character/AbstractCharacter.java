@@ -20,6 +20,8 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Iterator;
+
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
@@ -31,6 +33,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
 
     private static final float FRICTION = 500f;
+
     private final Array<AbstractEffect> effects;
     private CharacterState state;
     private Direction viewDirection;
@@ -71,8 +74,14 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     public void update(float deltaTime) {
         //Apply any effects on character
         drainFullness(deltaTime);
-        for (AbstractEffect effect : effects) {
-            effect.apply(this, deltaTime);
+        Iterator<AbstractEffect> effectsIterator = effects.iterator();
+        while (effectsIterator.hasNext()) {
+            AbstractEffect effect = effectsIterator.next();
+            if (effect.isExpire()) {
+                effect.exit(this);
+                effectsIterator.remove();
+            }
+            else effect.apply(this, deltaTime);
         }
         state.update(deltaTime);
 
@@ -152,12 +161,16 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     }
 
     public void removeEffect(AbstractEffect effect) {
-        effects.removeValue(effect, true);
         effect.exit(this);
+        effects.removeValue(effect, true);
     }
 
     public boolean hasEffect(AbstractEffect effect) {
         return effects.contains(effect, true);
+    }
+
+    public Array<AbstractEffect> getEffects() {
+        return effects;
     }
 
 }

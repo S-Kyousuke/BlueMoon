@@ -41,13 +41,17 @@ public abstract class AbstractEffect {
                 remainingTime -= deltaTime;
             } else {
                 overTimeEffect(character, remainingTime);
-                remainingTime = 0;
+                expire();
             }
         }
     }
 
     public boolean isExpire() {
         return remainingTime == 0;
+    }
+
+    public void expire() {
+        remainingTime = 0;
     }
 
     public void enter(AbstractCharacter character) {
@@ -59,5 +63,7 @@ public abstract class AbstractEffect {
     }
 
     protected abstract void overTimeEffect(AbstractCharacter character, float activeTime);
+
+    public abstract String getName();
 
 }
