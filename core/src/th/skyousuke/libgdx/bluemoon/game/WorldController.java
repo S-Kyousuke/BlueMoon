@@ -28,7 +28,7 @@ public class WorldController extends InputAdapter {
 
     public CameraHelper cameraHelper;
     public Level level;
-    private AbstractPlayer controlledPlayer;
+    public AbstractPlayer controlledPlayer;
 
     public WorldController() {
         init();

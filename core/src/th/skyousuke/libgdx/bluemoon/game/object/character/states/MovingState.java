@@ -20,29 +20,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.others.Run;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 /**
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public class RunningState extends CharacterState {
+public class MovingState extends CharacterState {
 
-    private float[] bonusDerivedAttribute;
+    private Run run;
 
-    @Override
-    public void enter() {
-        bonusDerivedAttribute = new float[CharacterDerivedAttribute.values().length];
-        bonusDerivedAttribute[CharacterDerivedAttribute.MOVING_SPEED.ordinal()] =
-                character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
-        character.getAttribute().addAdditionalDerived(bonusDerivedAttribute);
-    }
-
-    @Override
-    public void exit() {
-        character.getAttribute().removeAdditionalDerived(bonusDerivedAttribute);
+    public MovingState(AbstractCharacter character) {
+        super(character);
+        run = new Run();
     }
 
     @Override
@@ -51,37 +44,47 @@ public class RunningState extends CharacterState {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) character.move(Direction.DOWN);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) character.move(Direction.LEFT);
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) character.move(Direction.RIGHT);
-        if (!Gdx.input.isKeyPressed(Input.Keys.Z)) character.setState(new WalkingState());
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) character.interact();
         if (Gdx.input.isKeyPressed(Input.Keys.C)) character.attack();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+            character.addEffect(run);
+        }
     }
 
     @Override
-    protected void updateCharacter(float deltaTime) {
-        //Drain stamina every second
-        character.changeStatus(CharacterStatusType.STAMINA,
-                -character.getAttribute().getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime);
+    public void updateCharacter(float deltaTime) {
+        if (character.hasEffect(run)) {
+            if (!Gdx.input.isKeyPressed(Input.Keys.Z)) {
+                character.removeEffect(run);
+            }
+        }
+        if (!character.isMoving()) {
+            character.setState(new IdlingState(character));
+        }
     }
 
     @Override
-    protected void setAnimation() {
-        float runTimeFactor = 12.5f;
-        float runTime = runTimeFactor / character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
+    public void setAnimation() {
+        float walkTimeFactor = 25.0f;
+        float walkTime = walkTimeFactor / character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
 
         switch (character.getViewDirection()) {
             case LEFT:
-                character.setAnimation(AnimationKey.WALK_LEFT, runTime);
+                character.setAnimation(AnimationKey.WALK_LEFT, walkTime);
                 break;
             case RIGHT:
-                character.setAnimation(AnimationKey.WALK_RIGHT, runTime);
+                character.setAnimation(AnimationKey.WALK_RIGHT, walkTime);
                 break;
             case UP:
-                character.setAnimation(AnimationKey.WALK_UP, runTime);
+                character.setAnimation(AnimationKey.WALK_UP, walkTime);
                 break;
             case DOWN:
-                character.setAnimation(AnimationKey.WALK_DOWN, runTime);
+                character.setAnimation(AnimationKey.WALK_DOWN, walkTime);
                 break;
         }
+    }
 
+    @Override
+    public void exit() {
+        character.removeEffect(run);
     }
 }

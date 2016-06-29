@@ -45,7 +45,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         status = new CharacterStatus(attribute);
         effects = new Array<>();
 
-        setState(new IdlingState());
+        setState(new IdlingState(this));
         viewDirection = Direction.DOWN;
         movable = true;
 
@@ -72,7 +72,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         //Apply any effects on character
         drainFullness(deltaTime);
         for (AbstractEffect effect : effects) {
-            effect.apply(deltaTime);
+            effect.apply(this, deltaTime);
         }
         state.update(deltaTime);
 
@@ -121,8 +121,8 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         return attribute;
     }
 
-    public CharacterStatus getStatus() {
-        return status;
+    public float getStatus(CharacterStatusType type) {
+        return status.getStatus(type);
     }
 
     public Direction getViewDirection() {
@@ -135,16 +135,29 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     public void setState(CharacterState state) {
         if (this.state != null) this.state.exit();
-        state.setCharacter(this);
         this.state = state;
         this.state.enter();
         resetAnimation();
     }
 
     public void attack() {
-        setState(new AttackingState());
+        setState(new AttackingState(this));
     }
 
     public abstract void interact();
+
+    public void addEffect(AbstractEffect effect) {
+        effects.add(effect);
+        effect.enter(this);
+    }
+
+    public void removeEffect(AbstractEffect effect) {
+        effects.removeValue(effect, true);
+        effect.exit(this);
+    }
+
+    public boolean hasEffect(AbstractEffect effect) {
+        return effects.contains(effect, true);
+    }
 
 }

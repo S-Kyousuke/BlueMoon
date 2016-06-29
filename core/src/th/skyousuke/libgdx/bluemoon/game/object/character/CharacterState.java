@@ -23,6 +23,10 @@ public abstract class CharacterState {
 
     protected AbstractCharacter character;
 
+    public CharacterState(AbstractCharacter character) {
+        this.character = character;
+    }
+
     public void update(float deltaTime) {
         setAnimation();
         updateCharacter(deltaTime);
@@ -39,10 +43,6 @@ public abstract class CharacterState {
     }
 
     public void exit() {
-    }
-
-    public void setCharacter(AbstractCharacter character) {
-        this.character = character;
     }
 
 }

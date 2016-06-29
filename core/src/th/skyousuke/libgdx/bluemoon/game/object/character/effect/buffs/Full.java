@@ -25,18 +25,18 @@ public class Full extends AbstractEffect {
     private final int[] primaryBonus;
     private boolean active;
 
-    public Full(AbstractCharacter character, float duration) {
-        super(character, duration);
+    public Full(float duration) {
+        super(duration);
         primaryBonus = new int[CharacterPrimaryAttribute.values().length];
     }
 
     @Override
-    protected void enterEffect() {
+    public void enter(AbstractCharacter character) {
         character.getAttribute().addAdditionalPrimary(primaryBonus);
     }
 
     @Override
-    protected void overTimeEffect(float activeTime) {
+    protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         primaryBonus[CharacterPrimaryAttribute.STRENGTH.ordinal()] =
                 (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
         primaryBonus[CharacterPrimaryAttribute.VITALITY.ordinal()] =
@@ -46,7 +46,7 @@ public class Full extends AbstractEffect {
     }
 
     @Override
-    protected void exitEffect() {
+    public void exit(AbstractCharacter character) {
         character.getAttribute().removeAdditionalPrimary(primaryBonus);
     }
 

@@ -24,10 +24,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class WorldRenderer implements Disposable {
+import th.skyousuke.libgdx.bluemoon.BlueMoon;
 
-    public static final int SCENE_WIDTH = 1280;
-    public static final int SCENE_HEIGHT = 720;
+public class WorldRenderer implements Disposable {
 
     private WorldController worldController;
 
@@ -37,6 +36,8 @@ public class WorldRenderer implements Disposable {
     private OrthogonalTiledMapRenderer tiledRenderer;
     private ShapeRenderer shapeRenderer;
 
+
+
     public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
         init();
@@ -44,7 +45,7 @@ public class WorldRenderer implements Disposable {
 
     public void init() {
         camera = new OrthographicCamera();
-        viewport = new FitViewport(SCENE_WIDTH, SCENE_HEIGHT, camera);
+        viewport = new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT, camera);
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -58,6 +59,7 @@ public class WorldRenderer implements Disposable {
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         worldController.level.render(batch, tiledRenderer, shapeRenderer);
+
     }
 
     public void resize(int width, int height) {

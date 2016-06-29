@@ -24,6 +24,7 @@ public enum CharacterDerivedAttribute {
     MAX_STAMINA,
     MAX_HEALTH,
     MAX_MANA,
+    MAX_FULLNESS,
     HEALTH_REGENERATION,
     MANA_REGENERATION,
     PHYSICAL_DAMAGE,

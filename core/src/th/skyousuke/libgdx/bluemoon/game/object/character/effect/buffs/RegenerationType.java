@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.desktop;
+package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
-import th.skyousuke.libgdx.bluemoon.BlueMoon;
-
-public class DesktopLauncher {
-    public static void main(String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Blue Moon";
-        config.width = BlueMoon.SCENE_WIDTH;
-        config.height = BlueMoon.SCENE_HEIGHT;
-        new LwjglApplication(new BlueMoon(), config);
-    }
+/**
+ * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
+ */
+public enum  RegenerationType {
+    HEALTH,
+    MANA,
+    STAMINA,
+    FULLNESS
 }

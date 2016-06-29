@@ -20,22 +20,13 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 
 public class CrowdControl extends AbstractEffect {
 
-    public CrowdControl(AbstractCharacter character, float duration) {
-        super(character, duration);
+    public CrowdControl(float duration) {
+        super(duration);
     }
 
     @Override
-    protected void enterEffect() {
+    protected void overTimeEffect(AbstractCharacter character, float activeTime) {
 
     }
 
-    @Override
-    protected void overTimeEffect(float activeTime) {
-
-    }
-
-    @Override
-    protected void exitEffect() {
-
-    }
 }

@@ -20,24 +20,29 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 
 public abstract class AbstractEffect {
 
-    protected final AbstractCharacter character;
     protected float remainingTime;
 
-    public AbstractEffect(AbstractCharacter character, float duration) {
-        this.character = character;
+    protected AbstractEffect(float duration) {
         remainingTime = duration;
-        enterEffect();
     }
 
-    public void apply(float deltaTime) {
+    // forever effect
+    protected AbstractEffect() {
+        this(Float.MAX_VALUE);
+    }
+
+    public void apply(AbstractCharacter character, float deltaTime) {
         if (isExpire()) return;
-        if (remainingTime > deltaTime) {
-            overTimeEffect(deltaTime);
-            remainingTime -= deltaTime;
+        if (remainingTime == Float.MAX_VALUE) {
+            overTimeEffect(character, deltaTime);
         } else {
-            overTimeEffect(remainingTime);
-            remainingTime = 0;
-            exitEffect();
+            if (remainingTime > deltaTime) {
+                overTimeEffect(character, deltaTime);
+                remainingTime -= deltaTime;
+            } else {
+                overTimeEffect(character, remainingTime);
+                remainingTime = 0;
+            }
         }
     }
 
@@ -45,10 +50,14 @@ public abstract class AbstractEffect {
         return remainingTime == 0;
     }
 
-    protected abstract void enterEffect();
+    public void enter(AbstractCharacter character) {
 
-    protected abstract void overTimeEffect(float activeTime);
+    }
 
-    protected abstract void exitEffect();
+    public void exit(AbstractCharacter character) {
+
+    }
+
+    protected abstract void overTimeEffect(AbstractCharacter character, float activeTime);
 
 }

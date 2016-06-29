@@ -25,18 +25,15 @@ public class Regeneration extends AbstractEffect {
     private final float restorePerSecond;
     private final RegenerationType type;
 
-    public Regeneration(AbstractCharacter character, RegenerationType type, float restorePerSecond, float duration) {
-        super(character, duration);
+    public Regeneration(RegenerationType type, float restorePerSecond, float duration) {
+        super(duration);
         this.restorePerSecond = restorePerSecond;
         this.type = type;
     }
 
-    @Override
-    protected void enterEffect() {
-    }
 
     @Override
-    protected void overTimeEffect(float activeTime) {
+    protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         switch (type) {
             case HEALTH:
                 character.changeStatus(CharacterStatusType.HEALTH, restorePerSecond * activeTime);
@@ -53,14 +50,4 @@ public class Regeneration extends AbstractEffect {
         }
     }
 
-    @Override
-    protected void exitEffect() {
-    }
-
-    public enum RegenerationType {
-        HEALTH,
-        MANA,
-        STAMINA,
-        FULLNESS
-    }
 }

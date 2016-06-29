@@ -23,6 +23,9 @@ import th.skyousuke.libgdx.bluemoon.screens.WorldScreen;
 
 public class BlueMoon extends Game {
 
+    public static final int SCENE_WIDTH = 1280;
+    public static final int SCENE_HEIGHT = 720;
+
     @Override
     public void create() {
         Assets.instance.init();

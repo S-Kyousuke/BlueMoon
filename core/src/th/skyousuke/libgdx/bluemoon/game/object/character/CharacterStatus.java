@@ -20,19 +20,27 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class CharacterStatus {
 
-    private final float[] allState;
+    private final float[] allStatus;
     private final CharacterAttribute characterAttribute;
 
     public CharacterStatus(CharacterAttribute characterAttribute) {
-        allState = new float[CharacterStatusType.values().length];
+        allStatus = new float[CharacterStatusType.values().length];
         this.characterAttribute = characterAttribute;
+        setToMax();
     }
 
-    public void setState(CharacterStatusType stateType, float value) {
-        float minValue = 0f;
-        float maxValue;
+    public void setToMax() {
+        setStatus(CharacterStatusType.HEALTH, Float.MAX_VALUE);
+        setStatus(CharacterStatusType.MANA, Float.MAX_VALUE);
+        setStatus(CharacterStatusType.STAMINA, Float.MAX_VALUE);
+        setStatus(CharacterStatusType.FULLNESS, Float.MAX_VALUE);
+    }
 
-        switch (stateType) {
+    public void setStatus(CharacterStatusType statusType, float value) {
+        float minValue = 0f;
+        float maxValue = Float.MAX_VALUE;
+
+        switch (statusType) {
             case HEALTH:
                 maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
                 break;
@@ -43,21 +51,19 @@ public class CharacterStatus {
                 maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_STAMINA);
                 break;
             case FULLNESS:
-                maxValue = 100f;
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
-            default:
-                maxValue = Float.MAX_VALUE;
         }
-
-        allState[stateType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
+        allStatus[statusType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
     }
 
-    public float getState(CharacterStatusType stateType) {
-        return allState[stateType.ordinal()];
+    public float getStatus(CharacterStatusType statusType) {
+        return allStatus[statusType.ordinal()];
     }
 
-    public void addValue(CharacterStatusType stateType, float changeValue) {
-        setState(stateType, getState(stateType) + changeValue);
+    public void addValue(CharacterStatusType statusType, float changeValue) {
+        setStatus(statusType, getStatus(statusType) + changeValue);
+
     }
 
 }

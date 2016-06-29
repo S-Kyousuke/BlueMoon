@@ -54,16 +54,19 @@ public class CharacterAttribute {
                 120 + (agility * 10.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_STAMINA.ordinal()] =
-                100 + (vitality * 5.0f);
+                100 + ((vitality - 1) * 5.0f);
+
+        baseDerivedAttribute[CharacterDerivedAttribute.MAX_FULLNESS.ordinal()] =
+                100f;
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_HEALTH.ordinal()] =
-                100 + (vitality * 10.0f);
+                100 + ((vitality - 1) * 10.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.HEALTH_REGENERATION.ordinal()] =
                 2 + (vitality * 0.5f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_MANA.ordinal()] =
-                10 + (intelligence * 1.0f);
+                10 + ((intelligence - 1) * 1.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MANA_REGENERATION.ordinal()] =
                 10 + (intelligence * 0.2f);
@@ -84,7 +87,7 @@ public class CharacterAttribute {
                 1 / (float) (1 - Math.sqrt(agility * 0.06f));
 
         baseDerivedAttribute[CharacterDerivedAttribute.FULLNESS_DRAIN.ordinal()] =
-                1 / (float) (1 - Math.sqrt(survival * 0.05f));
+                1 / (float) ((1 - Math.sqrt(survival * 0.05f)) * 32f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.CRAFTING.ordinal()] =
                 1.0f + survival;

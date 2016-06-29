@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
@@ -27,6 +28,10 @@ import th.skyousuke.libgdx.bluemoon.utils.Direction;
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public class IdlingState extends CharacterState {
+
+    public IdlingState(AbstractCharacter character) {
+        super(character);
+    }
 
     @Override
     public void handleInput() {
@@ -40,7 +45,7 @@ public class IdlingState extends CharacterState {
 
     @Override
     public void updateCharacter(float deltaTime) {
-        if (character.isMoving()) character.setState(new WalkingState());
+        if (character.isMoving()) character.setState(new MovingState(character));
     }
 
     @Override
