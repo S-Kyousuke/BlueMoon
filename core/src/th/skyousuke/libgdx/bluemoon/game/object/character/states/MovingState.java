@@ -47,7 +47,7 @@ public class MovingState extends CharacterState {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) character.move(Direction.RIGHT);
         if (Gdx.input.isKeyPressed(Input.Keys.C)) character.attack();
         if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-            if (character.getStatus(CharacterStatusType.STAMINA) > 0)
+            if (character.getCharacterStatus().getStatus(CharacterStatusType.STAMINA) > 0)
                 character.addEffect(running);
         }
     }
@@ -87,6 +87,8 @@ public class MovingState extends CharacterState {
 
     @Override
     public void exit() {
-        character.removeEffect(running);
+        if (character.hasEffect(running)) {
+            character.removeEffect(running);
+        }
     }
 }

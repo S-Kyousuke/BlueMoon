@@ -18,16 +18,16 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.effect;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 
-public abstract class AbstractEffect {
+public abstract class AbstractCharacterEffect {
 
     protected float remainingTime;
 
-    protected AbstractEffect(float duration) {
+    protected AbstractCharacterEffect(float duration) {
         remainingTime = duration;
     }
 
     // forever effect
-    protected AbstractEffect() {
+    protected AbstractCharacterEffect() {
         this(Float.MAX_VALUE);
     }
 

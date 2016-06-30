@@ -18,18 +18,28 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.math.MathUtils;
 
+import java.util.EnumMap;
+
 public class CharacterStatus {
 
-    private final float[] allStatus;
+    private final EnumMap<CharacterStatusType, Float> allStatus;
     private final CharacterAttribute characterAttribute;
 
+    private CharacterListener characterListener;
+
     public CharacterStatus(CharacterAttribute characterAttribute) {
-        allStatus = new float[CharacterStatusType.values().length];
+        allStatus = new EnumMap<>(CharacterStatusType.class);
         this.characterAttribute = characterAttribute;
-        setToMax();
+        characterListener = new NullCharacterListener();
+
+        // Initialize status
+        for (CharacterStatusType type : CharacterStatusType.values()) {
+            allStatus.put(type, 0f);
+        }
+        maxAll();
     }
 
-    public void setToMax() {
+    public void maxAll() {
         setStatus(CharacterStatusType.HEALTH, Float.MAX_VALUE);
         setStatus(CharacterStatusType.MANA, Float.MAX_VALUE);
         setStatus(CharacterStatusType.STAMINA, Float.MAX_VALUE);
@@ -54,16 +64,20 @@ public class CharacterStatus {
                 maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
         }
-        allStatus[statusType.ordinal()] = MathUtils.clamp(value, minValue, maxValue);
+        allStatus.put(statusType, MathUtils.clamp(value, minValue, maxValue));
+        characterListener.onStatusChange(statusType);
     }
 
     public float getStatus(CharacterStatusType statusType) {
-        return allStatus[statusType.ordinal()];
+        return allStatus.get(statusType);
     }
 
-    public void addValue(CharacterStatusType statusType, float changeValue) {
+    public void changeStatus(CharacterStatusType statusType, float changeValue) {
         setStatus(statusType, getStatus(statusType) + changeValue);
+    }
 
+    public void setCharacterListener(CharacterListener characterListener) {
+        this.characterListener = characterListener;
     }
 
 }

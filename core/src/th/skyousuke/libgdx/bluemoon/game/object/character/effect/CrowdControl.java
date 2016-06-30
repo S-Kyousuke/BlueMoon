@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.effect;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 
-public abstract class CrowdControl extends AbstractEffect {
+public abstract class CrowdControl extends AbstractCharacterEffect {
 
     protected CrowdControl(float duration) {
         super(duration);

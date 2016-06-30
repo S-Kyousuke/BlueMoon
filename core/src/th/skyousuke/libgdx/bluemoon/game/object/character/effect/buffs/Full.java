@@ -17,37 +17,60 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
-public class Full extends AbstractEffect {
+public class Full extends AbstractCharacterEffect {
 
-    private final int[] primaryBonus;
-    private boolean active;
 
-    public Full(float duration) {
-        super(duration);
-        primaryBonus = new int[CharacterPrimaryAttribute.values().length];
-    }
+    private int lastBonusStrength;
+    private int lastBonusVitality;
+    private int lastBonusAgility;
+
+    private CharacterAttribute characterAttribute;
 
     @Override
     public void enter(AbstractCharacter character) {
-        character.getAttribute().addAdditionalPrimary(primaryBonus);
+        lastBonusStrength = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
+        lastBonusVitality = (int) (characterAttribute.getBasePrimary(CharacterPrimaryAttribute.VITALITY) * 0.20);
+        lastBonusAgility = (int) (characterAttribute.getBasePrimary(CharacterPrimaryAttribute.AGILITY) * 0.05);
+
+        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastBonusStrength);
+        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastBonusVitality);
+        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastBonusAgility);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        primaryBonus[CharacterPrimaryAttribute.STRENGTH.ordinal()] =
-                (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
-        primaryBonus[CharacterPrimaryAttribute.VITALITY.ordinal()] =
-                (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.VITALITY) * 0.20);
-        primaryBonus[CharacterPrimaryAttribute.AGILITY.ordinal()] =
-                (int) (character.getAttribute().getBasePrimary(CharacterPrimaryAttribute.AGILITY) * 0.05);
+
+        int bonusStrength = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
+        int bonusVitality = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.VITALITY) * 0.20);
+        int bonusAgility = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.AGILITY) * 0.05);
+
+        if (lastBonusStrength != bonusStrength) {
+            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastBonusStrength);
+            lastBonusStrength = bonusStrength;
+            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastBonusStrength);
+        }
+        if (lastBonusVitality != bonusVitality) {
+            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastBonusVitality);
+            lastBonusVitality = bonusVitality;
+            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastBonusVitality);
+        }
+        if (lastBonusAgility != bonusAgility) {
+            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastBonusAgility);
+            lastBonusAgility = bonusAgility;
+            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastBonusAgility);
+        }
+
     }
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().removeAdditionalPrimary(primaryBonus);
+        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastBonusStrength);
+        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastBonusVitality);
+        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastBonusAgility);
     }
 
     @Override

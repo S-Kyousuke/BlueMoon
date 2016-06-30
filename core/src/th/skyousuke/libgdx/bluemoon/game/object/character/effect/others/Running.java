@@ -19,38 +19,32 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.effect.others;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
  * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
  */
-public class Running extends AbstractEffect {
+public class Running extends AbstractCharacterEffect {
 
-    private float[] bonusDerivedAttribute;
-
-    public Running() {
-        super();
-        bonusDerivedAttribute = new float[CharacterDerivedAttribute.values().length];
-    }
+    private float bonusMovingSpeed;
 
     @Override
     public void enter(AbstractCharacter character) {
-        bonusDerivedAttribute[CharacterDerivedAttribute.MOVING_SPEED.ordinal()] =
-                character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
-        character.getAttribute().addAdditionalDerived(bonusDerivedAttribute);
+        bonusMovingSpeed = character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
+        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, bonusMovingSpeed);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        if (character.getStatus(CharacterStatusType.STAMINA) > 0) {
-            character.changeStatus(CharacterStatusType.STAMINA, -1.0f * activeTime);
+        if (character.getCharacterStatus().getStatus(CharacterStatusType.STAMINA) > 0) {
+            character.getCharacterStatus().changeStatus(CharacterStatusType.STAMINA, -1.0f * activeTime);
         }
         else expire();
     }
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().removeAdditionalDerived(bonusDerivedAttribute);
+        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, -bonusMovingSpeed);
     }
 
     @Override

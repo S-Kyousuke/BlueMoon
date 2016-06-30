@@ -1,6 +1,6 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
  * Created by Skyousuke <surasek@gmail.com> on 30/6/2559.
@@ -23,12 +23,12 @@ public class NullCharacterListener implements CharacterListener {
     }
 
     @Override
-    public void onEffectAdd(AbstractEffect effect) {
+    public void onEffectAdd(AbstractCharacterEffect effect) {
 
     }
 
     @Override
-    public void onEffectRemove(AbstractEffect effect) {
+    public void onEffectRemove(AbstractCharacterEffect effect) {
 
     }
 }

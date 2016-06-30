@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
@@ -32,12 +32,13 @@ import th.skyousuke.libgdx.bluemoon.utils.Direction;
 public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
 
-    private static final float FRICTION = 500f;
+    private static final float FRICTION = 1000f;
 
-    private final Array<AbstractEffect> effects;
+    private final Array<AbstractCharacterEffect> effects;
     private CharacterState state;
     private Direction viewDirection;
     private boolean movable;
+
     private CharacterStatus status;
     private CharacterAttribute attribute;
 
@@ -77,9 +78,9 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     public void update(float deltaTime) {
         //Apply any effects on character
         drainFullness(deltaTime);
-        Iterator<AbstractEffect> effectsIterator = effects.iterator();
+        Iterator<AbstractCharacterEffect> effectsIterator = effects.iterator();
         while (effectsIterator.hasNext()) {
-            AbstractEffect effect = effectsIterator.next();
+            AbstractCharacterEffect effect = effectsIterator.next();
             if (effect.isExpire()) {
                 removeEffect(effect);
             }
@@ -119,22 +120,17 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         velocity.setLength(movingSpeed);
     }
 
-    public void changeStatus(CharacterStatusType statusType, float value) {
-        status.addValue(statusType, value);
-        listener.onStatusChange(statusType);
+    public void drainFullness(float deltaTime) {
+        status.changeStatus(CharacterStatusType.FULLNESS,
+                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime);
     }
 
-    public void drainFullness(float deltaTime) {
-        changeStatus(CharacterStatusType.FULLNESS, -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) *
-                deltaTime);
+    public CharacterStatus getCharacterStatus() {
+        return status;
     }
 
     public CharacterAttribute getAttribute() {
         return attribute;
-    }
-
-    public float getStatus(CharacterStatusType type) {
-        return status.getStatus(type);
     }
 
     public Direction getViewDirection() {
@@ -158,32 +154,35 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     public abstract void interact();
 
-    public void addEffect(AbstractEffect effect) {
+    public void addEffect(AbstractCharacterEffect effect) {
         effects.add(effect);
         effect.enter(this);
         listener.onEffectAdd(effect);
     }
 
-    public void removeEffect(AbstractEffect effect) {
-        effect.exit(this);
-        effects.removeValue(effect, true);
+    public void removeEffect(AbstractCharacterEffect effect) {
+        if(effects.removeValue(effect, true)) {
+            effect.exit(this);
+        }
         listener.onEffectRemove(effect);
     }
 
-    public boolean hasEffect(AbstractEffect effect) {
+    public boolean hasEffect(AbstractCharacterEffect effect) {
         return effects.contains(effect, true);
     }
 
-    public Array<AbstractEffect> getEffects() {
+    public Array<AbstractCharacterEffect> getEffects() {
         return effects;
     }
 
     public void setListener(CharacterListener listener) {
         this.listener = listener;
+        status.setCharacterListener(listener);
+        attribute.setCharacterListener(listener);
     }
 
     public void removeListener() {
-        listener = new NullCharacterListener();
+        setListener(new NullCharacterListener());
     }
 
 }
