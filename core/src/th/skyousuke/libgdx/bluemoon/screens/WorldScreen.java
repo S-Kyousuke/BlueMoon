@@ -19,51 +19,17 @@ package th.skyousuke.libgdx.bluemoon.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import th.skyousuke.libgdx.bluemoon.BlueMoon;
-import th.skyousuke.libgdx.bluemoon.game.Assets;
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
+import th.skyousuke.libgdx.bluemoon.game.WorldGui;
 import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
 
 public class WorldScreen extends AbstractGameScreen {
 
     private WorldController worldController;
     private WorldRenderer worldRenderer;
+    private WorldGui worldGui;
 
-    private Stage stage;
-
-    private Window statusWindow;
-    private Label healthLabel;
-    private Label manaLabel;
-    private Label staminaLabel;
-    private Label fullnessLabel;
-    private Label effectLabel;
-
-    private List<String> effectsList;
-    private ScrollPane effectsPane;
-
-    private TextButton addHealthButton;
-    private TextButton subtractHealthButton;
-    private TextButton addManaButton;
-    private TextButton subtractManaButton;
-    private TextButton addStaminaButton;
-    private TextButton subtractStaminaButton;
-    private TextButton addFullnessButton;
-    private TextButton subtractFullnessButton;
-    private TextButton showAttributeButton;
 
     public WorldScreen(Game game) {
         super(game);
@@ -73,128 +39,9 @@ public class WorldScreen extends AbstractGameScreen {
     public void show() {
         worldController = new WorldController();
         worldRenderer = new WorldRenderer(worldController);
+        worldGui = new WorldGui(worldController);
 
-        // GUI
-        stage = new Stage(new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT));
-        healthLabel = new Label("", Assets.instance.skin);
-        manaLabel = new Label("", Assets.instance.skin);
-        staminaLabel = new Label("", Assets.instance.skin);
-        fullnessLabel = new Label("", Assets.instance.skin);
-
-        healthLabel.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                healthLabel.setText(String.format("Health: %.1f/%.1f",
-                        worldController.controlledPlayer.getStatus(CharacterStatusType.HEALTH),
-                        worldController.controlledPlayer.getAttribute()
-                                .getDerived(CharacterDerivedAttribute.MAX_HEALTH)));
-                return false;
-            }
-        });
-
-        manaLabel.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                manaLabel.setText(String.format("Mana: %.1f/%.1f",
-                        worldController.controlledPlayer.getStatus(CharacterStatusType.MANA),
-                        worldController.controlledPlayer.getAttribute()
-                                .getDerived(CharacterDerivedAttribute.MAX_MANA)));
-                return false;
-            }
-        });
-
-        staminaLabel.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                staminaLabel.setText(String.format("Stamina: %.1f/%.1f",
-                        worldController.controlledPlayer.getStatus(CharacterStatusType.STAMINA),
-                        worldController.controlledPlayer.getAttribute()
-                                .getDerived(CharacterDerivedAttribute.MAX_STAMINA)));
-                return false;
-            }
-        });
-
-        fullnessLabel.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                fullnessLabel.setText(String.format("Fullness: %.1f/%.1f",
-                        worldController.controlledPlayer.getStatus(CharacterStatusType.FULLNESS),
-                        worldController.controlledPlayer.getAttribute()
-                                .getDerived(CharacterDerivedAttribute.MAX_FULLNESS)));
-                return false;
-            }
-        });
-
-        effectsList = new List<>(Assets.instance.skin);
-        Array<String> items = new Array<>();
-        effectsList.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                items.clear();
-                for (AbstractEffect effect : worldController.controlledPlayer.getEffects())
-                    items.add(effect.getName());
-                effectsList.setItems(items);
-                return false;
-            }
-        });
-        effectsPane = new ScrollPane(effectsList, Assets.instance.skin);
-        //effectsPane.setForceScroll(false, true);
-        //effectsPane.setFadeScrollBars(false);
-        effectLabel = new Label("Effects:", Assets.instance.skin);
-
-        addHealthButton = new TextButton("+", Assets.instance.skin);
-        addManaButton = new TextButton("+", Assets.instance.skin);
-        addStaminaButton = new TextButton("+", Assets.instance.skin);
-        addFullnessButton = new TextButton("+", Assets.instance.skin);
-        subtractHealthButton = new TextButton("-", Assets.instance.skin);
-        subtractManaButton = new TextButton("-", Assets.instance.skin);
-        subtractStaminaButton = new TextButton("-", Assets.instance.skin);
-        subtractFullnessButton = new TextButton("-", Assets.instance.skin);
-        showAttributeButton = new TextButton("Show Attribute", Assets.instance.skin);
-
-        statusWindow = new Window("", Assets.instance.skin);
-        statusWindow.padLeft(10f);
-        statusWindow.padRight(15f);
-        statusWindow.padBottom(10f);
-        statusWindow.align(Align.left);
-        statusWindow.row().padTop(10f);
-        statusWindow.add(healthLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addHealthButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractHealthButton).width(20f).height(20f);
-        statusWindow.row();
-        statusWindow.add(manaLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addManaButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractManaButton).width(20f).height(20f);
-        statusWindow.row();
-        statusWindow.add(staminaLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addStaminaButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractStaminaButton).width(20f).height(20f);
-        statusWindow.row();
-        statusWindow.add(fullnessLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addFullnessButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractFullnessButton).width(20f).height(20f);
-        statusWindow.row().colspan(3);
-        statusWindow.add(effectLabel).align(Align.left).padTop(5f);
-        statusWindow.row().colspan(3);
-        statusWindow.add(effectsPane).fill().expand();
-        statusWindow.row().colspan(3);
-        statusWindow.add(showAttributeButton).width(130f).height(25f).padTop(10f);
-        statusWindow.pack();
-        statusWindow.setWidth(240f);
-        statusWindow.setHeight(280f);
-        statusWindow.setPosition(100, 256f);
-
-        statusWindow.addAction(new Action() {
-            @Override
-            public boolean act(float delta) {
-                statusWindow.getTitleLabel().setText(String.format("%s", worldController.controlledPlayer.getName()));
-                return false;
-            }
-        });
-
-        //stage.setDebugAll(true);
-        stage.addActor(statusWindow);
-        Gdx.input.setInputProcessor(stage);
+        worldController.setListener(worldGui);
     }
 
     @Override
@@ -205,20 +52,20 @@ public class WorldScreen extends AbstractGameScreen {
         worldController.update(deltaTime);
         worldRenderer.render();
 
-        stage.act(deltaTime);
-        stage.draw();
+        worldGui.update(deltaTime);
+        worldGui.render();
     }
 
     @Override
     public void resize(int width, int height) {
         worldRenderer.resize(width, height);
-        stage.getViewport().update(width, height);
+        worldGui.resize(width, height);
     }
 
     @Override
     public void hide() {
-        stage.dispose();
         worldRenderer.dispose();
+        worldGui.dispose();
     }
 
 }

@@ -54,19 +54,19 @@ public class CharacterAttribute {
                 120 + (agility * 10.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_STAMINA.ordinal()] =
-                100 + ((vitality - 1) * 5.0f);
+                50 + ((vitality - 1) * 5.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_FULLNESS.ordinal()] =
                 100f;
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_HEALTH.ordinal()] =
-                100 + ((vitality - 1) * 10.0f);
+                80 + ((vitality - 1) * 10.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.HEALTH_REGENERATION.ordinal()] =
                 2 + (vitality * 0.5f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MAX_MANA.ordinal()] =
-                10 + ((intelligence - 1) * 1.0f);
+                20 + ((intelligence - 1) * 1.0f);
 
         baseDerivedAttribute[CharacterDerivedAttribute.MANA_REGENERATION.ordinal()] =
                 10 + (intelligence * 0.2f);
@@ -169,6 +169,16 @@ public class CharacterAttribute {
         return getBasePrimary(primaryAttribute) + getTotalAdditionalPrimary(primaryAttribute);
     }
 
+    public int[] getPrimary() {
+        int[] totalPrimary = new int[CharacterPrimaryAttribute.values().length];
+        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
+            totalPrimary[primaryAttribute.ordinal()] += (basePrimaryAttribute[primaryAttribute.ordinal()]
+                    + getTotalAdditionalPrimary(primaryAttribute));
+        }
+
+        return totalPrimary;
+    }
+
     public float getBaseDerived(CharacterDerivedAttribute derivedAttribute) {
         return baseDerivedAttribute[derivedAttribute.ordinal()];
     }
@@ -183,6 +193,15 @@ public class CharacterAttribute {
 
     public float getDerived(CharacterDerivedAttribute derivedAttribute) {
         return getBaseDerived(derivedAttribute) + getTotalAdditionalDerived(derivedAttribute);
+    }
+
+    public float[] getDerived() {
+        float[] totalDerived = new float[CharacterDerivedAttribute.values().length];
+        for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
+            totalDerived[derivedAttribute.ordinal()] += (baseDerivedAttribute[derivedAttribute.ordinal()]
+                    + getTotalAdditionalDerived(derivedAttribute));
+        }
+        return totalDerived;
     }
 
 }

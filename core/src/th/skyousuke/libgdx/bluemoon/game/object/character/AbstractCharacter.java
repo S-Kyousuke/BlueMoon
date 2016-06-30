@@ -41,12 +41,15 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     private CharacterStatus status;
     private CharacterAttribute attribute;
 
+    private CharacterListener listener;
+
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
 
         attribute = new CharacterAttribute();
         status = new CharacterStatus(attribute);
         effects = new Array<>();
+        listener = new NullCharacterListener();
 
         setState(new IdlingState(this));
         viewDirection = Direction.DOWN;
@@ -78,8 +81,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         while (effectsIterator.hasNext()) {
             AbstractEffect effect = effectsIterator.next();
             if (effect.isExpire()) {
-                effect.exit(this);
-                effectsIterator.remove();
+                removeEffect(effect);
             }
             else effect.apply(this, deltaTime);
         }
@@ -119,6 +121,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     public void changeStatus(CharacterStatusType statusType, float value) {
         status.addValue(statusType, value);
+        listener.onStatusChange(statusType);
     }
 
     public void drainFullness(float deltaTime) {
@@ -158,11 +161,13 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     public void addEffect(AbstractEffect effect) {
         effects.add(effect);
         effect.enter(this);
+        listener.onEffectAdd(effect);
     }
 
     public void removeEffect(AbstractEffect effect) {
         effect.exit(this);
         effects.removeValue(effect, true);
+        listener.onEffectRemove(effect);
     }
 
     public boolean hasEffect(AbstractEffect effect) {
@@ -171,6 +176,14 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     public Array<AbstractEffect> getEffects() {
         return effects;
+    }
+
+    public void setListener(CharacterListener listener) {
+        this.listener = listener;
+    }
+
+    public void removeListener() {
+        listener = new NullCharacterListener();
     }
 
 }

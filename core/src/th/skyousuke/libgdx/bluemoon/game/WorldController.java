@@ -27,8 +27,10 @@ import th.skyousuke.libgdx.bluemoon.utils.CameraHelper;
 public class WorldController extends InputAdapter {
 
     public CameraHelper cameraHelper;
-    public Level level;
     public AbstractPlayer controlledPlayer;
+    public Level level;
+
+    private WorldListener listener;
 
     public WorldController() {
         init();
@@ -65,10 +67,7 @@ public class WorldController extends InputAdapter {
         }
         if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
             if (!cameraHelper.hasTarget()) return;
-            if (controlledPlayer == level.player)
-                controlledPlayer = level.player2;
-            else
-                controlledPlayer = level.player;
+            swapPlayer();
             cameraHelper.setTarget(controlledPlayer);
         }
         if (!cameraHelper.hasTarget())
@@ -81,6 +80,19 @@ public class WorldController extends InputAdapter {
         handleInput(deltaTime);
         level.update(deltaTime);
         cameraHelper.update(deltaTime);
+    }
+
+    public void swapPlayer() {
+        controlledPlayer.removeListener();
+        if (controlledPlayer == level.player)
+            controlledPlayer = level.player2;
+        else
+            controlledPlayer = level.player;
+        listener.onPlayerChange();
+    }
+
+    public void setListener(WorldListener listener) {
+        this.listener = listener;
     }
 
 }

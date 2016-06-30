@@ -36,8 +36,6 @@ public class WorldRenderer implements Disposable {
     private OrthogonalTiledMapRenderer tiledRenderer;
     private ShapeRenderer shapeRenderer;
 
-
-
     public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
         init();
@@ -59,7 +57,6 @@ public class WorldRenderer implements Disposable {
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         worldController.level.render(batch, tiledRenderer, shapeRenderer);
-
     }
 
     public void resize(int width, int height) {

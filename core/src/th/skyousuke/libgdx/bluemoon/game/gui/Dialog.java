@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.ui;
+package th.skyousuke.libgdx.bluemoon.game.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
