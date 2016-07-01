@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,9 +20,11 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Iterator;
+
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
@@ -30,13 +32,17 @@ import th.skyousuke.libgdx.bluemoon.utils.Direction;
 public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
 
-    private static final float FRICTION = 500f;
-    private final Array<AbstractEffect> effects;
+    private static final float FRICTION = 1000f;
+
+    private final Array<AbstractCharacterEffect> effects;
     private CharacterState state;
     private Direction viewDirection;
     private boolean movable;
+
     private CharacterStatus status;
     private CharacterAttribute attribute;
+
+    private CharacterListener listener;
 
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
@@ -44,8 +50,9 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         attribute = new CharacterAttribute();
         status = new CharacterStatus(attribute);
         effects = new Array<>();
+        listener = new NullCharacterListener();
 
-        setState(new IdlingState());
+        setState(new IdlingState(this));
         viewDirection = Direction.DOWN;
         movable = true;
 
@@ -71,8 +78,13 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     public void update(float deltaTime) {
         //Apply any effects on character
         drainFullness(deltaTime);
-        for (AbstractEffect effect : effects) {
-            effect.apply(deltaTime);
+        Iterator<AbstractCharacterEffect> effectsIterator = effects.iterator();
+        while (effectsIterator.hasNext()) {
+            AbstractCharacterEffect effect = effectsIterator.next();
+            if (effect.isExpire()) {
+                removeEffect(effect);
+            }
+            else effect.apply(this, deltaTime);
         }
         state.update(deltaTime);
 
@@ -108,21 +120,17 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         velocity.setLength(movingSpeed);
     }
 
-    public void changeStatus(CharacterStatusType statusType, float value) {
-        status.addValue(statusType, value);
+    public void drainFullness(float deltaTime) {
+        status.changeStatus(CharacterStatusType.FULLNESS,
+                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime);
     }
 
-    public void drainFullness(float deltaTime) {
-        changeStatus(CharacterStatusType.FULLNESS, -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) *
-                deltaTime);
+    public CharacterStatus getCharacterStatus() {
+        return status;
     }
 
     public CharacterAttribute getAttribute() {
         return attribute;
-    }
-
-    public CharacterStatus getStatus() {
-        return status;
     }
 
     public Direction getViewDirection() {
@@ -135,16 +143,46 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     public void setState(CharacterState state) {
         if (this.state != null) this.state.exit();
-        state.setCharacter(this);
         this.state = state;
         this.state.enter();
         resetAnimation();
     }
 
     public void attack() {
-        setState(new AttackingState());
+        setState(new AttackingState(this));
     }
 
     public abstract void interact();
+
+    public void addEffect(AbstractCharacterEffect effect) {
+        effects.add(effect);
+        effect.enter(this);
+        listener.onEffectAdd(effect);
+    }
+
+    public void removeEffect(AbstractCharacterEffect effect) {
+        if(effects.removeValue(effect, true)) {
+            effect.exit(this);
+        }
+        listener.onEffectRemove(effect);
+    }
+
+    public boolean hasEffect(AbstractCharacterEffect effect) {
+        return effects.contains(effect, true);
+    }
+
+    public Array<AbstractCharacterEffect> getEffects() {
+        return effects;
+    }
+
+    public void setListener(CharacterListener listener) {
+        this.listener = listener;
+        status.setCharacterListener(listener);
+        attribute.setCharacterListener(listener);
+    }
+
+    public void removeListener() {
+        setListener(new NullCharacterListener());
+    }
 
 }

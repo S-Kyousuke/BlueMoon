@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,9 +20,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 
 public class Assets implements Disposable, AssetErrorListener {
@@ -47,6 +51,10 @@ public class Assets implements Disposable, AssetErrorListener {
     public TextureAtlas monster4Altas;
 
     public TiledMap mainMap;
+
+    public BitmapFont thaiFont24;
+
+    public Skin skin;
 
     private Assets() {
     }
@@ -74,6 +82,10 @@ public class Assets implements Disposable, AssetErrorListener {
 
         manager.load("maps/main.tmx", TiledMap.class);
 
+        manager.load("fonts/thai24.fnt", BitmapFont.class);
+
+        manager.load("skins/uiskin.json", Skin.class, new SkinParameter("skins/uiskin.atlas"));
+
         manager.finishLoading();
 
         //get assets here
@@ -93,6 +105,11 @@ public class Assets implements Disposable, AssetErrorListener {
         monster4Altas = manager.get("images/characters/character.atlas");
 
         mainMap = manager.get("maps/main.tmx");
+
+        thaiFont24 = manager.get("fonts/thai24.fnt");
+
+        skin = manager.get("skins/uiskin.json");
+        skin.getFont("default-font").getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
     }
 
     @SuppressWarnings("rawtypes")

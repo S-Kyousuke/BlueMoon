@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,49 +18,43 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
-public class Regeneration extends AbstractEffect {
+public class Regeneration extends AbstractCharacterEffect {
 
     private final float restorePerSecond;
     private final RegenerationType type;
 
-    public Regeneration(AbstractCharacter character, RegenerationType type, float restorePerSecond, float duration) {
-        super(character, duration);
+    public Regeneration(RegenerationType type, float restorePerSecond, float duration) {
+        super(duration);
         this.restorePerSecond = restorePerSecond;
         this.type = type;
     }
 
     @Override
-    protected void enterEffect() {
-    }
-
-    @Override
-    protected void overTimeEffect(float activeTime) {
+    protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         switch (type) {
             case HEALTH:
-                character.changeStatus(CharacterStatusType.HEALTH, restorePerSecond * activeTime);
+                character.getCharacterStatus()
+                        .changeStatus(CharacterStatusType.HEALTH, restorePerSecond * activeTime);
                 break;
             case MANA:
-                character.changeStatus(CharacterStatusType.MANA, restorePerSecond * activeTime);
+                character.getCharacterStatus()
+                        .changeStatus(CharacterStatusType.MANA, restorePerSecond * activeTime);
                 break;
             case STAMINA:
-                character.changeStatus(CharacterStatusType.STAMINA, restorePerSecond * activeTime);
+                character.getCharacterStatus()
+                        .changeStatus(CharacterStatusType.STAMINA, restorePerSecond * activeTime);
                 break;
             case FULLNESS:
-                character.changeStatus(CharacterStatusType.FULLNESS, restorePerSecond * activeTime);
+                character.getCharacterStatus()
+                        .changeStatus(CharacterStatusType.FULLNESS, restorePerSecond * activeTime);
                 break;
         }
     }
 
     @Override
-    protected void exitEffect() {
-    }
-
-    public enum RegenerationType {
-        HEALTH,
-        MANA,
-        STAMINA,
-        FULLNESS
+    public String getName() {
+        return type.name().substring(0, 1) + type.name().toLowerCase().substring(1) + " Regeneration";
     }
 }

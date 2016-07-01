@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,29 +16,41 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.math.MathUtils;
+
+import java.util.EnumMap;
 
 public class CharacterAttribute {
 
     // 2 length array for base value and additional value
 
-    private final int[] basePrimaryAttribute;
-    private final float[] baseDerivedAttribute;
+    private final EnumMap<CharacterPrimaryAttribute, Integer> basePrimaryAttribute;
+    private final EnumMap<CharacterDerivedAttribute, Float> baseDerivedAttribute;
 
-    private final Array<int[]> additionalPrimaryAttribute;
-    private final Array<float[]> additionalDerivedAttribute;
+    private final EnumMap<CharacterPrimaryAttribute, Integer> additionalPrimaryAttribute;
+    private final EnumMap<CharacterDerivedAttribute, Float> additionalDerivedAttribute;
+
+    private CharacterListener characterListener;
 
     public CharacterAttribute() {
-        basePrimaryAttribute = new int[CharacterPrimaryAttribute.values().length];
-        baseDerivedAttribute = new float[CharacterDerivedAttribute.values().length];
+        basePrimaryAttribute = new EnumMap<>(CharacterPrimaryAttribute.class);
+        baseDerivedAttribute = new EnumMap<>(CharacterDerivedAttribute.class);
 
-        additionalPrimaryAttribute = new Array<>();
-        additionalDerivedAttribute = new Array<>();
+        additionalPrimaryAttribute = new EnumMap<>(CharacterPrimaryAttribute.class);
+        additionalDerivedAttribute = new EnumMap<>(CharacterDerivedAttribute.class);
 
-        // Initialize Attribute
-        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
-            setBasePrimary(primaryAttribute, 1);
+        characterListener = new NullCharacterListener();
+
+        // Initialize value
+        for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
+            baseDerivedAttribute.put(derivedAttribute, 0f);
+            additionalDerivedAttribute.put(derivedAttribute, 0f);
         }
+        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
+            basePrimaryAttribute.put(primaryAttribute, 1);
+            additionalPrimaryAttribute.put(primaryAttribute, 0);
+        }
+        calculateBaseDerived();
     }
 
     private void calculateBaseDerived() {
@@ -50,137 +62,138 @@ public class CharacterAttribute {
         int luck = getPrimary(CharacterPrimaryAttribute.LUCK);
         int survival = getPrimary(CharacterPrimaryAttribute.SURVIVAL);
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MOVING_SPEED.ordinal()] =
-                120 + (agility * 10.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MOVING_SPEED,
+                120 + (agility * 10.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MAX_STAMINA.ordinal()] =
-                100 + (vitality * 5.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_STAMINA,
+                50 + ((vitality - 1) * 5.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MAX_HEALTH.ordinal()] =
-                100 + (vitality * 10.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_FULLNESS,
+                100f);
 
-        baseDerivedAttribute[CharacterDerivedAttribute.HEALTH_REGENERATION.ordinal()] =
-                2 + (vitality * 0.5f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_HEALTH,
+                80 + ((vitality - 1) * 10.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MAX_MANA.ordinal()] =
-                10 + (intelligence * 1.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.HEALTH_REGENERATION,
+                2 + (vitality * 0.5f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MANA_REGENERATION.ordinal()] =
-                10 + (intelligence * 0.2f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_MANA,
+                20 + ((intelligence - 1) * 1.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.PHYSICAL_DAMAGE.ordinal()] =
-                1 + (strength * 1.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MANA_REGENERATION,
+                10 + (intelligence * 0.2f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MAGICAL_DAMAGE.ordinal()] =
-                1 + (intelligence * 1.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DAMAGE,
+                1 + (strength * 1.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.PHYSICAL_DEFENSE.ordinal()] =
-                1 + (vitality * 1.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAGICAL_DAMAGE,
+                1 + (intelligence * 1.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.MAGICAL_DEFENSE.ordinal()] =
-                1 + (intelligence * 1.0f);
+        setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DEFENSE,
+                1 + (vitality * 1.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.ATTACK_SPEED.ordinal()] =
-                1 / (float) (1 - Math.sqrt(agility * 0.06f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAGICAL_DEFENSE,
+                1 + (intelligence * 1.0f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.FULLNESS_DRAIN.ordinal()] =
-                1 / (float) (1 - Math.sqrt(survival * 0.05f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.ATTACK_SPEED,
+                1 / (float) (1 - Math.sqrt(agility * 0.06f)));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.CRAFTING.ordinal()] =
-                1.0f + survival;
+        setBaseDerivedAttribute(CharacterDerivedAttribute.FULLNESS_DRAIN,
+                1 / (float) ((1 - Math.sqrt(survival * 0.05f)) * 32f));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.FISHING.ordinal()] =
-                1.0f + survival;
+        setBaseDerivedAttribute(CharacterDerivedAttribute.CRAFTING,
+                1.0f + survival);
 
-        baseDerivedAttribute[CharacterDerivedAttribute.TOOLS_EFFICIENCY.ordinal()] =
-                1 / (float) (1 - Math.sqrt(strength * 0.08f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.FISHING,
+                1.0f + survival);
 
-        baseDerivedAttribute[CharacterDerivedAttribute.TOOLS_SPEED.ordinal()] =
-                1 / (float) (1 - Math.sqrt(agility * 0.05f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_EFFICIENCY,
+                1 / (float) (1 - Math.sqrt(strength * 0.08f)));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.TOOLS_LEVEL.ordinal()] =
-                1.0f + intelligence;
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_SPEED,
+                1 / (float) (1 - Math.sqrt(agility * 0.05f)));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.ITEM_CHANCE.ordinal()] =
-                1 / (float) (1 - Math.sqrt(luck * 0.07f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_LEVEL,
+                1.0f + intelligence);
 
-        baseDerivedAttribute[CharacterDerivedAttribute.UPGRADE_CHANCE.ordinal()] =
-                1 / (float) (1 - Math.sqrt(luck * 0.05f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.ITEM_CHANCE,
+                1 / (float) (1 - Math.sqrt(luck * 0.07f)));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.EVENT_CHANCE.ordinal()] =
-                1 / (float) (1 - Math.sqrt(luck * 0.06f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.UPGRADE_CHANCE,
+                1 / (float) (1 - Math.sqrt(luck * 0.05f)));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.FRIENDSHIP.ordinal()] =
-                1 / (float) (1 - Math.sqrt(charisma * 0.06f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.EVENT_CHANCE,
+                1 / (float) (1 - Math.sqrt(luck * 0.06f)));
 
-        baseDerivedAttribute[CharacterDerivedAttribute.SHOPPING.ordinal()] =
-                (float) (1 - Math.sqrt(charisma * 0.06f));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.FRIENDSHIP,
+                1 / (float) (1 - Math.sqrt(charisma * 0.06f)));
+
+        setBaseDerivedAttribute(CharacterDerivedAttribute.SHOPPING,
+                (float) (1 - Math.sqrt(charisma * 0.06f)));
+    }
+
+    public void setBaseDerivedAttribute(CharacterDerivedAttribute derivedAttribute, float value) {
+        baseDerivedAttribute.put(derivedAttribute, value);
+        characterListener.onDerivedAttributeChange(derivedAttribute);
+
+        // Call onStatusChange() if it has effect on status
+        switch (derivedAttribute) {
+            case MAX_STAMINA:
+                characterListener.onStatusChange(CharacterStatusType.STAMINA);
+                break;
+            case MAX_HEALTH:
+                characterListener.onStatusChange(CharacterStatusType.HEALTH);
+                break;
+            case MAX_MANA:
+                characterListener.onStatusChange(CharacterStatusType.MANA);
+                break;
+            case MAX_FULLNESS:
+                characterListener.onStatusChange(CharacterStatusType.FULLNESS);
+                break;
+        }
     }
 
     public void setBasePrimary(CharacterPrimaryAttribute primaryAttribute, int value) {
-        basePrimaryAttribute[primaryAttribute.ordinal()] = value;
+        // set value between 1 and 99
+        basePrimaryAttribute.put(primaryAttribute, MathUtils.clamp(value, 1, 99));
         calculateBaseDerived();
+        characterListener.onPrimaryAttributeChange(primaryAttribute);
     }
-
-    //  Set/Change value methods
 
     public void changeBasePrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
         setBasePrimary(primaryAttribute, getBasePrimary(primaryAttribute) + changeValue);
     }
 
-    public void addAdditionalPrimary(int[] value) {
-        if (value.length != CharacterPrimaryAttribute.values().length) {
-            throw new IllegalArgumentException("addAdditionalPrimary: Invalid array size!");
-        }
-        additionalPrimaryAttribute.add(value);
+    public void changeAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
+        int currentValue = additionalPrimaryAttribute.get(primaryAttribute);
+        additionalPrimaryAttribute.put(primaryAttribute, currentValue + changeValue);
+        characterListener.onPrimaryAttributeChange(primaryAttribute);
     }
 
-    public void addAdditionalDerived(float[] value) {
-        if (value.length != CharacterDerivedAttribute.values().length) {
-            throw new IllegalArgumentException("addAdditionalDerived: Invalid array size!");
-        }
-        additionalDerivedAttribute.add(value);
-    }
-
-    public void removeAdditionalPrimary(int[] value) {
-        additionalPrimaryAttribute.removeValue(value, true);
-    }
-
-    public void removeAdditionalDerived(float[] value) {
-        additionalDerivedAttribute.removeValue(value, true);
+    public void changeAdditionalDerived(CharacterDerivedAttribute derivedAttribute, float changeValue) {
+        float currentValue = additionalDerivedAttribute.get(derivedAttribute);
+        additionalDerivedAttribute.put(derivedAttribute, currentValue + changeValue);
+        characterListener.onDerivedAttributeChange(derivedAttribute);
     }
 
     public int getBasePrimary(CharacterPrimaryAttribute primaryAttribute) {
-        return basePrimaryAttribute[primaryAttribute.ordinal()];
-    }
-
-    public int getTotalAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute) {
-        int totalAdditionalPrimary = 0;
-        for (int[] additionalPrimary : additionalPrimaryAttribute) {
-            totalAdditionalPrimary += additionalPrimary[primaryAttribute.ordinal()];
-        }
-        return totalAdditionalPrimary;
+        return basePrimaryAttribute.get(primaryAttribute);
     }
 
     public int getPrimary(CharacterPrimaryAttribute primaryAttribute) {
-        return getBasePrimary(primaryAttribute) + getTotalAdditionalPrimary(primaryAttribute);
+        return getBasePrimary(primaryAttribute) + additionalPrimaryAttribute.get(primaryAttribute);
     }
 
     public float getBaseDerived(CharacterDerivedAttribute derivedAttribute) {
-        return baseDerivedAttribute[derivedAttribute.ordinal()];
-    }
-
-    public float getTotalAdditionalDerived(CharacterDerivedAttribute derivedAttribute) {
-        float totalAdditionalDerived = 0;
-        for (float[] additionalDerived : additionalDerivedAttribute) {
-            totalAdditionalDerived += additionalDerived[derivedAttribute.ordinal()];
-        }
-        return totalAdditionalDerived;
+        return baseDerivedAttribute.get(derivedAttribute);
     }
 
     public float getDerived(CharacterDerivedAttribute derivedAttribute) {
-        return getBaseDerived(derivedAttribute) + getTotalAdditionalDerived(derivedAttribute);
+        return getBaseDerived(derivedAttribute) + additionalDerivedAttribute.get(derivedAttribute);
     }
 
+    public void setCharacterListener(CharacterListener characterListener) {
+        this.characterListener = characterListener;
+    }
 
 }

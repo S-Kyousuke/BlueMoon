@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,10 +24,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class WorldRenderer implements Disposable {
+import th.skyousuke.libgdx.bluemoon.BlueMoon;
 
-    public static final int SCENE_WIDTH = 1280;
-    public static final int SCENE_HEIGHT = 720;
+public class WorldRenderer implements Disposable {
 
     private WorldController worldController;
 
@@ -44,7 +43,7 @@ public class WorldRenderer implements Disposable {
 
     public void init() {
         camera = new OrthographicCamera();
-        viewport = new FitViewport(SCENE_WIDTH, SCENE_HEIGHT, camera);
+        viewport = new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT, camera);
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
