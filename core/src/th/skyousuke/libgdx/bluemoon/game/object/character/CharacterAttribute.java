@@ -22,8 +22,6 @@ import java.util.EnumMap;
 
 public class CharacterAttribute {
 
-    // 2 length array for base value and additional value
-
     private final EnumMap<CharacterPrimaryAttribute, Integer> basePrimaryAttribute;
     private final EnumMap<CharacterDerivedAttribute, Float> baseDerivedAttribute;
 
@@ -41,7 +39,6 @@ public class CharacterAttribute {
 
         characterListener = new NullCharacterListener();
 
-        // Initialize value
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
             baseDerivedAttribute.put(derivedAttribute, 0f);
             additionalDerivedAttribute.put(derivedAttribute, 0f);
@@ -63,25 +60,25 @@ public class CharacterAttribute {
         int survival = getPrimary(CharacterPrimaryAttribute.SURVIVAL);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MOVING_SPEED,
-                120 + (agility * 10.0f));
+                120 + (4.5f * agility) / (1 + 0.015f * agility));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_STAMINA,
-                50 + ((vitality - 1) * 5.0f));
+                58 + (vitality * 2.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_FULLNESS,
-                100f);
+                50f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_HEALTH,
-                80 + ((vitality - 1) * 10.0f));
+                271 + (vitality * 29.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.HEALTH_REGENERATION,
-                2 + (vitality * 0.5f));
+                getBaseDerived(CharacterDerivedAttribute.MAX_HEALTH) * 0.001f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_MANA,
-                20 + ((intelligence - 1) * 1.0f));
+                90 + (intelligence * 10.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MANA_REGENERATION,
-                10 + (intelligence * 0.2f));
+                getBaseDerived(CharacterDerivedAttribute.MAX_MANA) * 0.001f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DAMAGE,
                 1 + (strength * 1.0f));
@@ -136,7 +133,6 @@ public class CharacterAttribute {
         baseDerivedAttribute.put(derivedAttribute, value);
         characterListener.onDerivedAttributeChange(derivedAttribute);
 
-        // Call onStatusChange() if it has effect on status
         switch (derivedAttribute) {
             case MAX_STAMINA:
                 characterListener.onStatusChange(CharacterStatusType.STAMINA);
@@ -154,7 +150,6 @@ public class CharacterAttribute {
     }
 
     public void setBasePrimary(CharacterPrimaryAttribute primaryAttribute, int value) {
-        // set value between 1 and 99
         basePrimaryAttribute.put(primaryAttribute, MathUtils.clamp(value, 1, 99));
         calculateBaseDerived();
         characterListener.onPrimaryAttributeChange(primaryAttribute);
@@ -167,6 +162,7 @@ public class CharacterAttribute {
     public void changeAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
         int currentValue = additionalPrimaryAttribute.get(primaryAttribute);
         additionalPrimaryAttribute.put(primaryAttribute, currentValue + changeValue);
+        calculateBaseDerived();
         characterListener.onPrimaryAttributeChange(primaryAttribute);
     }
 
@@ -180,16 +176,24 @@ public class CharacterAttribute {
         return basePrimaryAttribute.get(primaryAttribute);
     }
 
+    public int getAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute) {
+        return additionalPrimaryAttribute.get(primaryAttribute);
+    }
+
     public int getPrimary(CharacterPrimaryAttribute primaryAttribute) {
-        return getBasePrimary(primaryAttribute) + additionalPrimaryAttribute.get(primaryAttribute);
+        return getBasePrimary(primaryAttribute) + getAdditionalPrimary(primaryAttribute);
     }
 
     public float getBaseDerived(CharacterDerivedAttribute derivedAttribute) {
         return baseDerivedAttribute.get(derivedAttribute);
     }
 
+    public float getAdditionalDerived(CharacterDerivedAttribute derivedAttribute) {
+        return additionalDerivedAttribute.get(derivedAttribute);
+    }
+
     public float getDerived(CharacterDerivedAttribute derivedAttribute) {
-        return getBaseDerived(derivedAttribute) + additionalDerivedAttribute.get(derivedAttribute);
+        return getBaseDerived(derivedAttribute) + getAdditionalDerived(derivedAttribute);
     }
 
     public void setCharacterListener(CharacterListener characterListener) {

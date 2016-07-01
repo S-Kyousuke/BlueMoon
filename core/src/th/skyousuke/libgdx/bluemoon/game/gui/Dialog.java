@@ -94,7 +94,7 @@ public class Dialog extends Actor {
         @Override
         public void drag(InputEvent event, float x, float y, int pointer)  {
             moveBy(x - dragStartX, y - dragStartY);
-        };
+        }
     };
 
     public Dialog(BitmapFont font, TextureRegion dialogTexture, float textStartX, float textStartY) {

@@ -20,21 +20,20 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Iterator;
-
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs.Full;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
-
     private static final float FRICTION = 1000f;
 
     private final Array<AbstractCharacterEffect> effects;
+
     private CharacterState state;
     private Direction viewDirection;
     private boolean movable;
@@ -43,6 +42,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     private CharacterAttribute attribute;
 
     private CharacterListener listener;
+    private Full fullEffect;
 
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
@@ -76,20 +76,30 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     @Override
     public void update(float deltaTime) {
-        //Apply any effects on character
-        drainFullness(deltaTime);
-        Iterator<AbstractCharacterEffect> effectsIterator = effects.iterator();
-        while (effectsIterator.hasNext()) {
-            AbstractCharacterEffect effect = effectsIterator.next();
+        applyEffects(deltaTime);
+        updateStatus(deltaTime);
+
+        state.update(deltaTime);
+        super.update(deltaTime);
+    }
+
+    private void applyEffects(float deltaTime) {
+        for (AbstractCharacterEffect effect : effects) {
             if (effect.isExpire()) {
                 removeEffect(effect);
             }
             else effect.apply(this, deltaTime);
         }
-        state.update(deltaTime);
+        applyFullnessBonus();
+    }
 
-        // Moving
-        super.update(deltaTime);
+    private void applyFullnessBonus() {
+        if (status.get(CharacterStatusType.FULLNESS) >= 40.0) {
+            if (!hasEffect(fullEffect)) {
+                fullEffect = new Full();
+                addEffect(fullEffect);
+            }
+        }
     }
 
     public void handleInput() {
@@ -97,10 +107,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     }
 
     public void move(Direction direction) {
-
-        // Exit method if can't move.
         if (!movable) return;
-
         viewDirection = direction;
         float movingSpeed = attribute.getDerived(CharacterDerivedAttribute.MOVING_SPEED);
         switch (direction) {
@@ -120,12 +127,16 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         velocity.setLength(movingSpeed);
     }
 
-    public void drainFullness(float deltaTime) {
-        status.changeStatus(CharacterStatusType.FULLNESS,
+    private void updateStatus(float deltaTime) {
+        status.change(CharacterStatusType.FULLNESS,
                 -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime);
+        status.change(CharacterStatusType.HEALTH,
+                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime);
+        status.change(CharacterStatusType.MANA,
+                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime);
     }
 
-    public CharacterStatus getCharacterStatus() {
+    public CharacterStatus getStatus() {
         return status;
     }
 
@@ -133,7 +144,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         return attribute;
     }
 
-    public Direction getViewDirection() {
+    public Direction viewDirection() {
         return viewDirection;
     }
 

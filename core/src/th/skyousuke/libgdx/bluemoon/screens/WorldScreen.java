@@ -30,7 +30,6 @@ public class WorldScreen extends AbstractGameScreen {
     private WorldRenderer worldRenderer;
     private WorldGui worldGui;
 
-
     public WorldScreen(Game game) {
         super(game);
     }

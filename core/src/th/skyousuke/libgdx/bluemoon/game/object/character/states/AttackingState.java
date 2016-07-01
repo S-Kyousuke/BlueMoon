@@ -46,7 +46,7 @@ public class AttackingState extends CharacterState {
         float attackTime = attackTimeFactor / character.getAttribute()
                 .getDerived(CharacterDerivedAttribute.ATTACK_SPEED);
 
-        switch (character.getViewDirection()) {
+        switch (character.viewDirection()) {
             case LEFT:
                 character.setAnimation(AnimationKey.ATK_LEFT, attackTime);
                 break;

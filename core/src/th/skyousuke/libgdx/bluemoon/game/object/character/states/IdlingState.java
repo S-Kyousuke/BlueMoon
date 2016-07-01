@@ -50,7 +50,7 @@ public class IdlingState extends CharacterState {
 
     @Override
     public void setAnimation() {
-        switch (character.getViewDirection()) {
+        switch (character.viewDirection()) {
             case LEFT:
                 character.setAnimation(AnimationKey.IDLE_LEFT, 0);
                 break;

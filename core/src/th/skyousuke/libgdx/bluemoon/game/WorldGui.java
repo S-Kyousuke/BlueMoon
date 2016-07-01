@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -43,6 +42,8 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttrib
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
+// TODO: Extract class to separate each UI
+
 /**
  * Game World GUI Class
  * Created by Skyousuke <surasek@gmail.com> on 30/6/2559.
@@ -54,10 +55,9 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
 
     private Window statusWindow;
     private EnumMap<CharacterStatusType, Label> statusLabels;
-    private List<String> effectList;
-    private Array<String> effectArray;
+    private Array<AbstractCharacterEffect> effectArray;
+    private Table effectTable;
     private ScrollPane effectPane;
-    private TextButton toggleAttributeDisplayButton;
 
     private Window attributeWindow;
     private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeNumberLabels;
@@ -78,22 +78,23 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             addStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    worldController.controlledPlayer.getCharacterStatus().changeStatus(statusType, 5);
+                    worldController.controlledPlayer.getStatus().change(statusType, 5);
                 }
             });
             subtractStatusButtons.put(statusType, new TextButton("-", Assets.instance.skin));
             subtractStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    worldController.controlledPlayer.getCharacterStatus().changeStatus(statusType, -5);
+                    worldController.controlledPlayer.getStatus().change(statusType, -5);
                 }
             });
         }
 
         Label effectLabel = new Label("Effects:", Assets.instance.skin);
-        effectList = new List<>(Assets.instance.skin);
+        effectTable = new Table();
+        effectTable.align(Align.top);
         effectArray = new Array<>();
-        effectPane = new ScrollPane(effectList, Assets.instance.skin);
+        effectPane = new ScrollPane(effectTable, Assets.instance.skin);
         effectPane.setFadeScrollBars(false);
         effectPane.setForceScroll(false, true);
         effectPane.addListener(new ClickListener() {
@@ -108,24 +109,9 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             }
         });
 
-        toggleAttributeDisplayButton = new TextButton("Show Attribute", Assets.instance.skin);
-        toggleAttributeDisplayButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!attributeWindow.isVisible()) {
-                    attributeWindow.setVisible(true);
-                    attributeWindow.setPosition(statusWindow.getX() + 240f, statusWindow.getY());
-                    toggleAttributeDisplayButton.setText("Hide Attribute");
-                } else {
-                    attributeWindow.setVisible(false);
-                    toggleAttributeDisplayButton.setText("Show Attribute");
-                }
-            }
-        });
-
         statusWindow = new Window("", Assets.instance.skin);
         statusWindow.padLeft(10f);
-        statusWindow.padRight(15f);
+        statusWindow.padRight(10f);
         statusWindow.padBottom(10f);
         statusWindow.align(Align.topLeft);
         statusWindow.row().padTop(10f);
@@ -139,19 +125,19 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         statusWindow.row();
         statusWindow.add(effectPane).fill().expand().colspan(3);
         statusWindow.row();
-        statusWindow.add(toggleAttributeDisplayButton).width(130f).height(25f).padTop(10f).colspan(3);
         statusWindow.pack();
         statusWindow.setWidth(240f);
-        statusWindow.setHeight(320f);
-        statusWindow.setPosition(0, 440f);
+        statusWindow.setHeight(280f);
+        statusWindow.setPosition(0, 0);
 
-        EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels = new EnumMap<>(CharacterPrimaryAttribute
-                .class);
         primaryAttributeNumberLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
-        EnumMap<CharacterPrimaryAttribute, TextButton> addPrimaryAttributeButtons = new EnumMap<>
-                (CharacterPrimaryAttribute.class);
-        EnumMap<CharacterPrimaryAttribute, TextButton> subtractPrimaryAttributeButtons = new EnumMap<>
-                (CharacterPrimaryAttribute.class);
+
+        EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels
+                = new EnumMap<>(CharacterPrimaryAttribute.class);
+        EnumMap<CharacterPrimaryAttribute, TextButton> addPrimaryAttributeButtons
+                = new EnumMap<>(CharacterPrimaryAttribute.class);
+        EnumMap<CharacterPrimaryAttribute, TextButton> subtractPrimaryAttributeButtons
+                = new EnumMap<>(CharacterPrimaryAttribute.class);
 
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             String attributeName = primaryAttribute.name().substring(0, 1)
@@ -175,10 +161,10 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         }
 
         Label derivedAttributeTitleLabel = new Label("Derived Attribute:", Assets.instance.skin);
-        EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute
-                .class);
+        EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels
+                = new EnumMap<>(CharacterDerivedAttribute.class);
         derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
-        Table table = new Table();
+        Table derivedAttributeTable = new Table();
 
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
             String[] name = derivedAttribute.name().split("_");
@@ -187,15 +173,15 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
                 formattedName += s.substring(0, 1) + s.substring(1).toLowerCase() + ' ';
             }
 
-            derivedAttributeLabels.put(derivedAttribute,
-                    new Label(formattedName, Assets.instance.skin));
+            derivedAttributeLabels.put(derivedAttribute, new Label(formattedName, Assets.instance.skin));
             derivedAttributeNumberLabels.put(derivedAttribute, new Label("", Assets.instance.skin));
 
-            table.row();
-            table.add(derivedAttributeLabels.get(derivedAttribute)).fillX().expandX();
-            table.add(derivedAttributeNumberLabels.get(derivedAttribute)).align(Align.right).padRight(10f);
+            derivedAttributeTable.row();
+            derivedAttributeTable.add(derivedAttributeLabels.get(derivedAttribute)).fillX().expandX();
+            derivedAttributeTable.add(derivedAttributeNumberLabels.get(derivedAttribute))
+                    .align(Align.right).padRight(10f);
         }
-        derivedAttributePane = new ScrollPane(table, Assets.instance.skin);
+        derivedAttributePane = new ScrollPane(derivedAttributeTable, Assets.instance.skin);
         derivedAttributePane.setFadeScrollBars(false);
         derivedAttributePane.setForceScroll(false, true);
         derivedAttributePane.addListener(new ClickListener() {
@@ -211,10 +197,9 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         });
 
         attributeWindow = new Window("", Assets.instance.skin);
-        attributeWindow.setVisible(false);
         attributeWindow.align(Align.topLeft);
         attributeWindow.padLeft(10f);
-        attributeWindow.padRight(15f);
+        attributeWindow.padRight(10);
         attributeWindow.padBottom(10f);
         attributeWindow.row().padTop(10f);
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
@@ -232,14 +217,39 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         attributeWindow.row().colspan(4);
         attributeWindow.add(derivedAttributePane).fill().expand();
         attributeWindow.pack();
-        attributeWindow.setWidth(290f);
+        attributeWindow.setWidth(370f);
         attributeWindow.setHeight(500f);
+        attributeWindow.setPosition(BlueMoon.SCENE_WIDTH - 370f, 0);
+
+        TextButton toggleStatusWindowButton = new TextButton("Status", Assets.instance.skin);
+        toggleStatusWindowButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!statusWindow.isVisible()) statusWindow.setVisible(true);
+                else statusWindow.setVisible(false);
+            }
+        });
+        TextButton toggleAttributeWindowButton = new TextButton("Attribute", Assets.instance.skin);
+        toggleAttributeWindowButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!attributeWindow.isVisible()) attributeWindow.setVisible(true);
+                else attributeWindow.setVisible(false);
+            }
+        });
+        Table debugMenu = new Table();
+        debugMenu.row();
+        debugMenu.add(toggleStatusWindowButton).padLeft(10f).width(60).height(30);
+        debugMenu.add(toggleAttributeWindowButton).padLeft(10f).width(80).height(30);
+        debugMenu.pack();
+        debugMenu.setPosition(0, 680);
 
         onPlayerChange();
 
         //stage.setDebugAll(true);
         stage.addActor(statusWindow);
         stage.addActor(attributeWindow);
+        stage.addActor(debugMenu);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -273,7 +283,7 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
                 break;
         }
         statusLabels.get(statusType).setText(String.format("%s: %.1f/%.1f",
-                statusName, character.getCharacterStatus().getStatus(statusType), maxStatusValue));
+                statusName, character.getStatus().get(statusType), maxStatusValue));
     }
 
     private void updateAttributeWindowTitle() {
@@ -288,8 +298,9 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     private void updatePrimaryAttributeNumberLabel(CharacterPrimaryAttribute primaryAttribute) {
-        primaryAttributeNumberLabels.get(primaryAttribute).setText(String.format("%d",
-                worldController.controlledPlayer.getAttribute().getPrimary(primaryAttribute)));
+        primaryAttributeNumberLabels.get(primaryAttribute).setText(String.format("%d (+%d)",
+                worldController.controlledPlayer.getAttribute().getBasePrimary(primaryAttribute),
+                worldController.controlledPlayer.getAttribute().getAdditionalPrimary(primaryAttribute)));
     }
 
     private void updateDerivedAttributeNumberLabel() {
@@ -299,16 +310,19 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     private void updateDerivedAttributeNumberLabel(CharacterDerivedAttribute derivedAttribute) {
-        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.2f",
-                worldController.controlledPlayer.getAttribute().getDerived(derivedAttribute)));
+        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.2f (+%.2f)",
+                worldController.controlledPlayer.getAttribute().getBaseDerived(derivedAttribute),
+                worldController.controlledPlayer.getAttribute().getAdditionalDerived(derivedAttribute)));
     }
 
     private void updateEffectList() {
         effectArray.clear();
-        for (AbstractCharacterEffect effect : worldController.controlledPlayer.getEffects()) {
-            effectArray.add(effect.getName());
+        effectArray.addAll(worldController.controlledPlayer.getEffects());
+        effectTable.clear();
+        for (AbstractCharacterEffect effect : effectArray) {
+            effectTable.row().expandX().align(Align.left);
+            effectTable.add(new Label(effect.getName(), Assets.instance.skin));
         }
-        effectList.setItems(effectArray);
     }
 
     @Override

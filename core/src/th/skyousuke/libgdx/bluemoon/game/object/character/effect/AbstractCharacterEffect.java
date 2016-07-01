@@ -66,4 +66,8 @@ public abstract class AbstractCharacterEffect {
 
     public abstract String getName();
 
+    public float getRemainingTime() {
+        return remainingTime;
+    }
+
 }

@@ -27,29 +27,27 @@ public class CharacterStatus {
 
     private CharacterListener characterListener;
 
+    // Create character status from character attribute and initialize all status to max value
     public CharacterStatus(CharacterAttribute characterAttribute) {
         allStatus = new EnumMap<>(CharacterStatusType.class);
         this.characterAttribute = characterAttribute;
         characterListener = new NullCharacterListener();
 
-        // Initialize status
         for (CharacterStatusType type : CharacterStatusType.values()) {
             allStatus.put(type, 0f);
         }
-        maxAll();
+        for (CharacterStatusType statusType : CharacterStatusType.values()) {
+            max(statusType);
+        }
     }
 
-    public void maxAll() {
-        setStatus(CharacterStatusType.HEALTH, Float.MAX_VALUE);
-        setStatus(CharacterStatusType.MANA, Float.MAX_VALUE);
-        setStatus(CharacterStatusType.STAMINA, Float.MAX_VALUE);
-        setStatus(CharacterStatusType.FULLNESS, Float.MAX_VALUE);
+    public void max(CharacterStatusType statusType) {
+        set(statusType, Float.MAX_VALUE);
     }
 
-    public void setStatus(CharacterStatusType statusType, float value) {
+    public void set(CharacterStatusType statusType, float value) {
         float minValue = 0f;
         float maxValue = 0f;
-
         switch (statusType) {
             case HEALTH:
                 maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
@@ -68,12 +66,12 @@ public class CharacterStatus {
         characterListener.onStatusChange(statusType);
     }
 
-    public float getStatus(CharacterStatusType statusType) {
+    public float get(CharacterStatusType statusType) {
         return allStatus.get(statusType);
     }
 
-    public void changeStatus(CharacterStatusType statusType, float changeValue) {
-        setStatus(statusType, getStatus(statusType) + changeValue);
+    public void change(CharacterStatusType statusType, float changeValue) {
+        set(statusType, get(statusType) + changeValue);
     }
 
     public void setCharacterListener(CharacterListener characterListener) {

@@ -46,9 +46,11 @@ public class MovingState extends CharacterState {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) character.move(Direction.LEFT);
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) character.move(Direction.RIGHT);
         if (Gdx.input.isKeyPressed(Input.Keys.C)) character.attack();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-            if (character.getCharacterStatus().getStatus(CharacterStatusType.STAMINA) > 0)
-                character.addEffect(running);
+        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            if (!character.hasEffect(running)) {
+                if (character.getStatus().get(CharacterStatusType.STAMINA) > 0)
+                    character.addEffect(running);
+            }
         }
     }
 
@@ -69,7 +71,7 @@ public class MovingState extends CharacterState {
         float walkTimeFactor = 25.0f;
         float walkTime = walkTimeFactor / character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
 
-        switch (character.getViewDirection()) {
+        switch (character.viewDirection()) {
             case LEFT:
                 character.setAnimation(AnimationKey.WALK_LEFT, walkTime);
                 break;

@@ -30,14 +30,14 @@ public class Running extends AbstractCharacterEffect {
 
     @Override
     public void enter(AbstractCharacter character) {
-        bonusMovingSpeed = character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
+        bonusMovingSpeed = character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED) * 0.5f;
         character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, bonusMovingSpeed);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        if (character.getCharacterStatus().getStatus(CharacterStatusType.STAMINA) > 0) {
-            character.getCharacterStatus().changeStatus(CharacterStatusType.STAMINA, -1.0f * activeTime);
+        if (character.getStatus().get(CharacterStatusType.STAMINA) > 0) {
+            character.getStatus().change(CharacterStatusType.STAMINA, -0.5f * activeTime);
         }
         else expire();
     }

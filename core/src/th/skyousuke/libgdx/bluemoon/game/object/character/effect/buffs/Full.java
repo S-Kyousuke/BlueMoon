@@ -17,60 +17,62 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 public class Full extends AbstractCharacterEffect {
 
-
-    private int lastBonusStrength;
-    private int lastBonusVitality;
-    private int lastBonusAgility;
-
-    private CharacterAttribute characterAttribute;
+    private float lastBonusHealthRegeneration;
+    private float lastBonusManaRegeneration;
 
     @Override
     public void enter(AbstractCharacter character) {
-        lastBonusStrength = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
-        lastBonusVitality = (int) (characterAttribute.getBasePrimary(CharacterPrimaryAttribute.VITALITY) * 0.20);
-        lastBonusAgility = (int) (characterAttribute.getBasePrimary(CharacterPrimaryAttribute.AGILITY) * 0.05);
+        lastBonusHealthRegeneration = character.getAttribute()
+                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * 0.5f;
+        lastBonusManaRegeneration = character.getAttribute()
+                .getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION) * 0.5f;
 
-        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastBonusStrength);
-        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastBonusVitality);
-        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastBonusAgility);
+        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+                lastBonusHealthRegeneration);
+        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+                lastBonusManaRegeneration);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
+        float bonusHealthRegeneration = character.getAttribute()
+                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * 0.5f;
+        float bonusManaRegeneration = character.getAttribute()
+                .getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION) * 0.5f;
 
-        int bonusStrength = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * 0.20);
-        int bonusVitality = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.VITALITY) * 0.20);
-        int bonusAgility = (int)(characterAttribute.getBasePrimary(CharacterPrimaryAttribute.AGILITY) * 0.05);
-
-        if (lastBonusStrength != bonusStrength) {
-            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastBonusStrength);
-            lastBonusStrength = bonusStrength;
-            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastBonusStrength);
+        if (lastBonusHealthRegeneration != bonusHealthRegeneration) {
+            character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+                    -lastBonusHealthRegeneration);
+            lastBonusHealthRegeneration = bonusHealthRegeneration;
+            character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+                    lastBonusHealthRegeneration);
         }
-        if (lastBonusVitality != bonusVitality) {
-            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastBonusVitality);
-            lastBonusVitality = bonusVitality;
-            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastBonusVitality);
-        }
-        if (lastBonusAgility != bonusAgility) {
-            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastBonusAgility);
-            lastBonusAgility = bonusAgility;
-            characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastBonusAgility);
+        if (lastBonusManaRegeneration != bonusManaRegeneration) {
+            character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+                    -lastBonusManaRegeneration);
+            lastBonusManaRegeneration = bonusManaRegeneration;
+            character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+                    lastBonusManaRegeneration);
         }
 
+        character.getStatus().change(CharacterStatusType.STAMINA,
+                character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_STAMINA) * 0.005f * activeTime);
+
+        if (character.getStatus().get(CharacterStatusType.FULLNESS) < 40.0) expire();
     }
 
     @Override
     public void exit(AbstractCharacter character) {
-        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastBonusStrength);
-        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastBonusVitality);
-        characterAttribute.changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastBonusAgility);
+        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+                -lastBonusHealthRegeneration);
+        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+                -lastBonusManaRegeneration);
     }
 
     @Override
