@@ -1,12 +1,30 @@
+/*
+ * Copyright 2016 Surasek Nusati <surasek@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package th.skyousuke.libgdx.bluemoon.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,6 +36,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.BlueMoon;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterListener;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
@@ -25,6 +44,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
+ * Game World GUI Class
  * Created by Skyousuke <surasek@gmail.com> on 30/6/2559.
  */
 public class WorldGui extends InputAdapter implements Disposable, CharacterListener, WorldListener {
@@ -33,139 +53,58 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     private Stage stage;
 
     private Window statusWindow;
-    private Label healthLabel;
-    private Label manaLabel;
-    private Label staminaLabel;
-    private Label fullnessLabel;
-    private Label effectLabel;
+    private EnumMap<CharacterStatusType, Label> statusLabels;
     private List<String> effectList;
     private Array<String> effectArray;
     private ScrollPane effectPane;
-    private TextButton addHealthButton;
-    private TextButton subtractHealthButton;
-    private TextButton addManaButton;
-    private TextButton subtractManaButton;
-    private TextButton addStaminaButton;
-    private TextButton subtractStaminaButton;
-    private TextButton addFullnessButton;
-    private TextButton subtractFullnessButton;
     private TextButton toggleAttributeDisplayButton;
 
     private Window attributeWindow;
-
-    private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels;
     private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeNumberLabels;
-    private EnumMap<CharacterPrimaryAttribute, TextButton> addPrimaryAttributeButtons;
-    private EnumMap<CharacterPrimaryAttribute, TextButton> subtractPrimaryAttributeButtons;
-
-    private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels;
-
-    /*
-    private Label strenghtLabel;
-    private Label agilityLabel;
-    private Label intelligenceLabel;
-    private Label charismaLabel;
-    private Label luckLabel;
-    private Label survivalLabel;
-    private Label movingSpeedLabel;
-    private Label maxStaminaLabel;
-    private Label maxHealthLabel;
-    private Label maxManaLabel;
-    private Label maxFullnessLabel;
-    private Label healthRegenerationLabel;
-    private Label manaRegenerationLabel;
-    private Label physicalDamageLabel;
-    private Label magicalDamageLabel;
-    private Label physicalDefenseLabel;
-    private Label attackSpeedLabel;
-    private Label craftingLabel;
-    private Label fishingLabel;
-    private Label fullnessDrainLabel;
-    private Label toolsEfficiencyLabel;
-    private Label toolsSpeedLabel;
-    private Label toolsLevelLabel;
-    private Label itemChanceLabel;
-    private Label upgradeChanceLabel;
-    private Label eventChanceLabel;
-    private Label friendshipLabel;
-    private Label shoppingLabel;
-    */
+    private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeNumberLabels;
+    private ScrollPane derivedAttributePane;
 
     public WorldGui(WorldController worldController) {
         this.worldController = worldController;
         stage = new Stage(new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT));
 
-        healthLabel = new Label("", Assets.instance.skin);
-        manaLabel = new Label("", Assets.instance.skin);
-        staminaLabel = new Label("", Assets.instance.skin);
-        fullnessLabel = new Label("", Assets.instance.skin);
+        statusLabels = new EnumMap<>(CharacterStatusType.class);
+        EnumMap<CharacterStatusType, TextButton> addStatusButtons = new EnumMap<>(CharacterStatusType.class);
+        EnumMap<CharacterStatusType, TextButton> subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
 
+        for (CharacterStatusType statusType : CharacterStatusType.values()) {
+            statusLabels.put(statusType, new Label("", Assets.instance.skin));
+            addStatusButtons.put(statusType, new TextButton("+", Assets.instance.skin));
+            addStatusButtons.get(statusType).addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    worldController.controlledPlayer.getCharacterStatus().changeStatus(statusType, 5);
+                }
+            });
+            subtractStatusButtons.put(statusType, new TextButton("-", Assets.instance.skin));
+            subtractStatusButtons.get(statusType).addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    worldController.controlledPlayer.getCharacterStatus().changeStatus(statusType, -5);
+                }
+            });
+        }
+
+        Label effectLabel = new Label("Effects:", Assets.instance.skin);
         effectList = new List<>(Assets.instance.skin);
         effectArray = new Array<>();
         effectPane = new ScrollPane(effectList, Assets.instance.skin);
-        effectLabel = new Label("Effects:", Assets.instance.skin);
-
-        addHealthButton = new TextButton("+", Assets.instance.skin);
-        addHealthButton.addListener(new ClickListener() {
+        effectPane.setFadeScrollBars(false);
+        effectPane.setForceScroll(false, true);
+        effectPane.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.HEALTH, 5);
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                stage.setScrollFocus(effectPane);
             }
-        });
 
-        addManaButton = new TextButton("+", Assets.instance.skin);
-        addManaButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.MANA, 5);
-            }
-        });
-
-        addStaminaButton = new TextButton("+", Assets.instance.skin);
-        addStaminaButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.STAMINA, 5);
-            }
-        });
-
-        addFullnessButton = new TextButton("+", Assets.instance.skin);
-        addFullnessButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.FULLNESS, 5);
-            }
-        });
-
-        subtractHealthButton = new TextButton("-", Assets.instance.skin);
-        subtractHealthButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.HEALTH, -5);
-            }
-        });
-
-        subtractManaButton = new TextButton("-", Assets.instance.skin);
-        subtractManaButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.MANA, -5);
-            }
-        });
-
-        subtractStaminaButton = new TextButton("-", Assets.instance.skin);
-        subtractStaminaButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.STAMINA, -5);
-            }
-        });
-
-        subtractFullnessButton = new TextButton("-", Assets.instance.skin);
-        subtractFullnessButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                worldController.controlledPlayer.getCharacterStatus().changeStatus(CharacterStatusType.FULLNESS, -5);
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                stage.setScrollFocus(null);
             }
         });
 
@@ -190,36 +129,29 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         statusWindow.padBottom(10f);
         statusWindow.align(Align.topLeft);
         statusWindow.row().padTop(10f);
-        statusWindow.add(healthLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addHealthButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractHealthButton).width(20f).height(20f);
+        for (CharacterStatusType statusType : CharacterStatusType.values()) {
+            statusWindow.add(statusLabels.get(statusType)).align(Align.left).fillX().expandX();
+            statusWindow.add(addStatusButtons.get(statusType)).width(20f).height(20f).padRight(5f);
+            statusWindow.add(subtractStatusButtons.get(statusType)).width(20f).height(20f);
+            statusWindow.row();
+        }
+        statusWindow.add(effectLabel).align(Align.left).padTop(5f).colspan(3);
         statusWindow.row();
-        statusWindow.add(manaLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addManaButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractManaButton).width(20f).height(20f);
+        statusWindow.add(effectPane).fill().expand().colspan(3);
         statusWindow.row();
-        statusWindow.add(staminaLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addStaminaButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractStaminaButton).width(20f).height(20f);
-        statusWindow.row();
-        statusWindow.add(fullnessLabel).align(Align.left).fillX().expandX();
-        statusWindow.add(addFullnessButton).width(20f).height(20f).padRight(5f);
-        statusWindow.add(subtractFullnessButton).width(20f).height(20f);
-        statusWindow.row().colspan(3);
-        statusWindow.add(effectLabel).align(Align.left).padTop(5f);
-        statusWindow.row().colspan(3);
-        statusWindow.add(effectPane).fill().expand();
-        statusWindow.row().colspan(3);
-        statusWindow.add(toggleAttributeDisplayButton).width(130f).height(25f).padTop(10f);
+        statusWindow.add(toggleAttributeDisplayButton).width(130f).height(25f).padTop(10f).colspan(3);
         statusWindow.pack();
         statusWindow.setWidth(240f);
-        statusWindow.setHeight(280f);
+        statusWindow.setHeight(320f);
         statusWindow.setPosition(0, 440f);
 
-        primaryAttributeLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
+        EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels = new EnumMap<>(CharacterPrimaryAttribute
+                .class);
         primaryAttributeNumberLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
-        addPrimaryAttributeButtons = new EnumMap<>(CharacterPrimaryAttribute.class);
-        subtractPrimaryAttributeButtons = new EnumMap<>(CharacterPrimaryAttribute.class);
+        EnumMap<CharacterPrimaryAttribute, TextButton> addPrimaryAttributeButtons = new EnumMap<>
+                (CharacterPrimaryAttribute.class);
+        EnumMap<CharacterPrimaryAttribute, TextButton> subtractPrimaryAttributeButtons = new EnumMap<>
+                (CharacterPrimaryAttribute.class);
 
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             String attributeName = primaryAttribute.name().substring(0, 1)
@@ -242,10 +174,41 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             });
         }
 
-        derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute.class);
+        Label derivedAttributeTitleLabel = new Label("Derived Attribute:", Assets.instance.skin);
+        EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute
+                .class);
+        derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
+        Table table = new Table();
+
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
-            derivedAttributeLabels.put(derivedAttribute, new Label("", Assets.instance.skin));
+            String[] name = derivedAttribute.name().split("_");
+            String formattedName = "";
+            for (String s : name) {
+                formattedName += s.substring(0, 1) + s.substring(1).toLowerCase() + ' ';
+            }
+
+            derivedAttributeLabels.put(derivedAttribute,
+                    new Label(formattedName, Assets.instance.skin));
+            derivedAttributeNumberLabels.put(derivedAttribute, new Label("", Assets.instance.skin));
+
+            table.row();
+            table.add(derivedAttributeLabels.get(derivedAttribute)).fillX().expandX();
+            table.add(derivedAttributeNumberLabels.get(derivedAttribute)).align(Align.right).padRight(10f);
         }
+        derivedAttributePane = new ScrollPane(table, Assets.instance.skin);
+        derivedAttributePane.setFadeScrollBars(false);
+        derivedAttributePane.setForceScroll(false, true);
+        derivedAttributePane.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                stage.setScrollFocus(derivedAttributePane);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                stage.setScrollFocus(null);
+            }
+        });
 
         attributeWindow = new Window("", Assets.instance.skin);
         attributeWindow.setVisible(false);
@@ -258,16 +221,19 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             attributeWindow.add(primaryAttributeLabels.get(primaryAttribute))
                     .align(Align.left).fillX().expandX();
             attributeWindow.add(primaryAttributeNumberLabels.get(primaryAttribute))
-                    .align(Align.right).expandX();
+                    .align(Align.right);
             attributeWindow.add(addPrimaryAttributeButtons.get(primaryAttribute))
                     .width(20f).height(20f).padRight(5f).padLeft(10f);
             attributeWindow.add(subtractPrimaryAttributeButtons.get(primaryAttribute))
                     .width(20f).height(20f);
             attributeWindow.row();
         }
+        attributeWindow.add(derivedAttributeTitleLabel).align(Align.left).padTop(5f).colspan(4);
+        attributeWindow.row().colspan(4);
+        attributeWindow.add(derivedAttributePane).fill().expand();
         attributeWindow.pack();
-        attributeWindow.setWidth(240f);
-        attributeWindow.setHeight(280f);
+        attributeWindow.setWidth(290f);
+        attributeWindow.setHeight(500f);
 
         onPlayerChange();
 
@@ -277,38 +243,37 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         Gdx.input.setInputProcessor(stage);
     }
 
-
-    private void updateHealthLabel() {
-        healthLabel.setText(String.format("Health: %.1f/%.1f",
-                worldController.controlledPlayer.getCharacterStatus().getStatus(CharacterStatusType.HEALTH),
-                worldController.controlledPlayer.getAttribute()
-                        .getDerived(CharacterDerivedAttribute.MAX_HEALTH)));
-    }
-
-    private void updateManaLabel() {
-        manaLabel.setText(String.format("Mana: %.1f/%.1f",
-                worldController.controlledPlayer.getCharacterStatus().getStatus(CharacterStatusType.MANA),
-                worldController.controlledPlayer.getAttribute()
-                        .getDerived(CharacterDerivedAttribute.MAX_MANA)));
-    }
-
-    private void updateStaminaLabel() {
-        staminaLabel.setText(String.format("Stamina: %.1f/%.1f",
-                worldController.controlledPlayer.getCharacterStatus().getStatus(CharacterStatusType.STAMINA),
-                worldController.controlledPlayer.getAttribute()
-                        .getDerived(CharacterDerivedAttribute.MAX_STAMINA)));
-    }
-
-    private void updateFullnessLabel() {
-        fullnessLabel.setText(String.format("Fullness: %.1f/%.1f",
-                worldController.controlledPlayer.getCharacterStatus().getStatus(CharacterStatusType.FULLNESS),
-                worldController.controlledPlayer.getAttribute()
-                        .getDerived(CharacterDerivedAttribute.MAX_FULLNESS)));
-    }
-
     private void updateStatusWindowTitle() {
         statusWindow.getTitleLabel().setText(String.format("%s Status",
                 worldController.controlledPlayer.getName()));
+    }
+
+    private void updateStatusLabel() {
+        for (CharacterStatusType statusType : CharacterStatusType.values()) {
+            updateStatusLabel(statusType);
+        }
+    }
+
+    private void updateStatusLabel(CharacterStatusType statusType) {
+        final AbstractCharacter character = worldController.controlledPlayer;
+        final String statusName = statusType.name().substring(0, 1) + statusType.name().substring(1).toLowerCase();
+        float maxStatusValue = 0f;
+        switch (statusType) {
+            case HEALTH:
+                maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_HEALTH);
+                break;
+            case MANA:
+                maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_MANA);
+                break;
+            case STAMINA:
+                maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_STAMINA);
+                break;
+            case FULLNESS:
+                maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
+                break;
+        }
+        statusLabels.get(statusType).setText(String.format("%s: %.1f/%.1f",
+                statusName, character.getCharacterStatus().getStatus(statusType), maxStatusValue));
     }
 
     private void updateAttributeWindowTitle() {
@@ -327,6 +292,17 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
                 worldController.controlledPlayer.getAttribute().getPrimary(primaryAttribute)));
     }
 
+    private void updateDerivedAttributeNumberLabel() {
+        for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
+            updateDerivedAttributeNumberLabel(derivedAttribute);
+        }
+    }
+
+    private void updateDerivedAttributeNumberLabel(CharacterDerivedAttribute derivedAttribute) {
+        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.2f",
+                worldController.controlledPlayer.getAttribute().getDerived(derivedAttribute)));
+    }
+
     private void updateEffectList() {
         effectArray.clear();
         for (AbstractCharacterEffect effect : worldController.controlledPlayer.getEffects()) {
@@ -337,20 +313,7 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
 
     @Override
     public void onStatusChange(CharacterStatusType statusType) {
-        switch (statusType) {
-            case HEALTH:
-                updateHealthLabel();
-                break;
-            case MANA:
-                updateManaLabel();
-                break;
-            case STAMINA:
-                updateStaminaLabel();
-                break;
-            case FULLNESS:
-                updateFullnessLabel();
-                break;
-        }
+        updateStatusLabel(statusType);
     }
 
     public void update(float deltaTime) {
@@ -377,7 +340,7 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
 
     @Override
     public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute) {
-
+        updateDerivedAttributeNumberLabel(derivedAttribute);
     }
 
     @Override
@@ -395,13 +358,11 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         worldController.controlledPlayer.setListener(this);
 
         updateStatusWindowTitle();
-        updateHealthLabel();
-        updateManaLabel();
-        updateStaminaLabel();
-        updateFullnessLabel();
+        updateStatusLabel();
         updateEffectList();
 
         updateAttributeWindowTitle();
         updatePrimaryAttributeNumberLabel();
+        updateDerivedAttributeNumberLabel();
     }
 }

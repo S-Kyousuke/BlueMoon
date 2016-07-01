@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -62,74 +62,95 @@ public class CharacterAttribute {
         int luck = getPrimary(CharacterPrimaryAttribute.LUCK);
         int survival = getPrimary(CharacterPrimaryAttribute.SURVIVAL);
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MOVING_SPEED,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MOVING_SPEED,
                 120 + (agility * 10.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MAX_STAMINA,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_STAMINA,
                 50 + ((vitality - 1) * 5.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MAX_FULLNESS,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_FULLNESS,
                 100f);
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MAX_HEALTH,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_HEALTH,
                 80 + ((vitality - 1) * 10.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.HEALTH_REGENERATION,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.HEALTH_REGENERATION,
                 2 + (vitality * 0.5f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MAX_MANA,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_MANA,
                 20 + ((intelligence - 1) * 1.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MANA_REGENERATION,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MANA_REGENERATION,
                 10 + (intelligence * 0.2f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.PHYSICAL_DAMAGE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DAMAGE,
                 1 + (strength * 1.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MAGICAL_DAMAGE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAGICAL_DAMAGE,
                 1 + (intelligence * 1.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.PHYSICAL_DEFENSE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DEFENSE,
                 1 + (vitality * 1.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.MAGICAL_DEFENSE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MAGICAL_DEFENSE,
                 1 + (intelligence * 1.0f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.ATTACK_SPEED,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.ATTACK_SPEED,
                 1 / (float) (1 - Math.sqrt(agility * 0.06f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.FULLNESS_DRAIN,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.FULLNESS_DRAIN,
                 1 / (float) ((1 - Math.sqrt(survival * 0.05f)) * 32f));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.CRAFTING,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.CRAFTING,
                 1.0f + survival);
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.FISHING,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.FISHING,
                 1.0f + survival);
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.TOOLS_EFFICIENCY,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_EFFICIENCY,
                 1 / (float) (1 - Math.sqrt(strength * 0.08f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.TOOLS_SPEED,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_SPEED,
                 1 / (float) (1 - Math.sqrt(agility * 0.05f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.TOOLS_LEVEL,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_LEVEL,
                 1.0f + intelligence);
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.ITEM_CHANCE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.ITEM_CHANCE,
                 1 / (float) (1 - Math.sqrt(luck * 0.07f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.UPGRADE_CHANCE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.UPGRADE_CHANCE,
                 1 / (float) (1 - Math.sqrt(luck * 0.05f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.EVENT_CHANCE,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.EVENT_CHANCE,
                 1 / (float) (1 - Math.sqrt(luck * 0.06f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.FRIENDSHIP,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.FRIENDSHIP,
                 1 / (float) (1 - Math.sqrt(charisma * 0.06f)));
 
-        baseDerivedAttribute.put(CharacterDerivedAttribute.SHOPPING,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.SHOPPING,
                 (float) (1 - Math.sqrt(charisma * 0.06f)));
+    }
+
+    public void setBaseDerivedAttribute(CharacterDerivedAttribute derivedAttribute, float value) {
+        baseDerivedAttribute.put(derivedAttribute, value);
+        characterListener.onDerivedAttributeChange(derivedAttribute);
+
+        // Call onStatusChange() if it has effect on status
+        switch (derivedAttribute) {
+            case MAX_STAMINA:
+                characterListener.onStatusChange(CharacterStatusType.STAMINA);
+                break;
+            case MAX_HEALTH:
+                characterListener.onStatusChange(CharacterStatusType.HEALTH);
+                break;
+            case MAX_MANA:
+                characterListener.onStatusChange(CharacterStatusType.MANA);
+                break;
+            case MAX_FULLNESS:
+                characterListener.onStatusChange(CharacterStatusType.FULLNESS);
+                break;
+        }
     }
 
     public void setBasePrimary(CharacterPrimaryAttribute primaryAttribute, int value) {
@@ -146,11 +167,13 @@ public class CharacterAttribute {
     public void changeAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
         int currentValue = additionalPrimaryAttribute.get(primaryAttribute);
         additionalPrimaryAttribute.put(primaryAttribute, currentValue + changeValue);
+        characterListener.onPrimaryAttributeChange(primaryAttribute);
     }
 
     public void changeAdditionalDerived(CharacterDerivedAttribute derivedAttribute, float changeValue) {
         float currentValue = additionalDerivedAttribute.get(derivedAttribute);
         additionalDerivedAttribute.put(derivedAttribute, currentValue + changeValue);
+        characterListener.onDerivedAttributeChange(derivedAttribute);
     }
 
     public int getBasePrimary(CharacterPrimaryAttribute primaryAttribute) {
