@@ -32,25 +32,22 @@ public abstract class AbstractCharacterEffect {
     }
 
     public void apply(AbstractCharacter character, float deltaTime) {
-        if (isExpire()) return;
-        if (remainingTime == Float.MAX_VALUE) {
+        if (remainingTime == 0)
+            character.removeEffect(this);
+        else if (remainingTime == Float.MAX_VALUE)
             overTimeEffect(character, deltaTime);
-        } else {
+        else {
             if (remainingTime > deltaTime) {
                 overTimeEffect(character, deltaTime);
                 remainingTime -= deltaTime;
             } else {
                 overTimeEffect(character, remainingTime);
-                expire();
+                remainingTime = 0;
             }
         }
     }
 
-    public boolean isExpire() {
-        return remainingTime == 0;
-    }
-
-    public void expire() {
+    public void dispose() {
         remainingTime = 0;
     }
 

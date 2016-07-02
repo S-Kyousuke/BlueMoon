@@ -64,7 +64,7 @@ public class Full extends AbstractCharacterEffect {
         character.getStatus().change(CharacterStatusType.STAMINA,
                 character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_STAMINA) * 0.005f * activeTime);
 
-        if (character.getStatus().get(CharacterStatusType.FULLNESS) < 40.0) expire();
+        if (character.getStatus().get(CharacterStatusType.FULLNESS) < 40.0) dispose();
     }
 
     @Override

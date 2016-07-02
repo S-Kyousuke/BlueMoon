@@ -39,7 +39,7 @@ public class Running extends AbstractCharacterEffect {
         if (character.getStatus().get(CharacterStatusType.STAMINA) > 0) {
             character.getStatus().change(CharacterStatusType.STAMINA, -0.5f * activeTime);
         }
-        else expire();
+        else dispose();
     }
 
     @Override

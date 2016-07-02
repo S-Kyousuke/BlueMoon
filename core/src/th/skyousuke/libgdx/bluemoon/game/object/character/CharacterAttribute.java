@@ -60,7 +60,7 @@ public class CharacterAttribute {
         int survival = getPrimary(CharacterPrimaryAttribute.SURVIVAL);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MOVING_SPEED,
-                120 + (4.5f * agility) / (1 + 0.015f * agility));
+                120 + (363.6744f * (agility - 1)) / (100f + agility - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_STAMINA,
                 58 + (vitality * 2.0f));
@@ -72,31 +72,31 @@ public class CharacterAttribute {
                 271 + (vitality * 29.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.HEALTH_REGENERATION,
-                getBaseDerived(CharacterDerivedAttribute.MAX_HEALTH) * 0.001f);
+                getBaseDerived(CharacterDerivedAttribute.MAX_HEALTH) * 0.01f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_MANA,
                 90 + (intelligence * 10.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MANA_REGENERATION,
-                getBaseDerived(CharacterDerivedAttribute.MAX_MANA) * 0.001f);
+                getBaseDerived(CharacterDerivedAttribute.MAX_MANA) * 0.01f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DAMAGE,
-                1 + (strength * 1.0f));
+                (strength * 1.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAGICAL_DAMAGE,
-                1 + (intelligence * 1.0f));
+                (intelligence * 1.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DEFENSE,
-                1 + (vitality * 1.0f));
+                (vitality * 1.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAGICAL_DEFENSE,
-                1 + (intelligence * 1.0f));
+                (intelligence * 1.0f));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.ATTACK_SPEED,
-                1 / (float) (1 - Math.sqrt(agility * 0.06f)));
+                1 + (4.0408f * (agility - 1)) / (100f + agility - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.FULLNESS_DRAIN,
-                1 / (float) ((1 - Math.sqrt(survival * 0.05f)) * 32f));
+                1 - (1.5154f * (survival - 1)) / (100f + survival - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.CRAFTING,
                 1.0f + survival);
@@ -105,28 +105,28 @@ public class CharacterAttribute {
                 1.0f + survival);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_EFFICIENCY,
-                1 / (float) (1 - Math.sqrt(strength * 0.08f)));
+                1 + (8.081f * (strength - 1)) / (100f + strength - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_SPEED,
-                1 / (float) (1 - Math.sqrt(agility * 0.05f)));
+                1 + (8.081f * (agility - 1)) / (100f + agility - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_LEVEL,
                 1.0f + intelligence);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.ITEM_CHANCE,
-                1 / (float) (1 - Math.sqrt(luck * 0.07f)));
+                1 + (8.081f * (luck - 1)) / (100f + luck - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.UPGRADE_CHANCE,
-                1 / (float) (1 - Math.sqrt(luck * 0.05f)));
+                1 + (6.061225f * (luck - 1)) / (100f + luck - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.EVENT_CHANCE,
-                1 / (float) (1 - Math.sqrt(luck * 0.06f)));
+                1 + (4.0408f * (luck - 1)) / (100f + luck - 1));
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.FRIENDSHIP,
-                1 / (float) (1 - Math.sqrt(charisma * 0.06f)));
+                1 + (8.081f * (charisma - 1)) / (100f + charisma - 1));
 
-        setBaseDerivedAttribute(CharacterDerivedAttribute.SHOPPING,
-                (float) (1 - Math.sqrt(charisma * 0.06f)));
+        setBaseDerivedAttribute(CharacterDerivedAttribute.SHOPPING_PRICE,
+                1 - (2.02449f * (charisma - 1)) / (150f + charisma - 1));
     }
 
     public void setBaseDerivedAttribute(CharacterDerivedAttribute derivedAttribute, float value) {

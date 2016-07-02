@@ -298,7 +298,7 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     private void updatePrimaryAttributeNumberLabel(CharacterPrimaryAttribute primaryAttribute) {
-        primaryAttributeNumberLabels.get(primaryAttribute).setText(String.format("%d (+%d)",
+        primaryAttributeNumberLabels.get(primaryAttribute).setText(String.format("%d (%+d)",
                 worldController.controlledPlayer.getAttribute().getBasePrimary(primaryAttribute),
                 worldController.controlledPlayer.getAttribute().getAdditionalPrimary(primaryAttribute)));
     }
@@ -310,7 +310,7 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     private void updateDerivedAttributeNumberLabel(CharacterDerivedAttribute derivedAttribute) {
-        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.2f (+%.2f)",
+        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.2f (%+.2f)",
                 worldController.controlledPlayer.getAttribute().getBaseDerived(derivedAttribute),
                 worldController.controlledPlayer.getAttribute().getAdditionalDerived(derivedAttribute)));
     }

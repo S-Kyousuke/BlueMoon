@@ -24,6 +24,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs.Full;
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs.Hungry;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
 import th.skyousuke.libgdx.bluemoon.utils.Direction;
@@ -42,7 +43,8 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     private CharacterAttribute attribute;
 
     private CharacterListener listener;
-    private Full fullEffect;
+
+    private float lastFullness;
 
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
@@ -85,20 +87,24 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     private void applyEffects(float deltaTime) {
         for (AbstractCharacterEffect effect : effects) {
-            if (effect.isExpire()) {
-                removeEffect(effect);
-            }
-            else effect.apply(this, deltaTime);
+            effect.apply(this, deltaTime);
         }
-        applyFullnessBonus();
+
+        float currentFullness = status.get(CharacterStatusType.FULLNESS);
+        applyFullEffect(currentFullness);
+        applyHungryEffect(currentFullness);
+        lastFullness = currentFullness;
     }
 
-    private void applyFullnessBonus() {
-        if (status.get(CharacterStatusType.FULLNESS) >= 40.0) {
-            if (!hasEffect(fullEffect)) {
-                fullEffect = new Full();
-                addEffect(fullEffect);
-            }
+    private void applyFullEffect(float currentFullness) {
+        if (currentFullness >= 40 && lastFullness < 40) {
+            addEffect(new Full());
+        }
+    }
+
+    private void applyHungryEffect(float currentFullness) {
+        if (currentFullness <= 0 && lastFullness > 0) {
+            addEffect(new Hungry(1));
         }
     }
 
@@ -129,11 +135,11 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     private void updateStatus(float deltaTime) {
         status.change(CharacterStatusType.FULLNESS,
-                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime);
+                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime * 0.1f);
         status.change(CharacterStatusType.HEALTH,
-                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime);
+                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime * 0.1f);
         status.change(CharacterStatusType.MANA,
-                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime);
+                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime * 0.1f);
     }
 
     public CharacterStatus getStatus() {
@@ -166,8 +172,8 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
     public abstract void interact();
 
     public void addEffect(AbstractCharacterEffect effect) {
-        effects.add(effect);
         effect.enter(this);
+        effects.add(effect);
         listener.onEffectAdd(effect);
     }
 
