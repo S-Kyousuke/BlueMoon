@@ -17,36 +17,40 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.EnumMap;
 
 public class CharacterStatus {
 
-    private final EnumMap<CharacterStatusType, Float> allStatus;
+    private final EnumMap<CharacterStatusType, Float> status;
     private final CharacterAttribute characterAttribute;
 
-    private CharacterListener characterListener;
+    private final Array<CharacterAttributeAndStatusListener> listeners;
 
     // Create character status from character attribute and initialize all status to max value
     public CharacterStatus(CharacterAttribute characterAttribute) {
-        allStatus = new EnumMap<>(CharacterStatusType.class);
+        status = new EnumMap<>(CharacterStatusType.class);
         this.characterAttribute = characterAttribute;
-        characterListener = new NullCharacterListener();
+        listeners = new Array<>();
 
         for (CharacterStatusType type : CharacterStatusType.values()) {
-            allStatus.put(type, 0f);
-        }
-        for (CharacterStatusType statusType : CharacterStatusType.values()) {
-            max(statusType);
+            status.put(type, 0f);
         }
     }
 
-    public void max(CharacterStatusType statusType) {
-        set(statusType, Float.MAX_VALUE);
+    public void setToMax() {
+        for (CharacterStatusType type : CharacterStatusType.values()) {
+            setToMax(type);
+        }
     }
 
-    public void set(CharacterStatusType statusType, float value) {
-        float minValue = 0f;
+    public void setToMax(CharacterStatusType statusType) {
+        setValue(statusType, Float.MAX_VALUE);
+    }
+
+    public void setValue(CharacterStatusType statusType, float value) {
+        float oldValue = getValue(statusType);
         float maxValue = 0f;
         switch (statusType) {
             case HEALTH:
@@ -62,20 +66,26 @@ public class CharacterStatus {
                 maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
         }
-        allStatus.put(statusType, MathUtils.clamp(value, minValue, maxValue));
-        characterListener.onStatusChange(statusType);
+        status.put(statusType, MathUtils.clamp(value, 0, maxValue));
+        for (CharacterAttributeAndStatusListener listener : listeners) {
+            listener.onStatusChange(statusType, oldValue, getValue(statusType));
+        }
     }
 
-    public float get(CharacterStatusType statusType) {
-        return allStatus.get(statusType);
+    public float getValue(CharacterStatusType statusType) {
+        return status.get(statusType);
     }
 
-    public void change(CharacterStatusType statusType, float changeValue) {
-        set(statusType, get(statusType) + changeValue);
+    public void addValue(CharacterStatusType statusType, float value) {
+        setValue(statusType, getValue(statusType) + value);
     }
 
-    public void setCharacterListener(CharacterListener characterListener) {
-        this.characterListener = characterListener;
+    public void addListener(CharacterAttributeAndStatusListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(CharacterAttributeAndStatusListener listener) {
+        listeners.removeValue(listener, true);
     }
 
 }

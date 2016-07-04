@@ -17,6 +17,7 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.EnumMap;
 
@@ -28,7 +29,7 @@ public class CharacterAttribute {
     private final EnumMap<CharacterPrimaryAttribute, Integer> additionalPrimaryAttribute;
     private final EnumMap<CharacterDerivedAttribute, Float> additionalDerivedAttribute;
 
-    private CharacterListener characterListener;
+    private final Array<CharacterAttributeAndStatusListener> listeners;
 
     public CharacterAttribute() {
         basePrimaryAttribute = new EnumMap<>(CharacterPrimaryAttribute.class);
@@ -37,7 +38,7 @@ public class CharacterAttribute {
         additionalPrimaryAttribute = new EnumMap<>(CharacterPrimaryAttribute.class);
         additionalDerivedAttribute = new EnumMap<>(CharacterDerivedAttribute.class);
 
-        characterListener = new NullCharacterListener();
+        listeners = new Array<>();
 
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
             baseDerivedAttribute.put(derivedAttribute, 0f);
@@ -130,46 +131,33 @@ public class CharacterAttribute {
     }
 
     public void setBaseDerivedAttribute(CharacterDerivedAttribute derivedAttribute, float value) {
+        float oldValue = getDerived(derivedAttribute);
         baseDerivedAttribute.put(derivedAttribute, value);
-        characterListener.onDerivedAttributeChange(derivedAttribute);
-
-        switch (derivedAttribute) {
-            case MAX_STAMINA:
-                characterListener.onStatusChange(CharacterStatusType.STAMINA);
-                break;
-            case MAX_HEALTH:
-                characterListener.onStatusChange(CharacterStatusType.HEALTH);
-                break;
-            case MAX_MANA:
-                characterListener.onStatusChange(CharacterStatusType.MANA);
-                break;
-            case MAX_FULLNESS:
-                characterListener.onStatusChange(CharacterStatusType.FULLNESS);
-                break;
-        }
+        informDerivedChangeToListener(derivedAttribute, oldValue);
     }
 
     public void setBasePrimary(CharacterPrimaryAttribute primaryAttribute, int value) {
+        int oldValue = getPrimary(primaryAttribute);
         basePrimaryAttribute.put(primaryAttribute, MathUtils.clamp(value, 1, 99));
         calculateBaseDerived();
-        characterListener.onPrimaryAttributeChange(primaryAttribute);
+        informPrimaryChangeToListener(primaryAttribute, oldValue);
     }
 
-    public void changeBasePrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
+    public void addBasePrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
         setBasePrimary(primaryAttribute, getBasePrimary(primaryAttribute) + changeValue);
     }
 
-    public void changeAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
-        int currentValue = additionalPrimaryAttribute.get(primaryAttribute);
-        additionalPrimaryAttribute.put(primaryAttribute, currentValue + changeValue);
+    public void addAdditionalPrimary(CharacterPrimaryAttribute primaryAttribute, int changeValue) {
+        int oldValue = additionalPrimaryAttribute.get(primaryAttribute);
+        additionalPrimaryAttribute.put(primaryAttribute, oldValue + changeValue);
         calculateBaseDerived();
-        characterListener.onPrimaryAttributeChange(primaryAttribute);
+        informPrimaryChangeToListener(primaryAttribute, oldValue);
     }
 
-    public void changeAdditionalDerived(CharacterDerivedAttribute derivedAttribute, float changeValue) {
-        float currentValue = additionalDerivedAttribute.get(derivedAttribute);
-        additionalDerivedAttribute.put(derivedAttribute, currentValue + changeValue);
-        characterListener.onDerivedAttributeChange(derivedAttribute);
+    public void addAdditionalDerived(CharacterDerivedAttribute derivedAttribute, float changeValue) {
+        float oldValue = additionalDerivedAttribute.get(derivedAttribute);
+        additionalDerivedAttribute.put(derivedAttribute, oldValue + changeValue);
+        informDerivedChangeToListener(derivedAttribute, oldValue);
     }
 
     public int getBasePrimary(CharacterPrimaryAttribute primaryAttribute) {
@@ -196,8 +184,38 @@ public class CharacterAttribute {
         return getBaseDerived(derivedAttribute) + getAdditionalDerived(derivedAttribute);
     }
 
-    public void setCharacterListener(CharacterListener characterListener) {
-        this.characterListener = characterListener;
+    public void addListener(CharacterAttributeAndStatusListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(CharacterAttributeAndStatusListener listener) {
+        listeners.removeValue(listener, true);
+    }
+
+    private void informPrimaryChangeToListener(CharacterPrimaryAttribute primaryAttribute, int oldValue) {
+        for (CharacterAttributeAndStatusListener listener : listeners) {
+            listener.onPrimaryAttributeChange(primaryAttribute, oldValue, getPrimary(primaryAttribute));
+        }
+    }
+
+    private void informDerivedChangeToListener(CharacterDerivedAttribute derivedAttribute, float oldValue) {
+        for (CharacterAttributeAndStatusListener listener : listeners) {
+            listener.onDerivedAttributeChange(derivedAttribute, oldValue, getDerived(derivedAttribute));
+            switch (derivedAttribute) {
+                case MAX_STAMINA:
+                    listener.onMaxStatusChange(CharacterStatusType.STAMINA, oldValue, getDerived(derivedAttribute));
+                    break;
+                case MAX_HEALTH:
+                    listener.onMaxStatusChange(CharacterStatusType.HEALTH, oldValue, getDerived(derivedAttribute));
+                    break;
+                case MAX_MANA:
+                    listener.onMaxStatusChange(CharacterStatusType.MANA, oldValue, getDerived(derivedAttribute));
+                    break;
+                case MAX_FULLNESS:
+                    listener.onMaxStatusChange(CharacterStatusType.FULLNESS, oldValue, getDerived(derivedAttribute));
+                    break;
+            }
+        }
     }
 
 }

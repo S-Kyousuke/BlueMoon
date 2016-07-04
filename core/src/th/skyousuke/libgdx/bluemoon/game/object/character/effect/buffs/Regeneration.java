@@ -35,20 +35,20 @@ public class Regeneration extends AbstractCharacterEffect {
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         switch (type) {
             case HEALTH:
-                character.getStatus()
-                        .change(CharacterStatusType.HEALTH, restorePerSecond * activeTime);
+                character.getStatus().addValue(CharacterStatusType.HEALTH,
+                        restorePerSecond * activeTime);
                 break;
             case MANA:
-                character.getStatus()
-                        .change(CharacterStatusType.MANA, restorePerSecond * activeTime);
+                character.getStatus().addValue(CharacterStatusType.MANA,
+                        restorePerSecond * activeTime);
                 break;
             case STAMINA:
-                character.getStatus()
-                        .change(CharacterStatusType.STAMINA, restorePerSecond * activeTime);
+                character.getStatus().addValue(CharacterStatusType.STAMINA,
+                        restorePerSecond * activeTime);
                 break;
             case FULLNESS:
-                character.getStatus()
-                        .change(CharacterStatusType.FULLNESS, restorePerSecond * activeTime);
+                character.getStatus().addValue(CharacterStatusType.FULLNESS,
+                        restorePerSecond * activeTime);
                 break;
         }
     }

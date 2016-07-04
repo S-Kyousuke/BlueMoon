@@ -25,23 +25,24 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
 
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractGameObject;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
-import th.skyousuke.libgdx.bluemoon.game.object.character.players.Player1;
-import th.skyousuke.libgdx.bluemoon.game.object.character.players.Player2;
+import th.skyousuke.libgdx.bluemoon.game.object.character.players.Jane;
+import th.skyousuke.libgdx.bluemoon.game.object.character.players.John;
 
 public class Level {
 
-    public AbstractPlayer player;
-    public AbstractPlayer player2;
+    public AbstractPlayer John;
+    public AbstractPlayer Jane;
 
     private TiledMap map;
     private Array<AbstractGameObject> allObjects;
     private ZOrderComparator zOrderComparator;
 
     public Level() {
-        player = new Player1();
-        player2 = new Player2();
+        John = new John();
+        Jane = new Jane();
 
         map = Assets.instance.mainMap;
         allObjects = new Array<>();
@@ -49,17 +50,16 @@ public class Level {
 
         // add all object here
         //...
-        allObjects.add(player);
-        allObjects.add(player2);
+        allObjects.add(John);
+        allObjects.add(Jane);
     }
 
     public void update(float deltaTime) {
 
         // add logic here
         //...
-        player.update(deltaTime);
-        player2.update(deltaTime);
-
+        John.update(deltaTime);
+        Jane.update(deltaTime);
 
         allObjects.sort(zOrderComparator);
     }

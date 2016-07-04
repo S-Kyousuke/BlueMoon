@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.utils;
+package th.skyousuke.libgdx.bluemoon.framework;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;

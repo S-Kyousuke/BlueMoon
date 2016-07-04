@@ -19,12 +19,13 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+import th.skyousuke.libgdx.bluemoon.framework.Direction;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
-import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 /**
+ * Character idling state
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public class IdlingState extends CharacterState {

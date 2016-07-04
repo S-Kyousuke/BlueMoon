@@ -16,20 +16,18 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 
-import th.skyousuke.libgdx.bluemoon.game.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
-public class Player2 extends AbstractPlayer {
+public class John extends AbstractPlayer {
 
-    public Player2() {
-        super(Assets.instance.player2Altas);
-
-
+    public John() {
+        super(Assets.instance.johnAltas);
     }
 
     @Override
     public String getName() {
-        return "Player2";
+        return "John";
     }
 
 }

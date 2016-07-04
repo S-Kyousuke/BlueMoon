@@ -21,8 +21,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import th.skyousuke.libgdx.bluemoon.utils.collisions.CollisionCheck;
-import th.skyousuke.libgdx.bluemoon.utils.collisions.NullCollsionCheck;
+import th.skyousuke.libgdx.bluemoon.framework.collision.CollisionCheck;
+import th.skyousuke.libgdx.bluemoon.framework.collision.NullCollsionCheck;
 
 public abstract class AbstractGameObject {
 

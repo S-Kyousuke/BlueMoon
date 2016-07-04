@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character.players;
+package th.skyousuke.libgdx.bluemoon.framework.collision;
 
-import th.skyousuke.libgdx.bluemoon.game.Assets;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
+public interface CollisionCheck {
 
-public class Player1 extends AbstractPlayer {
+    boolean isCollidesRight();
 
-    public Player1() {
-        super(Assets.instance.player1Altas);
-    }
+    boolean isCollidesLeft();
 
-    @Override
-    public String getName() {
-        return "Player1";
-    }
+    boolean isCollidesTop();
+
+    boolean isCollidesBottom();
 
 }

@@ -18,22 +18,18 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
 
+import th.skyousuke.libgdx.bluemoon.framework.Direction;
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs.Full;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs.Hungry;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
-import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
-public abstract class AbstractCharacter extends AbstractAnimatedObject {
+public abstract class AbstractCharacter extends AbstractAnimatedObject implements CharacterAttributeAndStatusListener {
 
     private static final float FRICTION = 1000f;
-
-    private final Array<AbstractCharacterEffect> effects;
 
     private CharacterState state;
     private Direction viewDirection;
@@ -41,18 +37,16 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     private CharacterStatus status;
     private CharacterAttribute attribute;
-
-    private CharacterListener listener;
-
-    private float lastFullness;
+    private CharacterEffect effect;
 
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
 
         attribute = new CharacterAttribute();
         status = new CharacterStatus(attribute);
-        effects = new Array<>();
-        listener = new NullCharacterListener();
+        effect = new CharacterEffect(this);
+        status.addListener(this);
+        status.setToMax();
 
         setState(new IdlingState(this));
         viewDirection = Direction.DOWN;
@@ -78,34 +72,19 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     @Override
     public void update(float deltaTime) {
-        applyEffects(deltaTime);
-        updateStatus(deltaTime);
-
+        updateEffectsAndStatus(deltaTime);
         state.update(deltaTime);
         super.update(deltaTime);
     }
 
-    private void applyEffects(float deltaTime) {
-        for (AbstractCharacterEffect effect : effects) {
-            effect.apply(this, deltaTime);
-        }
-
-        float currentFullness = status.get(CharacterStatusType.FULLNESS);
-        applyFullEffect(currentFullness);
-        applyHungryEffect(currentFullness);
-        lastFullness = currentFullness;
-    }
-
-    private void applyFullEffect(float currentFullness) {
-        if (currentFullness >= 40 && lastFullness < 40) {
-            addEffect(new Full());
-        }
-    }
-
-    private void applyHungryEffect(float currentFullness) {
-        if (currentFullness <= 0 && lastFullness > 0) {
-            addEffect(new Hungry(1));
-        }
+    private void updateEffectsAndStatus(float deltaTime) {
+        effect.apply(deltaTime);
+        status.addValue(CharacterStatusType.HEALTH,
+                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime * 0.1f);
+        status.addValue(CharacterStatusType.MANA,
+                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime * 0.1f);
+        status.addValue(CharacterStatusType.FULLNESS,
+                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime * 0.1f);
     }
 
     public void handleInput() {
@@ -133,21 +112,16 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
         velocity.setLength(movingSpeed);
     }
 
-    private void updateStatus(float deltaTime) {
-        status.change(CharacterStatusType.FULLNESS,
-                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime * 0.1f);
-        status.change(CharacterStatusType.HEALTH,
-                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime * 0.1f);
-        status.change(CharacterStatusType.MANA,
-                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime * 0.1f);
-    }
-
     public CharacterStatus getStatus() {
         return status;
     }
 
     public CharacterAttribute getAttribute() {
         return attribute;
+    }
+
+    public CharacterEffect getEffect() {
+        return effect;
     }
 
     public Direction viewDirection() {
@@ -171,35 +145,32 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject {
 
     public abstract void interact();
 
-    public void addEffect(AbstractCharacterEffect effect) {
-        effect.enter(this);
-        effects.add(effect);
-        listener.onEffectAdd(effect);
-    }
-
-    public void removeEffect(AbstractCharacterEffect effect) {
-        if(effects.removeValue(effect, true)) {
-            effect.exit(this);
+    @Override
+    public void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
+        switch (statusType) {
+            case FULLNESS:
+                if (oldValue > 0 && newValue == 0)
+                    effect.add(new Hungry(1));
+                if (oldValue < 40 && newValue >= 40) {
+                    effect.add(new Full());
+                }
+                break;
         }
-        listener.onEffectRemove(effect);
     }
 
-    public boolean hasEffect(AbstractCharacterEffect effect) {
-        return effects.contains(effect, true);
+    @Override
+    public void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
+
     }
 
-    public Array<AbstractCharacterEffect> getEffects() {
-        return effects;
+    @Override
+    public void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue) {
+
     }
 
-    public void setListener(CharacterListener listener) {
-        this.listener = listener;
-        status.setCharacterListener(listener);
-        attribute.setCharacterListener(listener);
-    }
+    @Override
+    public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue) {
 
-    public void removeListener() {
-        setListener(new NullCharacterListener());
     }
 
 }

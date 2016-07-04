@@ -16,10 +16,12 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs;
 
+import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
+ * Debuff applied to character when character has no fullness.
  * Created by Skyousuke <surasek@gmail.com> on 2/7/2559.
  */
 public class Hungry extends Starve {
@@ -40,29 +42,29 @@ public class Hungry extends Starve {
     public void exit(AbstractCharacter character) {
         super.exit(character);
         if (effectAfterDispose != null)
-            character.addEffect(effectAfterDispose);
+            character.getEffect().add(effectAfterDispose);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        updateLevel(character, activeTime);
+        updateLevel(activeTime);
         updatePenaltyPercent();
         updatePenaltyValue(character);
         expireIfHasFullness(character);
     }
 
-    private void updateLevel(AbstractCharacter character, float activeTime) {
+    private void updateLevel(float activeTime) {
         levelActiveTime += activeTime;
         float timeToLevelUp = Float.MAX_VALUE;
         switch (level) {
             case 1:
-                timeToLevelUp = 5;
+                timeToLevelUp = WorldTime.SECONDS_PER_WORLD_DAY;
                 break;
             case 2:
-                timeToLevelUp = 10;
+                timeToLevelUp = WorldTime.SECONDS_PER_WORLD_DAY * 2;
                 break;
             case 3:
-                timeToLevelUp = 15;
+                timeToLevelUp = WorldTime.SECONDS_PER_WORLD_DAY * 3;
                 break;
         }
         if (levelActiveTime >= timeToLevelUp) {

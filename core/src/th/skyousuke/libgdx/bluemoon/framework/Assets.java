@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game;
+package th.skyousuke.libgdx.bluemoon.framework;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -35,8 +35,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public AssetManager manager;
 
-    public TextureAtlas player1Altas;
-    public TextureAtlas player2Altas;
+    public TextureAtlas johnAltas;
+    public TextureAtlas janeAltas;
     public TextureAtlas player3Altas;
     public TextureAtlas player4Altas;
 
@@ -89,8 +89,8 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.finishLoading();
 
         //get assets here
-        player1Altas = manager.get("images/characters/character.atlas");
-        player2Altas = manager.get("images/characters/character.atlas");
+        johnAltas = manager.get("images/characters/character.atlas");
+        janeAltas = manager.get("images/characters/character.atlas");
         player3Altas = manager.get("images/characters/character.atlas");
         player4Altas = manager.get("images/characters/character.atlas");
 

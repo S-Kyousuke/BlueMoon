@@ -20,26 +20,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.utils.Array;
 
+import th.skyousuke.libgdx.bluemoon.framework.CameraHelper;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
-import th.skyousuke.libgdx.bluemoon.utils.CameraHelper;
 
 public class WorldController extends InputAdapter {
 
+    public Level level;
     public CameraHelper cameraHelper;
     public AbstractPlayer controlledPlayer;
-    public Level level;
 
-    private WorldListener listener;
+    private WorldTime worldTime;
+    private Array<WorldListener> worldListeners;
 
     public WorldController() {
         init();
     }
 
     public void init() {
-        cameraHelper = new CameraHelper();
         level = new Level();
-        controlledPlayer = level.player;
+        cameraHelper = new CameraHelper();
+        controlledPlayer = level.John;
+
+        worldTime = new WorldTime();
+        worldListeners = new Array<>();
     }
 
     private void handleInputCamera(float deltaTime) {
@@ -54,7 +59,7 @@ public class WorldController extends InputAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.X)) cameraHelper.addZoom(-CAMERA_ZOOM_SPEED * deltaTime);
     }
 
-    private void handleInputPlayer(float deltaTime) {
+    private void handleInputPlayer() {
         controlledPlayer.handleInput();
     }
 
@@ -73,26 +78,36 @@ public class WorldController extends InputAdapter {
         if (!cameraHelper.hasTarget())
             handleInputCamera(deltaTime);
         else
-            handleInputPlayer(deltaTime);
+            handleInputPlayer();
     }
 
     public void update(float deltaTime) {
         handleInput(deltaTime);
         level.update(deltaTime);
         cameraHelper.update(deltaTime);
+        worldTime.update(deltaTime);
     }
 
     public void swapPlayer() {
-        controlledPlayer.removeListener();
-        if (controlledPlayer == level.player)
-            controlledPlayer = level.player2;
-        else
-            controlledPlayer = level.player;
-        listener.onPlayerChange();
+        if (controlledPlayer == level.John) {
+            controlledPlayer = level.Jane;
+            for (WorldListener worldListener : worldListeners) {
+                worldListener.onPlayerChange(level.John, level.Jane);
+            }
+        } else {
+            controlledPlayer = level.John;
+            for (WorldListener worldListener : worldListeners) {
+                worldListener.onPlayerChange(level.Jane, level.John);
+            }
+        }
     }
 
-    public void setListener(WorldListener listener) {
-        this.listener = listener;
+    public WorldTime getWorldTime() {
+        return worldTime;
+    }
+
+    public void addWorldListener(WorldListener worldListener) {
+        worldListeners.add(worldListener);
     }
 
 }

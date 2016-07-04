@@ -17,33 +17,17 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 /**
- * Base Character state class
- * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ * Listener interface for trigger event when status or attribute change
+ * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
  */
-public abstract class CharacterState {
+public interface CharacterAttributeAndStatusListener {
 
-    protected AbstractCharacter character;
+    void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue);
 
-    public CharacterState(AbstractCharacter character) {
-        this.character = character;
-    }
+    void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue);
 
-    public void update(float deltaTime) {
-        setAnimation();
-        updateCharacter(deltaTime);
-    }
+    void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue);
 
-    protected abstract void updateCharacter(float deltaTime);
-
-    protected abstract void setAnimation();
-
-    public void handleInput() {
-    }
-
-    public void enter() {
-    }
-
-    public void exit() {
-    }
+    void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue);
 
 }

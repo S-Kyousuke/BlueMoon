@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.gui;
+package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Align;
 
 /**
+ * (Not Complete) Custom Dialog class
  * Created by Skyousuke <surasek@gmail.com> on 28/6/2559.
  */
 public class Dialog extends Actor {
@@ -88,11 +89,11 @@ public class Dialog extends Actor {
         @Override
         public void dragStart(InputEvent event, float x, float y, int pointer) {
             dragStartX = x;
-            dragStartY= y;
+            dragStartY = y;
         }
 
         @Override
-        public void drag(InputEvent event, float x, float y, int pointer)  {
+        public void drag(InputEvent event, float x, float y, int pointer) {
             moveBy(x - dragStartX, y - dragStartY);
         }
     };
@@ -124,12 +125,12 @@ public class Dialog extends Actor {
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
 
         Color fontColor = font.getColor();
-        font.setColor(fontColor.r, fontColor.g, fontColor.b, color.a*parentAlpha);
+        font.setColor(fontColor.r, fontColor.g, fontColor.b, color.a * parentAlpha);
         font.draw(batch, text,
                 getX() + textStartX,
                 getY() + textStartY,
                 0, charCount,
-                getWidth() - textStartX*2, Align.left, true);
+                getWidth() - textStartX * 2, Align.left, true);
     }
 
     public void setShowingEffect(Action effect) {

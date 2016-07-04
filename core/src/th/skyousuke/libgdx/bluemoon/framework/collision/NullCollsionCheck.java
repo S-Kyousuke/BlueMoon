@@ -14,16 +14,28 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.utils.collisions;
+package th.skyousuke.libgdx.bluemoon.framework.collision;
 
-public interface CollisionCheck {
+public class NullCollsionCheck implements CollisionCheck {
 
-    boolean isCollidesRight();
+    @Override
+    public boolean isCollidesRight() {
+        return false;
+    }
 
-    boolean isCollidesLeft();
+    @Override
+    public boolean isCollidesLeft() {
+        return false;
+    }
 
-    boolean isCollidesTop();
+    @Override
+    public boolean isCollidesTop() {
+        return false;
+    }
 
-    boolean isCollidesBottom();
+    @Override
+    public boolean isCollidesBottom() {
+        return false;
+    }
 
 }

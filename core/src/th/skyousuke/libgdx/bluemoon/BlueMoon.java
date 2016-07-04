@@ -18,8 +18,8 @@ package th.skyousuke.libgdx.bluemoon;
 
 import com.badlogic.gdx.Game;
 
-import th.skyousuke.libgdx.bluemoon.game.Assets;
-import th.skyousuke.libgdx.bluemoon.screens.WorldScreen;
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.screen.WorldScreen;
 
 public class BlueMoon extends Game {
 

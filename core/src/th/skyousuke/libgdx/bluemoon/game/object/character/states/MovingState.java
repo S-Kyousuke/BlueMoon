@@ -19,15 +19,16 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+import th.skyousuke.libgdx.bluemoon.framework.Direction;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.others.Running;
-import th.skyousuke.libgdx.bluemoon.utils.Direction;
 
 /**
+ * Character moving state
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public class MovingState extends CharacterState {
@@ -47,18 +48,18 @@ public class MovingState extends CharacterState {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) character.move(Direction.RIGHT);
         if (Gdx.input.isKeyPressed(Input.Keys.C)) character.attack();
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            if (!character.hasEffect(running)) {
-                if (character.getStatus().get(CharacterStatusType.STAMINA) > 0)
-                    character.addEffect(running);
+            if (!character.getEffect().has(running)) {
+                if (character.getStatus().getValue(CharacterStatusType.STAMINA) > 0)
+                    character.getEffect().add(running);
             }
         }
     }
 
     @Override
     public void updateCharacter(float deltaTime) {
-        if (character.hasEffect(running)) {
+        if (character.getEffect().has(running)) {
             if (!Gdx.input.isKeyPressed(Input.Keys.Z)) {
-                character.removeEffect(running);
+                character.getEffect().remove(running);
             }
         }
         if (!character.isMoving()) {
@@ -89,8 +90,8 @@ public class MovingState extends CharacterState {
 
     @Override
     public void exit() {
-        if (character.hasEffect(running)) {
-            character.removeEffect(running);
+        if (character.getEffect().has(running)) {
+            character.getEffect().remove(running);
         }
     }
 }

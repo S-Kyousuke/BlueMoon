@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character;
+package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 
-/**
- * Created by Skyousuke <surasek@gmail.com> on 3/7/2559.
- */
-public class Status {
-    public float value;
-    public float lastValue;
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
-    public boolean isJustIncreaseTo(float value) {
-        return (lastValue < value) && (this.value >= value);
+public class Jane extends AbstractPlayer {
+
+    public Jane() {
+        super(Assets.instance.janeAltas);
     }
 
-    public boolean isJustDecreaseTo(float value) {
-        return (lastValue > value) && (this.value <= value);
+    @Override
+    public String getName() {
+        return "Jane";
     }
+
 }

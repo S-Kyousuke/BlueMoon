@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
+
+import com.badlogic.gdx.utils.Array;
+
+import th.skyousuke.libgdx.bluemoon.game.object.item.AbstractItem;
 
 /**
- * Regeneration effect type enum
- * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
+ * Game Inventory Class
+ * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
  */
-public enum RegenerationType {
-    HEALTH,
-    MANA,
-    STAMINA,
-    FULLNESS
+public class Inventory {
+
+    private final Array<AbstractItem> items;
+    private int capacity;
+
+    public Inventory(Array<AbstractItem> items) {
+        this.items = items;
+    }
 }

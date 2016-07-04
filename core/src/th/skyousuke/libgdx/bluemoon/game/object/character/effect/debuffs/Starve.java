@@ -23,6 +23,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
+ * Debuff applied to character when character has no fullness for a long time.
  * Created by Skyousuke <surasek@gmail.com> on 2/7/2559.
  */
 public class Starve extends AbstractCharacterEffect {
@@ -35,6 +36,9 @@ public class Starve extends AbstractCharacterEffect {
     protected float vitalityPenaltyPercent;
     protected float agilityPenaltyPercent;
 
+    protected float lastHealRegeneration;
+    protected float lastManaRegeneration;
+
     @Override
     public void enter(AbstractCharacter character) {
         strengthPenaltyPercent = 0.8f;
@@ -44,9 +48,13 @@ public class Starve extends AbstractCharacterEffect {
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastStrengthPenalty);
-        character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
-        character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
+        character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastStrengthPenalty);
+        character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
+        character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
+        character.getAttribute()
+                .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
+        character.getAttribute()
+                .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
     }
 
     @Override
@@ -57,13 +65,13 @@ public class Starve extends AbstractCharacterEffect {
     }
 
     private void damageToPlayer(AbstractCharacter character, float activeTime) {
-        character.getStatus().change(CharacterStatusType.HEALTH,
-                -0.005f * character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_HEALTH) * activeTime);
+        character.getStatus().addValue(CharacterStatusType.HEALTH, -0.005f * character.getAttribute()
+                .getDerived(CharacterDerivedAttribute.MAX_HEALTH) * activeTime);
     }
 
     protected void expireIfHasFullness(AbstractCharacter character) {
-        if (character.getStatus().get(CharacterStatusType.FULLNESS) > 0)
-            character.removeEffect(this);
+        if (character.getStatus().getValue(CharacterStatusType.FULLNESS) > 0)
+            character.getEffect().remove(this);
     }
 
     protected void updatePenaltyValue(AbstractCharacter character) {
@@ -75,19 +83,37 @@ public class Starve extends AbstractCharacterEffect {
                 .getBasePrimary(CharacterPrimaryAttribute.AGILITY) * agilityPenaltyPercent);
 
         if (lastStrengthPenalty != strengthPenalty) {
-            character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastStrengthPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastStrengthPenalty);
             lastStrengthPenalty = strengthPenalty;
-            character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastStrengthPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastStrengthPenalty);
         }
         if (lastVitalityPenalty != vitalityPenalty) {
-            character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
             lastVitalityPenalty = vitalityPenalty;
-            character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastVitalityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastVitalityPenalty);
         }
         if (lastAgilityPenalty != agilityPenalty) {
-            character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
             lastAgilityPenalty = agilityPenalty;
-            character.getAttribute().changeAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastAgilityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastAgilityPenalty);
+        }
+
+        float healRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION);
+        float manaRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION);
+
+        if (lastHealRegeneration != healRegeneration) {
+            character.getAttribute()
+                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
+            lastHealRegeneration = healRegeneration;
+            character.getAttribute()
+                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, -lastHealRegeneration);
+        }
+        if (lastManaRegeneration != manaRegeneration) {
+            character.getAttribute()
+                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
+            lastManaRegeneration = manaRegeneration;
+            character.getAttribute()
+                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, -lastManaRegeneration);
         }
     }
 

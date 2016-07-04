@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.utils;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-public enum Direction {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
+
+/**
+ * Character listener to fire event when effect has been changed.
+ * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ */
+public interface CharacterEffectListener {
+
+    void onEffectAdd(AbstractCharacterEffect effect);
+
+    void onEffectRemove(AbstractCharacterEffect effect);
 }

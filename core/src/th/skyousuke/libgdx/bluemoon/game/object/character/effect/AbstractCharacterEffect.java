@@ -33,7 +33,7 @@ public abstract class AbstractCharacterEffect {
 
     public void apply(AbstractCharacter character, float deltaTime) {
         if (remainingTime == 0)
-            character.removeEffect(this);
+            character.getEffect().remove(this);
         else if (remainingTime == Float.MAX_VALUE)
             overTimeEffect(character, deltaTime);
         else {

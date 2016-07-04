@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.screens;
+package th.skyousuke.libgdx.bluemoon.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
-import th.skyousuke.libgdx.bluemoon.game.WorldGui;
 import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
+import th.skyousuke.libgdx.bluemoon.game.ui.WorldGui;
 
 public class WorldScreen extends AbstractGameScreen {
 
@@ -40,7 +40,8 @@ public class WorldScreen extends AbstractGameScreen {
         worldRenderer = new WorldRenderer(worldController);
         worldGui = new WorldGui(worldController);
 
-        worldController.setListener(worldGui);
+        worldController.addWorldListener(worldGui);
+        worldController.getWorldTime().addWorldListener(worldGui);
     }
 
     @Override

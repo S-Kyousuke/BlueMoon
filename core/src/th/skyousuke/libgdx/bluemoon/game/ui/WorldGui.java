@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game;
+package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -35,20 +35,25 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.BlueMoon;
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.game.WorldController;
+import th.skyousuke.libgdx.bluemoon.game.WorldListener;
+import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttributeAndStatusListener;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterListener;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterEffectListener;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
-
-// TODO: Extract class to separate each UI
 
 /**
  * Game World GUI Class
  * Created by Skyousuke <surasek@gmail.com> on 30/6/2559.
  */
-public class WorldGui extends InputAdapter implements Disposable, CharacterListener, WorldListener {
+public class WorldGui extends InputAdapter implements Disposable,
+        WorldListener, CharacterAttributeAndStatusListener, CharacterEffectListener {
 
     private WorldController worldController;
     private Stage stage;
@@ -64,6 +69,8 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeNumberLabels;
     private ScrollPane derivedAttributePane;
 
+    private Label timeLabel;
+
     public WorldGui(WorldController worldController) {
         this.worldController = worldController;
         stage = new Stage(new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT));
@@ -78,14 +85,14 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             addStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    worldController.controlledPlayer.getStatus().change(statusType, 5);
+                    worldController.controlledPlayer.getStatus().addValue(statusType, 5);
                 }
             });
             subtractStatusButtons.put(statusType, new TextButton("-", Assets.instance.skin));
             subtractStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    worldController.controlledPlayer.getStatus().change(statusType, -5);
+                    worldController.controlledPlayer.getStatus().addValue(statusType, -5);
                 }
             });
         }
@@ -148,14 +155,14 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             addPrimaryAttributeButtons.get(primaryAttribute).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    worldController.controlledPlayer.getAttribute().changeBasePrimary(primaryAttribute, 1);
+                    worldController.controlledPlayer.getAttribute().addBasePrimary(primaryAttribute, 1);
                 }
             });
             subtractPrimaryAttributeButtons.put(primaryAttribute, new TextButton("-", Assets.instance.skin));
             subtractPrimaryAttributeButtons.get(primaryAttribute).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    worldController.controlledPlayer.getAttribute().changeBasePrimary(primaryAttribute, -1);
+                    worldController.controlledPlayer.getAttribute().addBasePrimary(primaryAttribute, -1);
                 }
             });
         }
@@ -172,7 +179,6 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
             for (String s : name) {
                 formattedName += s.substring(0, 1) + s.substring(1).toLowerCase() + ' ';
             }
-
             derivedAttributeLabels.put(derivedAttribute, new Label(formattedName, Assets.instance.skin));
             derivedAttributeNumberLabels.put(derivedAttribute, new Label("", Assets.instance.skin));
 
@@ -221,6 +227,18 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         attributeWindow.setHeight(500f);
         attributeWindow.setPosition(BlueMoon.SCENE_WIDTH - 370f, 0);
 
+        timeLabel = new Label("Day 1\n%24:%00d", Assets.instance.skin);
+        timeLabel.setAlignment(Align.center);
+        Window timeWindow = new Window("Time", Assets.instance.skin);
+        timeWindow.row().align(Align.left);
+        timeWindow.add(timeLabel).expand().fill();
+        timeWindow.pack();
+        timeWindow.setWidth(80f);
+        timeWindow.setMovable(false);
+        timeWindow.setPosition(
+                BlueMoon.SCENE_WIDTH - timeWindow.getWidth(),
+                BlueMoon.SCENE_HEIGHT - timeWindow.getHeight());
+
         TextButton toggleStatusWindowButton = new TextButton("Status", Assets.instance.skin);
         toggleStatusWindowButton.addListener(new ClickListener() {
             @Override
@@ -244,18 +262,17 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
         debugMenu.pack();
         debugMenu.setPosition(0, 680);
 
-        onPlayerChange();
+        initGuiContent(worldController.controlledPlayer);
 
-        //stage.setDebugAll(true);
         stage.addActor(statusWindow);
         stage.addActor(attributeWindow);
+        stage.addActor(timeWindow);
         stage.addActor(debugMenu);
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void updateStatusWindowTitle() {
-        statusWindow.getTitleLabel().setText(String.format("%s Status",
-                worldController.controlledPlayer.getName()));
+    private void updateStatusWindowTitle(String playerName) {
+        statusWindow.getTitleLabel().setText(String.format("%s Status", playerName));
     }
 
     private void updateStatusLabel() {
@@ -283,12 +300,11 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
                 break;
         }
         statusLabels.get(statusType).setText(String.format("%s: %.1f/%.1f",
-                statusName, character.getStatus().get(statusType), maxStatusValue));
+                statusName, character.getStatus().getValue(statusType), maxStatusValue));
     }
 
-    private void updateAttributeWindowTitle() {
-        attributeWindow.getTitleLabel().setText(String.format("%s Attribute",
-                worldController.controlledPlayer.getName()));
+    private void updateAttributeWindowTitle(String playerName) {
+        attributeWindow.getTitleLabel().setText(String.format("%s Attribute", playerName));
     }
 
     private void updatePrimaryAttributeNumberLabel() {
@@ -316,18 +332,13 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     private void updateEffectList() {
-        effectArray.clear();
-        effectArray.addAll(worldController.controlledPlayer.getEffects());
         effectTable.clear();
+        effectArray.clear();
+        effectArray.addAll(worldController.controlledPlayer.getEffect().getAll());
         for (AbstractCharacterEffect effect : effectArray) {
             effectTable.row().expandX().align(Align.left);
             effectTable.add(new Label(effect.getName(), Assets.instance.skin));
         }
-    }
-
-    @Override
-    public void onStatusChange(CharacterStatusType statusType) {
-        updateStatusLabel(statusType);
     }
 
     public void update(float deltaTime) {
@@ -348,16 +359,6 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     @Override
-    public void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute) {
-        updatePrimaryAttributeNumberLabel(primaryAttribute);
-    }
-
-    @Override
-    public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute) {
-        updateDerivedAttributeNumberLabel(derivedAttribute);
-    }
-
-    @Override
     public void onEffectAdd(AbstractCharacterEffect effect) {
         updateEffectList();
     }
@@ -368,15 +369,50 @@ public class WorldGui extends InputAdapter implements Disposable, CharacterListe
     }
 
     @Override
-    public void onPlayerChange() {
-        worldController.controlledPlayer.setListener(this);
+    public void onPlayerChange(AbstractPlayer oldPlayer, AbstractPlayer newPlayer) {
+        oldPlayer.getAttribute().removeListener(this);
+        oldPlayer.getStatus().removeListener(this);
+        oldPlayer.getEffect().removeListener(this);
 
-        updateStatusWindowTitle();
+        initGuiContent(newPlayer);
+    }
+
+    private void initGuiContent(AbstractPlayer player) {
+        player.getAttribute().addListener(this);
+        player.getStatus().addListener(this);
+        player.getEffect().addListener(this);
+
+        updateStatusWindowTitle(player.getName());
         updateStatusLabel();
         updateEffectList();
 
-        updateAttributeWindowTitle();
+        updateAttributeWindowTitle(player.getName());
         updatePrimaryAttributeNumberLabel();
         updateDerivedAttributeNumberLabel();
+    }
+
+    @Override
+    public void onTimeChange(WorldTime time) {
+        timeLabel.setText(String.format("Day %d\n%02d:%02d", time.getDay(), time.getHours(), time.getMintues()));
+    }
+
+    @Override
+    public void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue) {
+        updatePrimaryAttributeNumberLabel(primaryAttribute);
+    }
+
+    @Override
+    public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue) {
+        updateDerivedAttributeNumberLabel(derivedAttribute);
+    }
+
+    @Override
+    public void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
+        updateStatusLabel(statusType);
+    }
+
+    @Override
+    public void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
+        updateStatusLabel(statusType);
     }
 }

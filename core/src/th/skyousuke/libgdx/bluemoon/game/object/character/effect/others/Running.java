@@ -22,6 +22,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
+ * Character running state
  * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
  */
 public class Running extends AbstractCharacterEffect {
@@ -31,20 +32,19 @@ public class Running extends AbstractCharacterEffect {
     @Override
     public void enter(AbstractCharacter character) {
         bonusMovingSpeed = character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED) * 0.5f;
-        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, bonusMovingSpeed);
+        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, bonusMovingSpeed);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        if (character.getStatus().get(CharacterStatusType.STAMINA) > 0) {
-            character.getStatus().change(CharacterStatusType.STAMINA, -0.5f * activeTime);
-        }
-        else dispose();
+        if (character.getStatus().getValue(CharacterStatusType.STAMINA) > 0) {
+            character.getStatus().addValue(CharacterStatusType.STAMINA, -0.5f * activeTime);
+        } else dispose();
     }
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().changeAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, -bonusMovingSpeed);
+        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, -bonusMovingSpeed);
     }
 
     @Override

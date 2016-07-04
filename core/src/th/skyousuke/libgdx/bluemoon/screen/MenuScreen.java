@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.screens;
+package th.skyousuke.libgdx.bluemoon.screen;
 
 import com.badlogic.gdx.Screen;
 
