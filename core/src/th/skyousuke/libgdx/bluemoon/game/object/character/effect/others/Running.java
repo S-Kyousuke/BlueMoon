@@ -17,8 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.others;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.DerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.StatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
@@ -31,20 +31,20 @@ public class Running extends AbstractCharacterEffect {
 
     @Override
     public void enter(AbstractCharacter character) {
-        bonusMovingSpeed = character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED) * 0.5f;
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, bonusMovingSpeed);
+        bonusMovingSpeed = character.getAttribute().getDerived(DerivedAttribute.MOVING_SPEED) * 0.5f;
+        character.getAttribute().addAdditionalDerived(DerivedAttribute.MOVING_SPEED, bonusMovingSpeed);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
-        if (character.getStatus().getValue(CharacterStatusType.STAMINA) > 0) {
-            character.getStatus().addValue(CharacterStatusType.STAMINA, -0.5f * activeTime);
+        if (character.getStatus().getValue(StatusType.STAMINA) > 0) {
+            character.getStatus().addValue(StatusType.STAMINA, -0.5f * activeTime);
         } else dispose();
     }
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MOVING_SPEED, -bonusMovingSpeed);
+        character.getAttribute().addAdditionalDerived(DerivedAttribute.MOVING_SPEED, -bonusMovingSpeed);
     }
 
     @Override

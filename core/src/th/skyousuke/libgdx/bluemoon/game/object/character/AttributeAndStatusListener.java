@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.item.equipment;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+/**
+ * Listener interface for trigger event when status or attribute change
+ * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ */
+public interface AttributeAndStatusListener {
 
-import th.skyousuke.libgdx.bluemoon.game.object.item.AbstractItem;
+    void onPrimaryAttributeChange(PrimaryAttribute primaryAttribute, int oldValue, int newValue);
 
-public abstract class AbstractEquipment extends AbstractItem {
+    void onDerivedAttributeChange(DerivedAttribute derivedAttribute, float oldValue, float newValue);
 
-    public AbstractEquipment(TextureAtlas atlas) {
-        super(atlas);
-    }
+    void onStatusChange(StatusType statusType, float oldValue, float newValue);
 
-    public abstract EquipmentType getType();
+    void onMaxStatusChange(StatusType statusType, float oldValue, float newValue);
 
 }

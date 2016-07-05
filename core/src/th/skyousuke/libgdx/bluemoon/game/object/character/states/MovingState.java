@@ -22,16 +22,16 @@ import com.badlogic.gdx.Input;
 import th.skyousuke.libgdx.bluemoon.framework.Direction;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.DerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.State;
+import th.skyousuke.libgdx.bluemoon.game.object.character.StatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.others.Running;
 
 /**
  * Character moving state
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public class MovingState extends CharacterState {
+public class MovingState extends State {
 
     private Running running;
 
@@ -49,7 +49,7 @@ public class MovingState extends CharacterState {
         if (Gdx.input.isKeyPressed(Input.Keys.C)) character.attack();
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
             if (!character.getEffect().has(running)) {
-                if (character.getStatus().getValue(CharacterStatusType.STAMINA) > 0)
+                if (character.getStatus().getValue(StatusType.STAMINA) > 0)
                     character.getEffect().add(running);
             }
         }
@@ -70,7 +70,7 @@ public class MovingState extends CharacterState {
     @Override
     public void setAnimation() {
         float walkTimeFactor = 25.0f;
-        float walkTime = walkTimeFactor / character.getAttribute().getDerived(CharacterDerivedAttribute.MOVING_SPEED);
+        float walkTime = walkTimeFactor / character.getAttribute().getDerived(DerivedAttribute.MOVING_SPEED);
 
         switch (character.viewDirection()) {
             case LEFT:

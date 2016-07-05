@@ -14,17 +14,27 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character;
+package th.skyousuke.libgdx.bluemoon.game.object.item.equipment.helmets;
 
-import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-/**
- * Character listener to fire event when effect has been changed.
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
- */
-public interface CharacterEffectListener {
+import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.AbstractEquipment;
+import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.EquipmentType;
 
-    void onEffectAdd(AbstractCharacterEffect effect);
+public class Helmet1 extends AbstractEquipment {
 
-    void onEffectRemove(AbstractCharacterEffect effect);
+    public Helmet1(TextureAtlas atlas) {
+        super(atlas);
+    }
+
+    @Override
+    public String getName() {
+        return "Helmet1";
+    }
+
+    @Override
+    public EquipmentType getType() {
+        return EquipmentType.HELMET;
+    }
+
 }

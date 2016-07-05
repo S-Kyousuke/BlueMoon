@@ -16,31 +16,15 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
+
 /**
- * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ * Character listener to fire event when effect has been changed.
+ * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
  */
-public enum CharacterDerivedAttribute {
-    MOVING_SPEED,
-    MAX_STAMINA,
-    MAX_HEALTH,
-    MAX_MANA,
-    MAX_FULLNESS,
-    HEALTH_REGENERATION,
-    MANA_REGENERATION,
-    PHYSICAL_DAMAGE,
-    MAGICAL_DAMAGE,
-    PHYSICAL_DEFENSE,
-    MAGICAL_DEFENSE,
-    ATTACK_SPEED,
-    CRAFTING,
-    FISHING,
-    FULLNESS_DRAIN,
-    TOOLS_EFFICIENCY,
-    TOOLS_SPEED,
-    TOOLS_LEVEL,
-    ITEM_CHANCE,
-    UPGRADE_CHANCE,
-    EVENT_CHANCE,
-    FRIENDSHIP,
-    SHOPPING_PRICE
+public interface EffectListener {
+
+    void onEffectAdd(AbstractCharacterEffect effect);
+
+    void onEffectRemove(AbstractCharacterEffect effect);
 }

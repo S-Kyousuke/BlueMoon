@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character;
+package th.skyousuke.libgdx.bluemoon.game.object.item.equipment;
 
 /**
- * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ * Equipment Type enumeration.
+ * Created by Skyousuke <surasek@gmail.com> on 5/7/2559.
  */
-public enum CharacterPrimaryAttribute {
-    STRENGTH,
-    AGILITY,
-    VITALITY,
-    INTELLIGENCE,
-    CHARISMA,
-    LUCK,
-    SURVIVAL
+public enum EquipmentType {
+    HELMET,
+    SHIRT,
+    PANTS,
+    SHOES,
+    TOOL
 }

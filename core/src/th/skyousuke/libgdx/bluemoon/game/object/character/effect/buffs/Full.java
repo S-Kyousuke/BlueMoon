@@ -17,8 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.DerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.StatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 public class Full extends AbstractCharacterEffect {
@@ -29,49 +29,49 @@ public class Full extends AbstractCharacterEffect {
     @Override
     public void enter(AbstractCharacter character) {
         lastBonusHealthRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * 0.5f;
+                .getBaseDerived(DerivedAttribute.HEALTH_REGENERATION) * 0.5f;
         lastBonusManaRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION) * 0.5f;
+                .getBaseDerived(DerivedAttribute.MANA_REGENERATION) * 0.5f;
 
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+        character.getAttribute().addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION,
                 lastBonusHealthRegeneration);
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+        character.getAttribute().addAdditionalDerived(DerivedAttribute.MANA_REGENERATION,
                 lastBonusManaRegeneration);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         float bonusHealthRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * 0.5f;
+                .getBaseDerived(DerivedAttribute.HEALTH_REGENERATION) * 0.5f;
         float bonusManaRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION) * 0.5f;
+                .getBaseDerived(DerivedAttribute.MANA_REGENERATION) * 0.5f;
 
         if (lastBonusHealthRegeneration != bonusHealthRegeneration) {
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+            character.getAttribute().addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION,
                     -lastBonusHealthRegeneration);
             lastBonusHealthRegeneration = bonusHealthRegeneration;
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+            character.getAttribute().addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION,
                     lastBonusHealthRegeneration);
         }
         if (lastBonusManaRegeneration != bonusManaRegeneration) {
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+            character.getAttribute().addAdditionalDerived(DerivedAttribute.MANA_REGENERATION,
                     -lastBonusManaRegeneration);
             lastBonusManaRegeneration = bonusManaRegeneration;
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+            character.getAttribute().addAdditionalDerived(DerivedAttribute.MANA_REGENERATION,
                     lastBonusManaRegeneration);
         }
 
-        character.getStatus().addValue(CharacterStatusType.STAMINA, character.getAttribute()
-                .getDerived(CharacterDerivedAttribute.MAX_STAMINA) * 0.005f * activeTime);
+        character.getStatus().addValue(StatusType.STAMINA, character.getAttribute()
+                .getDerived(DerivedAttribute.MAX_STAMINA) * 0.005f * activeTime);
 
-        if (character.getStatus().getValue(CharacterStatusType.FULLNESS) < 40.0) dispose();
+        if (character.getStatus().getValue(StatusType.FULLNESS) < 40.0) dispose();
     }
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+        character.getAttribute().addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION,
                 -lastBonusHealthRegeneration);
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+        character.getAttribute().addAdditionalDerived(DerivedAttribute.MANA_REGENERATION,
                 -lastBonusManaRegeneration);
     }
 

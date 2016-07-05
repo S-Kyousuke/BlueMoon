@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.item.equipment.weapons;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
-import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.AbstractEquipment;
-
-public class Weapon1 extends AbstractEquipment {
-
-    public Weapon1(TextureAtlas atlas) {
-        super(atlas);
-    }
-
-    @Override
-    public String getName() {
-        return "Weapon1";
-    }
-
+/**
+ * Character Status type enumeration.
+ * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ */
+public enum StatusType {
+    HEALTH,
+    MANA,
+    STAMINA,
+    FULLNESS
 }

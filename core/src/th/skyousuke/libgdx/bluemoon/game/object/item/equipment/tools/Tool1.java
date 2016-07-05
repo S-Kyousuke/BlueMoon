@@ -19,6 +19,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.item.equipment.tools;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.AbstractEquipment;
+import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.EquipmentType;
 
 public class Tool1 extends AbstractEquipment {
 
@@ -31,4 +32,8 @@ public class Tool1 extends AbstractEquipment {
         return "Tool1";
     }
 
+    @Override
+    public EquipmentType getType() {
+        return EquipmentType.TOOL;
+    }
 }

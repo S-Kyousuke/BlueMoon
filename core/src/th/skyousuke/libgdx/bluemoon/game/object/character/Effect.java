@@ -24,13 +24,13 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
  * Character effect class for storing and applying all effects to character.
  * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
  */
-public class CharacterEffect {
+public class Effect {
 
     private final Array<AbstractCharacterEffect> effects;
-    private final Array<CharacterEffectListener> listeners;
+    private final Array<EffectListener> listeners;
     private final AbstractCharacter character;
 
-    public CharacterEffect(AbstractCharacter character) {
+    public Effect(AbstractCharacter character) {
         effects = new Array<>();
         listeners = new Array<>();
         this.character = character;
@@ -45,7 +45,7 @@ public class CharacterEffect {
     public void add(AbstractCharacterEffect effect) {
         effect.enter(character);
         effects.add(effect);
-        for (CharacterEffectListener listener : listeners) {
+        for (EffectListener listener : listeners) {
             listener.onEffectAdd(effect);
         }
     }
@@ -54,7 +54,7 @@ public class CharacterEffect {
         if (effects.removeValue(effect, true)) {
             effect.exit(character);
         }
-        for (CharacterEffectListener listener : listeners) {
+        for (EffectListener listener : listeners) {
             listener.onEffectRemove(effect);
         }
     }
@@ -63,11 +63,11 @@ public class CharacterEffect {
         return effects.contains(effect, true);
     }
 
-    public void addListener(CharacterEffectListener listener) {
+    public void addListener(EffectListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(CharacterEffectListener listener) {
+    public void removeListener(EffectListener listener) {
         listeners.removeValue(listener, true);
     }
 

@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.item.equipment.armors;
+package th.skyousuke.libgdx.bluemoon.game.object.item.weapons;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.AbstractEquipment;
+import th.skyousuke.libgdx.bluemoon.game.object.item.AbstractItem;
 
-public class Armor1 extends AbstractEquipment {
+public class Weapon1 extends AbstractItem {
 
-    public Armor1(TextureAtlas atlas) {
+    public Weapon1(TextureAtlas atlas) {
         super(atlas);
     }
 
     @Override
     public String getName() {
-        return "Armor1";
+        return "Weapon1";
     }
 
 }

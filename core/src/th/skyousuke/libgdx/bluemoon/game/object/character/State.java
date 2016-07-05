@@ -20,11 +20,11 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
  * Base Character state class
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public abstract class CharacterState {
+public abstract class State {
 
     protected AbstractCharacter character;
 
-    public CharacterState(AbstractCharacter character) {
+    public State(AbstractCharacter character) {
         this.character = character;
     }
 

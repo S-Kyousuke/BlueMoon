@@ -17,17 +17,15 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 /**
- * Listener interface for trigger event when status or attribute change
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ * Character primary attribute enumeration.
+ * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
  */
-public interface CharacterAttributeAndStatusListener {
-
-    void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue);
-
-    void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue);
-
-    void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue);
-
-    void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue);
-
+public enum PrimaryAttribute {
+    STRENGTH,
+    AGILITY,
+    VITALITY,
+    INTELLIGENCE,
+    CHARISMA,
+    LUCK,
+    SURVIVAL
 }
