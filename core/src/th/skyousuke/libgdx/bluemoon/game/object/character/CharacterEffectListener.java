@@ -16,16 +16,15 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
+
 /**
- * Character primary attribute enumeration.
- * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ * Character listener to fire event when effect has been changed.
+ * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
  */
-public enum PrimaryAttribute {
-    STRENGTH,
-    AGILITY,
-    VITALITY,
-    INTELLIGENCE,
-    CHARISMA,
-    LUCK,
-    SURVIVAL
+public interface CharacterEffectListener {
+
+    void onEffectAdd(AbstractCharacterEffect effect);
+
+    void onEffectRemove(AbstractCharacterEffect effect);
 }

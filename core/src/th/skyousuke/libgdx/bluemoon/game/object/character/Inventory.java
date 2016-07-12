@@ -32,11 +32,14 @@ public class Inventory {
 
     private final Array<AbstractItem> items;
     private final EnumMap<EquipmentType, AbstractEquipment> equipments;
+
     private int capacity;
 
     public Inventory() {
         items = new Array<>();
         equipments = new EnumMap<>(EquipmentType.class);
+
+        capacity = 12;
     }
 
     public void addItem(AbstractItem item) {
@@ -62,5 +65,8 @@ public class Inventory {
             addItem(equipment);
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
 
 }

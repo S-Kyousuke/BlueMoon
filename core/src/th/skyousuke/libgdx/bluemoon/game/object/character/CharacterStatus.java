@@ -21,49 +21,49 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.EnumMap;
 
-public class Status {
+public class CharacterStatus {
 
-    private final EnumMap<StatusType, Float> status;
-    private final Attribute attribute;
+    private final EnumMap<CharacterStatusType, Float> status;
+    private final CharacterAttribute characterAttribute;
 
     private final Array<AttributeAndStatusListener> listeners;
 
     // Create character status from character attribute and initialize all status to max value
-    public Status(Attribute attribute) {
-        status = new EnumMap<>(StatusType.class);
-        this.attribute = attribute;
+    public CharacterStatus(CharacterAttribute characterAttribute) {
+        status = new EnumMap<>(CharacterStatusType.class);
+        this.characterAttribute = characterAttribute;
         listeners = new Array<>();
 
-        for (StatusType type : StatusType.values()) {
+        for (CharacterStatusType type : CharacterStatusType.values()) {
             status.put(type, 0f);
         }
     }
 
     public void setToMax() {
-        for (StatusType type : StatusType.values()) {
+        for (CharacterStatusType type : CharacterStatusType.values()) {
             setToMax(type);
         }
     }
 
-    public void setToMax(StatusType statusType) {
+    public void setToMax(CharacterStatusType statusType) {
         setValue(statusType, Float.MAX_VALUE);
     }
 
-    public void setValue(StatusType statusType, float value) {
+    public void setValue(CharacterStatusType statusType, float value) {
         float oldValue = getValue(statusType);
         float maxValue = 0f;
         switch (statusType) {
             case HEALTH:
-                maxValue = attribute.getDerived(DerivedAttribute.MAX_HEALTH);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
                 break;
             case MANA:
-                maxValue = attribute.getDerived(DerivedAttribute.MAX_MANA);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_MANA);
                 break;
             case STAMINA:
-                maxValue = attribute.getDerived(DerivedAttribute.MAX_STAMINA);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_STAMINA);
                 break;
             case FULLNESS:
-                maxValue = attribute.getDerived(DerivedAttribute.MAX_FULLNESS);
+                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
         }
         status.put(statusType, MathUtils.clamp(value, 0, maxValue));
@@ -72,11 +72,11 @@ public class Status {
         }
     }
 
-    public float getValue(StatusType statusType) {
+    public float getValue(CharacterStatusType statusType) {
         return status.get(statusType);
     }
 
-    public void addValue(StatusType statusType, float value) {
+    public void addValue(CharacterStatusType statusType, float value) {
         setValue(statusType, getValue(statusType) + value);
     }
 

@@ -1,0 +1,27 @@
+
+custom_skin.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+default
+  rotate: false
+  xy: 1, 35
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+default-window
+  rotate: false
+  xy: 1, 1
+  size: 1, 32
+  split: 0, 0, 24, 0
+  orig: 1, 32
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 259, 162
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

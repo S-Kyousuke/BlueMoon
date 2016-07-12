@@ -55,6 +55,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public BitmapFont thaiFont24;
 
     public Skin skin;
+    public Skin customSkin;
 
     private Assets() {
     }
@@ -85,6 +86,7 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.load("fonts/thai24.fnt", BitmapFont.class);
 
         manager.load("skins/uiskin.json", Skin.class, new SkinParameter("skins/uiskin.atlas"));
+        manager.load("skins/custom_skin.json", Skin.class, new SkinParameter("skins/custom_skin.atlas"));
 
         manager.finishLoading();
 
@@ -110,6 +112,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
         skin = manager.get("skins/uiskin.json");
         skin.getFont("default-font").getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        customSkin = manager.get("skins/custom_skin.json");
     }
 
     @SuppressWarnings("rawtypes")
