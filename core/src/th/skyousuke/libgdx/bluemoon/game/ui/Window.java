@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.Align;
  * Custom window class.
  * Created by Skyousuke <surasek@gmail.com> on 8/7/2559.
  */
-public class Window extends Table  {
+public class Window extends Table {
 
     private final Label titleLabel;
     private WindowStyle style;
@@ -91,7 +91,7 @@ public class Window extends Table  {
         titleLabel.draw(batch, parentAlpha);
     }
 
-    private void keepWithinStage () {
+    private void keepWithinStage() {
         Stage stage = getStage();
         OrthographicCamera camera = (OrthographicCamera) stage.getCamera();
         float parentWidth = stage.getWidth();
