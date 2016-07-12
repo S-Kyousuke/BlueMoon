@@ -22,10 +22,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.Align;
 
 /**
@@ -53,9 +51,6 @@ public class Dialog extends Actor {
     private Action hidingEffect = null;
 
     private boolean goingToChangePage = false;
-
-    private float dragStartX = 0;
-    private float dragStartY = 0;
 
     private Action typingAction = new Action() {
         @Override
@@ -85,18 +80,7 @@ public class Dialog extends Actor {
         }
     };
 
-    private DragListener dragListenner = new DragListener() {
-        @Override
-        public void dragStart(InputEvent event, float x, float y, int pointer) {
-            dragStartX = x;
-            dragStartY = y;
-        }
-
-        @Override
-        public void drag(InputEvent event, float x, float y, int pointer) {
-            moveBy(x - dragStartX, y - dragStartY);
-        }
-    };
+    private DragActorListener dragActorListener = new DragActorListener(this);
 
     public Dialog(BitmapFont font, TextureRegion dialogTexture, float textStartX, float textStartY) {
         this.font = font;
@@ -110,11 +94,11 @@ public class Dialog extends Actor {
     }
 
     public void enableDragging() {
-        addListener(dragListenner);
+        addListener(dragActorListener);
     }
 
     public void disableDragging() {
-        removeListener(dragListenner);
+        removeListener(dragActorListener);
     }
 
     @Override

@@ -22,12 +22,12 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
  */
 public interface AttributeAndStatusListener {
 
-    void onPrimaryAttributeChange(PrimaryAttribute primaryAttribute, int oldValue, int newValue);
+    void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue);
 
-    void onDerivedAttributeChange(DerivedAttribute derivedAttribute, float oldValue, float newValue);
+    void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue);
 
-    void onStatusChange(StatusType statusType, float oldValue, float newValue);
+    void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue);
 
-    void onMaxStatusChange(StatusType statusType, float oldValue, float newValue);
+    void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue);
 
 }

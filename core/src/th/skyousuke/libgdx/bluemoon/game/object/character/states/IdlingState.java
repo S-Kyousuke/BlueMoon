@@ -22,13 +22,13 @@ import com.badlogic.gdx.Input;
 import th.skyousuke.libgdx.bluemoon.framework.Direction;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.State;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 
 /**
  * Character idling state
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public class IdlingState extends State {
+public class IdlingState extends CharacterState {
 
     public IdlingState(AbstractCharacter character) {
         super(character);

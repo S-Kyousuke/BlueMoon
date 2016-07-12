@@ -31,20 +31,23 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
 
     private static final float FRICTION = 1000f;
 
-    private State state;
+    private CharacterState state;
     private Direction viewDirection;
     private boolean movable;
 
-    private Status status;
-    private Attribute attribute;
-    private Effect effect;
+    private CharacterStatus status;
+    private CharacterAttribute attribute;
+    private CharacterEffect effect;
+    private Inventory inventory;
 
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
 
-        attribute = new Attribute();
-        status = new Status(attribute);
-        effect = new Effect(this);
+        attribute = new CharacterAttribute();
+        status = new CharacterStatus(attribute);
+        effect = new CharacterEffect(this);
+        inventory = new Inventory();
+
         status.addListener(this);
         status.setToMax();
 
@@ -79,12 +82,12 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
 
     private void updateEffectsAndStatus(float deltaTime) {
         effect.apply(deltaTime);
-        status.addValue(StatusType.HEALTH,
-                attribute.getDerived(DerivedAttribute.HEALTH_REGENERATION) * deltaTime * 0.1f);
-        status.addValue(StatusType.MANA,
-                attribute.getDerived(DerivedAttribute.MANA_REGENERATION) * deltaTime * 0.1f);
-        status.addValue(StatusType.FULLNESS,
-                -attribute.getDerived(DerivedAttribute.FULLNESS_DRAIN) * deltaTime * 0.1f);
+        status.addValue(CharacterStatusType.HEALTH,
+                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime * 0.1f);
+        status.addValue(CharacterStatusType.MANA,
+                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime * 0.1f);
+        status.addValue(CharacterStatusType.FULLNESS,
+                -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime * 0.1f);
     }
 
     public void handleInput() {
@@ -94,7 +97,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
     public void move(Direction direction) {
         if (!movable) return;
         viewDirection = direction;
-        float movingSpeed = attribute.getDerived(DerivedAttribute.MOVING_SPEED);
+        float movingSpeed = attribute.getDerived(CharacterDerivedAttribute.MOVING_SPEED);
         switch (direction) {
             case LEFT:
                 velocity.x = -movingSpeed;
@@ -112,16 +115,20 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
         velocity.setLength(movingSpeed);
     }
 
-    public Status getStatus() {
+    public CharacterStatus getStatus() {
         return status;
     }
 
-    public Attribute getAttribute() {
+    public CharacterAttribute getAttribute() {
         return attribute;
     }
 
-    public Effect getEffect() {
+    public CharacterEffect getEffect() {
         return effect;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public Direction viewDirection() {
@@ -132,7 +139,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
         return !velocity.isZero();
     }
 
-    public void setState(State state) {
+    public void setState(CharacterState state) {
         if (this.state != null) this.state.exit();
         this.state = state;
         this.state.enter();
@@ -146,7 +153,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
     public abstract void interact();
 
     @Override
-    public void onStatusChange(StatusType statusType, float oldValue, float newValue) {
+    public void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
         switch (statusType) {
             case FULLNESS:
                 if (oldValue > 0 && newValue == 0)
@@ -159,17 +166,17 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
     }
 
     @Override
-    public void onMaxStatusChange(StatusType statusType, float oldValue, float newValue) {
+    public void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
 
     }
 
     @Override
-    public void onPrimaryAttributeChange(PrimaryAttribute primaryAttribute, int oldValue, int newValue) {
+    public void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue) {
 
     }
 
     @Override
-    public void onDerivedAttributeChange(DerivedAttribute derivedAttribute, float oldValue, float newValue) {
+    public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue) {
 
     }
 

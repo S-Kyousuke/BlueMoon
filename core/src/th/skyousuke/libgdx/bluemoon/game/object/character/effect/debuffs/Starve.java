@@ -17,9 +17,9 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.DerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.PrimaryAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.StatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 /**
@@ -48,13 +48,13 @@ public class Starve extends AbstractCharacterEffect {
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().addAdditionalPrimary(PrimaryAttribute.STRENGTH, lastStrengthPenalty);
-        character.getAttribute().addAdditionalPrimary(PrimaryAttribute.VITALITY, lastVitalityPenalty);
-        character.getAttribute().addAdditionalPrimary(PrimaryAttribute.AGILITY, lastAgilityPenalty);
+        character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastStrengthPenalty);
+        character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
+        character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
         character.getAttribute()
-                .addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
+                .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
         character.getAttribute()
-                .addAdditionalDerived(DerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
+                .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
     }
 
     @Override
@@ -65,55 +65,55 @@ public class Starve extends AbstractCharacterEffect {
     }
 
     private void damageToPlayer(AbstractCharacter character, float activeTime) {
-        character.getStatus().addValue(StatusType.HEALTH, -0.005f * character.getAttribute()
-                .getDerived(DerivedAttribute.MAX_HEALTH) * activeTime);
+        character.getStatus().addValue(CharacterStatusType.HEALTH, -0.005f * character.getAttribute()
+                .getDerived(CharacterDerivedAttribute.MAX_HEALTH) * activeTime);
     }
 
     protected void expireIfHasFullness(AbstractCharacter character) {
-        if (character.getStatus().getValue(StatusType.FULLNESS) > 0)
+        if (character.getStatus().getValue(CharacterStatusType.FULLNESS) > 0)
             character.getEffect().remove(this);
     }
 
     protected void updatePenaltyValue(AbstractCharacter character) {
         int strengthPenalty = (int) (character.getAttribute()
-                .getBasePrimary(PrimaryAttribute.STRENGTH) * strengthPenaltyPercent);
+                .getBasePrimary(CharacterPrimaryAttribute.STRENGTH) * strengthPenaltyPercent);
         int vitalityPenalty = (int) (character.getAttribute()
-                .getBasePrimary(PrimaryAttribute.VITALITY) * vitalityPenaltyPercent);
+                .getBasePrimary(CharacterPrimaryAttribute.VITALITY) * vitalityPenaltyPercent);
         int agilityPenalty = (int) (character.getAttribute()
-                .getBasePrimary(PrimaryAttribute.AGILITY) * agilityPenaltyPercent);
+                .getBasePrimary(CharacterPrimaryAttribute.AGILITY) * agilityPenaltyPercent);
 
         if (lastStrengthPenalty != strengthPenalty) {
-            character.getAttribute().addAdditionalPrimary(PrimaryAttribute.STRENGTH, lastStrengthPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, lastStrengthPenalty);
             lastStrengthPenalty = strengthPenalty;
-            character.getAttribute().addAdditionalPrimary(PrimaryAttribute.STRENGTH, -lastStrengthPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.STRENGTH, -lastStrengthPenalty);
         }
         if (lastVitalityPenalty != vitalityPenalty) {
-            character.getAttribute().addAdditionalPrimary(PrimaryAttribute.VITALITY, lastVitalityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
             lastVitalityPenalty = vitalityPenalty;
-            character.getAttribute().addAdditionalPrimary(PrimaryAttribute.VITALITY, -lastVitalityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, -lastVitalityPenalty);
         }
         if (lastAgilityPenalty != agilityPenalty) {
-            character.getAttribute().addAdditionalPrimary(PrimaryAttribute.AGILITY, lastAgilityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
             lastAgilityPenalty = agilityPenalty;
-            character.getAttribute().addAdditionalPrimary(PrimaryAttribute.AGILITY, -lastAgilityPenalty);
+            character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastAgilityPenalty);
         }
 
-        float healRegeneration = character.getAttribute().getBaseDerived(DerivedAttribute.HEALTH_REGENERATION);
-        float manaRegeneration = character.getAttribute().getBaseDerived(DerivedAttribute.MANA_REGENERATION);
+        float healRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION);
+        float manaRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION);
 
         if (lastHealRegeneration != healRegeneration) {
             character.getAttribute()
-                    .addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
             lastHealRegeneration = healRegeneration;
             character.getAttribute()
-                    .addAdditionalDerived(DerivedAttribute.HEALTH_REGENERATION, -lastHealRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, -lastHealRegeneration);
         }
         if (lastManaRegeneration != manaRegeneration) {
             character.getAttribute()
-                    .addAdditionalDerived(DerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
             lastManaRegeneration = manaRegeneration;
             character.getAttribute()
-                    .addAdditionalDerived(DerivedAttribute.MANA_REGENERATION, -lastManaRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, -lastManaRegeneration);
         }
     }
 

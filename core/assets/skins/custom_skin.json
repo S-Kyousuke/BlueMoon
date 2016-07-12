@@ -1,0 +1,25 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: default.fnt } },
+com.badlogic.gdx.graphics.Color: {
+	green: { a: 1, b: 0, g: 1, r: 0 },
+	white: { a: 1, b: 1, g: 1, r: 1 },
+	red: { a: 1, b: 0, g: 0, r: 1 },
+	black: { a: 1, b: 0, g: 0, r: 0 }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	goldDraw: { name: white, color: { r: 1, g: 0.84, b: 0, a: 1 } },
+    dimGrayDraw: {name: white, color: { r:0.26, g: 0.26, b: 0.26, a: 1 } },
+	grayDraw: { name: white, color: { r: 0.50, g: 0.50, b: 0.50, a: 1 } },
+	darkGrayDraw: { name: white, color: { r: 0.3, g: 0.3, b: 0.3, a: 1 } },
+    dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: { font: default-font, fontColor: white }
+},
+th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow$InventoryWindowStyle: {
+    default: { itemSlot: darkGrayDraw }
+},
+th.skyousuke.libgdx.bluemoon.game.ui.Window$WindowStyle: {
+    default: { background: default-window }
+}
+}

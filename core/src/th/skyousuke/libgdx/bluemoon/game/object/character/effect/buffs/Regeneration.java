@@ -17,7 +17,7 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.StatusType;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
 
 public class Regeneration extends AbstractCharacterEffect {
@@ -35,19 +35,19 @@ public class Regeneration extends AbstractCharacterEffect {
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         switch (type) {
             case HEALTH:
-                character.getStatus().addValue(StatusType.HEALTH,
+                character.getStatus().addValue(CharacterStatusType.HEALTH,
                         restorePerSecond * activeTime);
                 break;
             case MANA:
-                character.getStatus().addValue(StatusType.MANA,
+                character.getStatus().addValue(CharacterStatusType.MANA,
                         restorePerSecond * activeTime);
                 break;
             case STAMINA:
-                character.getStatus().addValue(StatusType.STAMINA,
+                character.getStatus().addValue(CharacterStatusType.STAMINA,
                         restorePerSecond * activeTime);
                 break;
             case FULLNESS:
-                character.getStatus().addValue(StatusType.FULLNESS,
+                character.getStatus().addValue(CharacterStatusType.FULLNESS,
                         restorePerSecond * activeTime);
                 break;
         }

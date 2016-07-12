@@ -18,14 +18,14 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.states;
 
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.DerivedAttribute;
-import th.skyousuke.libgdx.bluemoon.game.object.character.State;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 
 /**
  * Character Attacking state.
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public class AttackingState extends State {
+public class AttackingState extends CharacterState {
 
     public AttackingState(AbstractCharacter character) {
         super(character);
@@ -45,7 +45,7 @@ public class AttackingState extends State {
     protected void setAnimation() {
         float attackTimeFactor = 0.25f;
         float attackTime = attackTimeFactor / character.getAttribute()
-                .getDerived(DerivedAttribute.ATTACK_SPEED);
+                .getDerived(CharacterDerivedAttribute.ATTACK_SPEED);
 
         switch (character.viewDirection()) {
             case LEFT:

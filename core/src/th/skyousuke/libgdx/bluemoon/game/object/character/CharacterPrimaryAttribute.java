@@ -17,12 +17,15 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 /**
- * Character Status type enumeration.
+ * Character primary attribute enumeration.
  * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
  */
-public enum StatusType {
-    HEALTH,
-    MANA,
-    STAMINA,
-    FULLNESS
+public enum CharacterPrimaryAttribute {
+    STRENGTH,
+    AGILITY,
+    VITALITY,
+    INTELLIGENCE,
+    CHARISMA,
+    LUCK,
+    SURVIVAL
 }
