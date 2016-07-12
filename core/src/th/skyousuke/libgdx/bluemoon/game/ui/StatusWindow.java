@@ -43,11 +43,10 @@ public class StatusWindow extends Window {
     private AbstractCharacter character;
 
     private EnumMap<CharacterStatusType, Label> statusLabels;
-    private EnumMap<CharacterStatusType, TextButton> addStatusButtons = new EnumMap<>(CharacterStatusType.class);
-    private EnumMap<CharacterStatusType, TextButton> subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
+    private EnumMap<CharacterStatusType, TextButton> addStatusButtons;
+    private EnumMap<CharacterStatusType, TextButton> subtractStatusButtons;
 
-    private Array<AbstractCharacterEffect> effectArray;
-    private Label effectLabel;
+    private Label effectPaneLabel;
     private Table effectTable;
     private ScrollPane effectPane;
 
@@ -75,11 +74,10 @@ public class StatusWindow extends Window {
             });
         }
 
-        effectLabel = new Label("Effects:", Assets.instance.skin);
         effectTable = new Table();
         effectTable.align(Align.top);
-        effectArray = new Array<>();
         effectPane = new ScrollPane(effectTable, Assets.instance.skin);
+        effectPaneLabel = new Label("Effects:", Assets.instance.skin);
         effectPane.setFadeScrollBars(false);
         effectPane.setForceScroll(false, true);
         effectPane.addListener(new FocusScrollListener(effectPane));
@@ -95,7 +93,7 @@ public class StatusWindow extends Window {
             add(subtractStatusButtons.get(statusType)).width(20f).height(20f);
             row();
         }
-        add(effectLabel).align(Align.left).padTop(5f).colspan(3);
+        add(effectPaneLabel).align(Align.left).padTop(5f).colspan(3);
         row();
         add(effectPane).fill().expand().colspan(3);
         row();
@@ -135,13 +133,11 @@ public class StatusWindow extends Window {
 
     public void updateEffect() {
         effectTable.clearChildren();
-        effectArray.clear();
-        effectArray.addAll(character.getEffect().getAll());
-        for (AbstractCharacterEffect effect : effectArray) {
+        final Array<AbstractCharacterEffect> effects = character.getEffect().getAll();
+        for (int i = 0; i < effects.size; ++i) {
             effectTable.row().expandX().align(Align.left);
-            effectTable.add(new Label(effect.getName(), Assets.instance.skin));
+            effectTable.add(LabelPool.obtainLabel(effects.get(i).getName()));
         }
     }
-
 
 }
