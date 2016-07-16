@@ -29,7 +29,6 @@ public class BlueMoon extends Game {
     @Override
     public void create() {
         Assets.instance.init();
-
         setScreen(new WorldScreen(this));
     }
 
@@ -37,4 +36,5 @@ public class BlueMoon extends Game {
     public void dispose() {
         Assets.instance.dispose();
     }
+
 }
