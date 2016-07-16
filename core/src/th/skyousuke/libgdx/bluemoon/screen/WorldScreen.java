@@ -39,9 +39,6 @@ public class WorldScreen extends AbstractGameScreen {
         worldController = new WorldController();
         worldRenderer = new WorldRenderer(worldController);
         worldGui = new WorldGui(worldController);
-
-        worldController.addWorldListener(worldGui);
-        worldController.getWorldTime().addWorldListener(worldGui);
     }
 
     @Override

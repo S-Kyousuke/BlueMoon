@@ -27,10 +27,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Align;
 
 /**
- * (Not Complete) Custom Dialog class
+ * (Not Complete) Custom text dialog class
  * Created by Skyousuke <surasek@gmail.com> on 28/6/2559.
  */
-public class Dialog extends Actor {
+public class TextDialog extends Actor {
 
     private static final float DEFAULT_TEXT_SPEED = 30.0f;
     private static final float MAX_TEXT_SPEED = 100.0f;
@@ -82,7 +82,7 @@ public class Dialog extends Actor {
 
     private DragActorListener dragActorListener = new DragActorListener(this);
 
-    public Dialog(BitmapFont font, TextureRegion dialogTexture, float textStartX, float textStartY) {
+    public TextDialog(BitmapFont font, TextureRegion dialogTexture, float textStartX, float textStartY) {
         this.font = font;
         this.dialogTexture = dialogTexture;
 

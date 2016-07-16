@@ -3,24 +3,45 @@ custom_skin.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+thai_24
+  rotate: false
+  xy: 1, 141
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: 0
 default
   rotate: false
-  xy: 1, 35
+  xy: 1, 11
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 default-window
   rotate: false
-  xy: 1, 1
+  xy: 259, 365
   size: 1, 32
   split: 0, 0, 24, 0
   orig: 1, 32
   offset: 0, 0
   index: -1
+minus
+  rotate: false
+  xy: 1, 1
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+plus
+  rotate: false
+  xy: 262, 389
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 white
   rotate: false
-  xy: 259, 162
+  xy: 259, 362
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

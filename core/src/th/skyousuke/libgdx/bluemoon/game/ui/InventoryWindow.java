@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.Inventory;
 
@@ -47,6 +48,10 @@ public class InventoryWindow extends Window {
     public void setCharacter(AbstractCharacter character) {
         inventory = character.getInventory();
         update();
+        setTitle(LanguageManager.instance.getFormattedText("inventoryWindowTitle", character.getName()));
+    }
+
+    public void initContent() {
     }
 
     private void update() {
@@ -83,6 +88,5 @@ public class InventoryWindow extends Window {
         }
 
     }
-
 
 }

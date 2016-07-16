@@ -17,19 +17,20 @@
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.google.common.base.CaseFormat;
 
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
-import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
 
@@ -39,114 +40,120 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttrib
  */
 public class AttributeWindow extends Window {
 
-    private CharacterAttribute characterAttribute;
+    private AbstractCharacter character;
 
     private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeNumberLabels;
     private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeNumberLabels;
-    private ScrollPane derivedAttributePane;
+
+    private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels;
+    private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels;
+
+    private Label derivedAttributeTitleLabel = LabelPool.obtainLabel();
 
     public AttributeWindow(Skin skin) {
         super(skin);
-        init();
-    }
-
-    public void init() {
-        primaryAttributeNumberLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
-        EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels
-                = new EnumMap<>(CharacterPrimaryAttribute.class);
-        EnumMap<CharacterPrimaryAttribute, TextButton> addPrimaryAttributeButtons
-                = new EnumMap<>(CharacterPrimaryAttribute.class);
-        EnumMap<CharacterPrimaryAttribute, TextButton> subtractPrimaryAttributeButtons
-                = new EnumMap<>(CharacterPrimaryAttribute.class);
-        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
-            String attributeName = primaryAttribute.name().substring(0, 1)
-                    + primaryAttribute.name().toLowerCase().substring(1);
-            primaryAttributeLabels.put(primaryAttribute, new Label(attributeName, Assets.instance.skin));
-            primaryAttributeNumberLabels.put(primaryAttribute, new Label("", Assets.instance.skin));
-            addPrimaryAttributeButtons.put(primaryAttribute, new TextButton("+", Assets.instance.skin));
-            addPrimaryAttributeButtons.get(primaryAttribute).addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    characterAttribute.addBasePrimary(primaryAttribute, 1);
-                }
-            });
-            subtractPrimaryAttributeButtons.put(primaryAttribute, new TextButton("-", Assets.instance.skin));
-            subtractPrimaryAttributeButtons.get(primaryAttribute).addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    characterAttribute.addBasePrimary(primaryAttribute, -1);
-                }
-            });
-        }
-        Label derivedAttributeTitleLabel = new Label("Derived Attribute:", Assets.instance.skin);
-        EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels
-                = new EnumMap<>(CharacterDerivedAttribute.class);
-        derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
-        Table derivedAttributeTable = new Table();
-
-        for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
-            String[] name = derivedAttribute.name().split("_");
-            String formattedName = "";
-            for (String s : name) {
-                formattedName += s.substring(0, 1) + s.substring(1).toLowerCase() + ' ';
-            }
-            derivedAttributeLabels.put(derivedAttribute, new Label(formattedName, Assets.instance.skin));
-            derivedAttributeNumberLabels.put(derivedAttribute, new Label("", Assets.instance.skin));
-
-            derivedAttributeTable.row();
-            derivedAttributeTable.add(derivedAttributeLabels.get(derivedAttribute)).fillX().expandX();
-            derivedAttributeTable.add(derivedAttributeNumberLabels.get(derivedAttribute))
-                    .align(Align.right).padRight(10f);
-        }
-        derivedAttributePane = new ScrollPane(derivedAttributeTable, Assets.instance.skin);
-        derivedAttributePane.setFadeScrollBars(false);
-        derivedAttributePane.setForceScroll(false, true);
-        derivedAttributePane.addListener(new FocusScrollListener(derivedAttributePane));
 
         align(Align.topLeft);
         padLeft(10f);
         padRight(10);
         padBottom(10f);
-        row().padTop(10f);
+        row().padTop(5f);
+
+        primaryAttributeNumberLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
+        primaryAttributeLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
+        derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute.class);
+        derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
+
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
-            add(primaryAttributeLabels.get(primaryAttribute))
-                    .align(Align.left).fillX().expandX();
-            add(primaryAttributeNumberLabels.get(primaryAttribute))
-                    .align(Align.right);
-            add(addPrimaryAttributeButtons.get(primaryAttribute))
-                    .width(20f).height(20f).padRight(5f).padLeft(10f);
-            add(subtractPrimaryAttributeButtons.get(primaryAttribute))
-                    .width(20f).height(20f);
+            Label attributeLabel = LabelPool.obtainLabel();
+            Label attributeNumberLabel = LabelPool.obtainLabel();
+
+            ImageButton plusButton = new ImageButton(Assets.instance.customSkin, "plus");
+            ImageButton minusButton = new ImageButton(Assets.instance.customSkin, "minus");
+
+            primaryAttributeLabels.put(primaryAttribute, attributeLabel);
+            primaryAttributeNumberLabels.put(primaryAttribute, attributeNumberLabel);
+
+            plusButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    character.getAttribute().addBasePrimary(primaryAttribute, 1);
+                }
+            });
+            minusButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    character.getAttribute().addBasePrimary(primaryAttribute, -1);
+                }
+            });
+
+            add(attributeLabel).align(Align.left).fillX().expandX();
+            add(attributeNumberLabel).align(Align.right);
+            add(plusButton).width(16f).height(16f).padRight(8f).padLeft(10f);
+            add(minusButton).width(16f).height(16f);
             row();
         }
+
+        Table derivedAttributeTable = new Table();
+
+        for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
+            Label attributeLabel = LabelPool.obtainLabel();
+            Label attributeNumberLabel = LabelPool.obtainLabel();
+
+            derivedAttributeLabels.put(derivedAttribute, attributeLabel);
+            derivedAttributeNumberLabels.put(derivedAttribute, attributeNumberLabel);
+
+            derivedAttributeTable.row();
+            derivedAttributeTable.add(attributeLabel).fillX().expandX();
+            derivedAttributeTable.add(attributeNumberLabel).align(Align.right).padRight(10f);
+        }
+
+        ScrollPane derivedAttributePane = new ScrollPane(derivedAttributeTable, Assets.instance.skin);
+        derivedAttributePane.setFadeScrollBars(false);
+        derivedAttributePane.setForceScroll(false, true);
+        derivedAttributePane.addListener(new FocusScrollListener(derivedAttributePane));
+
         add(derivedAttributeTitleLabel).align(Align.left).padTop(5f).colspan(4);
         row().colspan(4);
         add(derivedAttributePane).fill().expand();
         pack();
-        setWidth(370f);
-        setHeight(500f);
+        setWidth(340f);
+        setHeight(420f);
+    }
+
+    public void initContent() {
+        for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
+            derivedAttributeLabels.get(derivedAttribute).setText(LanguageManager.instance.getText(CaseFormat
+                    .UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, derivedAttribute.name())));
+        }
+
+        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
+            String attributeName = primaryAttribute.name().toLowerCase();
+            primaryAttributeLabels.get(primaryAttribute).setText(LanguageManager.instance.getText(attributeName));
+        }
+        derivedAttributeTitleLabel.setText(LanguageManager.instance.getText("derivedAttribute") + ':');
     }
 
     public void setCharacter(AbstractCharacter character) {
-        characterAttribute = character.getAttribute();
-
+        this.character = character;
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             updatePrimaryAttribute(primaryAttribute);
         }
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
             updateDerivedAttribute(derivedAttribute);
         }
+        setTitle(LanguageManager.instance.getFormattedText("attributeWindowTitle", character.getName()));
     }
 
     public void updatePrimaryAttribute(CharacterPrimaryAttribute primaryAttribute) {
         primaryAttributeNumberLabels.get(primaryAttribute).setText(String.format("%d (%+d)",
-                characterAttribute.getBasePrimary(primaryAttribute),
-                characterAttribute.getAdditionalPrimary(primaryAttribute)));
+                character.getAttribute().getBasePrimary(primaryAttribute),
+                character.getAttribute().getAdditionalPrimary(primaryAttribute)));
     }
 
     public void updateDerivedAttribute(CharacterDerivedAttribute derivedAttribute) {
-        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.2f (%+.2f)",
-                characterAttribute.getBaseDerived(derivedAttribute),
-                characterAttribute.getAdditionalDerived(derivedAttribute)));
+        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.1f (%+.1f)",
+                character.getAttribute().getBaseDerived(derivedAttribute),
+                character.getAttribute().getAdditionalDerived(derivedAttribute)));
     }
 }

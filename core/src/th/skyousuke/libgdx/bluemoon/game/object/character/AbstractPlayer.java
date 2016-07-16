@@ -19,6 +19,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
+ * Player base class.
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public abstract class AbstractPlayer extends AbstractCharacter {

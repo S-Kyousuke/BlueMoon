@@ -17,11 +17,11 @@
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
@@ -43,11 +44,10 @@ public class StatusWindow extends Window {
     private AbstractCharacter character;
 
     private EnumMap<CharacterStatusType, Label> statusLabels;
-    private EnumMap<CharacterStatusType, TextButton> addStatusButtons = new EnumMap<>(CharacterStatusType.class);
-    private EnumMap<CharacterStatusType, TextButton> subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
+    private EnumMap<CharacterStatusType, ImageButton> addStatusButtons;
+    private EnumMap<CharacterStatusType, ImageButton> subtractStatusButtons;
 
-    private Array<AbstractCharacterEffect> effectArray;
-    private Label effectLabel;
+    private Label effectPaneLabel;
     private Table effectTable;
     private ScrollPane effectPane;
 
@@ -58,15 +58,15 @@ public class StatusWindow extends Window {
         subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
 
         for (CharacterStatusType statusType : CharacterStatusType.values()) {
-            statusLabels.put(statusType, new Label("", Assets.instance.skin));
-            addStatusButtons.put(statusType, new TextButton("+", Assets.instance.skin));
+            statusLabels.put(statusType, LabelPool.obtainLabel());
+            addStatusButtons.put(statusType, new ImageButton(Assets.instance.customSkin, "plus"));
             addStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     character.getStatus().addValue(statusType, 5);
                 }
             });
-            subtractStatusButtons.put(statusType, new TextButton("-", Assets.instance.skin));
+            subtractStatusButtons.put(statusType, new ImageButton(Assets.instance.customSkin, "minus"));
             subtractStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -75,11 +75,10 @@ public class StatusWindow extends Window {
             });
         }
 
-        effectLabel = new Label("Effects:", Assets.instance.skin);
         effectTable = new Table();
         effectTable.align(Align.top);
-        effectArray = new Array<>();
         effectPane = new ScrollPane(effectTable, Assets.instance.skin);
+        effectPaneLabel = LabelPool.obtainLabel();
         effectPane.setFadeScrollBars(false);
         effectPane.setForceScroll(false, true);
         effectPane.addListener(new FocusScrollListener(effectPane));
@@ -88,20 +87,24 @@ public class StatusWindow extends Window {
         padRight(10f);
         padBottom(10f);
         align(Align.topLeft);
-        row().padTop(10f);
+        row().padTop(5f);
         for (CharacterStatusType statusType : CharacterStatusType.values()) {
             add(statusLabels.get(statusType)).align(Align.left).fillX().expandX();
-            add(addStatusButtons.get(statusType)).width(20f).height(20f).padRight(5f);
-            add(subtractStatusButtons.get(statusType)).width(20f).height(20f);
+            add(addStatusButtons.get(statusType)).width(16f).height(16f).padRight(8f);
+            add(subtractStatusButtons.get(statusType)).width(16f).height(16f);
             row();
         }
-        add(effectLabel).align(Align.left).padTop(5f).colspan(3);
+        add(effectPaneLabel).align(Align.left).colspan(3);
         row();
         add(effectPane).fill().expand().colspan(3);
         row();
         pack();
         setWidth(240f);
-        setHeight(280f);
+        setHeight(260f);
+    }
+
+    public void initContent() {
+        effectPaneLabel.setText(LanguageManager.instance.getText("effect") + ':');
     }
 
     public void setCharacter(AbstractCharacter character) {
@@ -110,10 +113,10 @@ public class StatusWindow extends Window {
             updateStatus(statusType);
         }
         updateEffect();
+        setTitle(LanguageManager.instance.getFormattedText("statusWindowTitle", character.getName()));
     }
 
     public void updateStatus(CharacterStatusType statusType) {
-        final String statusName = statusType.name().substring(0, 1) + statusType.name().substring(1).toLowerCase();
         float maxStatusValue = 0f;
         switch (statusType) {
             case HEALTH:
@@ -130,18 +133,18 @@ public class StatusWindow extends Window {
                 break;
         }
         statusLabels.get(statusType).setText(String.format("%s: %.1f/%.1f",
-                statusName, character.getStatus().getValue(statusType), maxStatusValue));
+                LanguageManager.instance.getText(statusType.name().toLowerCase()),
+                character.getStatus().getValue(statusType),
+                maxStatusValue));
     }
 
     public void updateEffect() {
         effectTable.clearChildren();
-        effectArray.clear();
-        effectArray.addAll(character.getEffect().getAll());
-        for (AbstractCharacterEffect effect : effectArray) {
+        final Array<AbstractCharacterEffect> effects = character.getEffect().getAll();
+        for (int i = 0; i < effects.size; ++i) {
             effectTable.row().expandX().align(Align.left);
-            effectTable.add(new Label(effect.getName(), Assets.instance.skin));
+            effectTable.add(LabelPool.obtainLabel(effects.get(i).getName()));
         }
     }
-
 
 }

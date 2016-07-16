@@ -1,25 +1,133 @@
 {
-com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: default.fnt } },
-com.badlogic.gdx.graphics.Color: {
-	green: { a: 1, b: 0, g: 1, r: 0 },
-	white: { a: 1, b: 1, g: 1, r: 1 },
-	red: { a: 1, b: 0, g: 0, r: 1 },
-	black: { a: 1, b: 0, g: 0, r: 0 }
-},
-com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-	goldDraw: { name: white, color: { r: 1, g: 0.84, b: 0, a: 1 } },
-    dimGrayDraw: {name: white, color: { r:0.26, g: 0.26, b: 0.26, a: 1 } },
-	grayDraw: { name: white, color: { r: 0.50, g: 0.50, b: 0.50, a: 1 } },
-	darkGrayDraw: { name: white, color: { r: 0.3, g: 0.3, b: 0.3, a: 1 } },
-    dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } }
-},
-com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-    default: { font: default-font, fontColor: white }
-},
-th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow$InventoryWindowStyle: {
-    default: { itemSlot: darkGrayDraw }
-},
-th.skyousuke.libgdx.bluemoon.game.ui.Window$WindowStyle: {
-    default: { background: default-window }
-}
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "default-font": {
+      "file": "default.fnt"
+    },
+    "thai-font": {
+      "file": "thai_24.fnt"
+    }
+  },
+  "com.badlogic.gdx.graphics.Color": {
+    "green": {
+      "a": 1,
+      "b": 0,
+      "g": 1,
+      "r": 0
+    },
+    "white": {
+      "a": 1,
+      "b": 1,
+      "g": 1,
+      "r": 1
+    },
+    "red": {
+      "a": 1,
+      "b": 0,
+      "g": 0,
+      "r": 1
+    },
+    "black": {
+      "a": 1,
+      "b": 0,
+      "g": 0,
+      "r": 0
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "darkRedDraw": {
+      "name": "white",
+      "color": {
+        "r": 0.68,
+        "g": 0.25,
+        "b": 0.25,
+        "a": 1
+      }
+    },
+    "grayDraw": {
+      "name": "white",
+      "color": {
+        "r": 0.50,
+        "g": 0.50,
+        "b": 0.50,
+        "a": 1
+      }
+    },
+    "darkGrayDraw": {
+      "name": "white",
+      "color": {
+        "r": 0.3,
+        "g": 0.3,
+        "b": 0.3,
+        "a": 1
+      }
+    },
+    "dimGrayDraw": {
+      "name": "white",
+      "color": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.45
+      }
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": {
+      "font": "thai-font",
+      "fontColor": "white"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+    "default": {
+      "down": "darkRedDraw",
+      "up": "grayDraw"
+    },
+    "toggle": {
+      "down": "darkRedDraw",
+      "checked": "darkRedDraw",
+      "up": "grayDraw"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": {
+      "down": "darkRedDraw",
+      "up": "grayDraw",
+      "font": "thai-font",
+      "fontColor": "white"
+    },
+    "toggle": {
+      "down": "darkRedDraw",
+      "up": "grayDraw",
+      "checked": "darkRedDraw",
+      "font": "thai-font",
+      "fontColor": "white",
+      "downFontColor": "red"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+    "default": {
+      "up": "grayDraw",
+      "down": "darkRedDraw"
+    },
+    "plus": {
+      "imageUp": "plus",
+      "up": "grayDraw",
+      "down": "darkRedDraw"
+    },
+    "minus": {
+      "imageUp": "minus",
+      "up": "grayDraw",
+      "down": "darkRedDraw"
+    }
+  },
+  "th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow$InventoryWindowStyle": {
+    "default": {
+      "itemSlot": "darkGrayDraw"
+    }
+  },
+  "th.skyousuke.libgdx.bluemoon.game.ui.Window$WindowStyle": {
+    "default": {
+      "background": "default-window"
+    }
+  }
 }

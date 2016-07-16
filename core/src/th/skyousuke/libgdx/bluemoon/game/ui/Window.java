@@ -28,7 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 /**
- * Custom window class.
+ * Window class that more lightweight than LibGDX window.
  * Created by Skyousuke <surasek@gmail.com> on 8/7/2559.
  */
 public class Window extends Table {

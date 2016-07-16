@@ -16,6 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs;
 
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
@@ -52,9 +53,9 @@ public class Starve extends AbstractCharacterEffect {
         character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.VITALITY, lastVitalityPenalty);
         character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, lastAgilityPenalty);
         character.getAttribute()
-                .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
+                .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN, lastHealRegeneration);
         character.getAttribute()
-                .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
+                .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN, lastManaRegeneration);
     }
 
     @Override
@@ -98,27 +99,27 @@ public class Starve extends AbstractCharacterEffect {
             character.getAttribute().addAdditionalPrimary(CharacterPrimaryAttribute.AGILITY, -lastAgilityPenalty);
         }
 
-        float healRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION);
-        float manaRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION);
+        float healRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.HEALTH_REGEN);
+        float manaRegeneration = character.getAttribute().getBaseDerived(CharacterDerivedAttribute.MANA_REGEN);
 
         if (lastHealRegeneration != healRegeneration) {
             character.getAttribute()
-                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, lastHealRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN, lastHealRegeneration);
             lastHealRegeneration = healRegeneration;
             character.getAttribute()
-                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION, -lastHealRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN, -lastHealRegeneration);
         }
         if (lastManaRegeneration != manaRegeneration) {
             character.getAttribute()
-                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, lastManaRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN, lastManaRegeneration);
             lastManaRegeneration = manaRegeneration;
             character.getAttribute()
-                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION, -lastManaRegeneration);
+                    .addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN, -lastManaRegeneration);
         }
     }
 
     @Override
     public String getName() {
-        return "Starve";
+        return LanguageManager.instance.getText("starve");
     }
 }

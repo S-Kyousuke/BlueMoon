@@ -14,28 +14,13 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character;
-
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+package th.skyousuke.libgdx.bluemoon.framework;
 
 /**
- * Monster base class.
- * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ * List of supported languages.
+ * Created by Skyousuke <surasek@gmail.com> on 15/7/2559.
  */
-public class AbstractMonster extends AbstractCharacter {
-
-    public AbstractMonster(TextureAtlas atlas) {
-        super(atlas);
-    }
-
-    @Override
-    public void interact() {
-
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
+public enum Language {
+    THAI,
+    ENGLISH
 }

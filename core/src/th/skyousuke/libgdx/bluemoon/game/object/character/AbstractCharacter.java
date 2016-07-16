@@ -83,9 +83,9 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
     private void updateEffectsAndStatus(float deltaTime) {
         effect.apply(deltaTime);
         status.addValue(CharacterStatusType.HEALTH,
-                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * deltaTime * 0.1f);
+                attribute.getDerived(CharacterDerivedAttribute.HEALTH_REGEN) * deltaTime * 0.1f);
         status.addValue(CharacterStatusType.MANA,
-                attribute.getDerived(CharacterDerivedAttribute.MANA_REGENERATION) * deltaTime * 0.1f);
+                attribute.getDerived(CharacterDerivedAttribute.MANA_REGEN) * deltaTime * 0.1f);
         status.addValue(CharacterStatusType.FULLNESS,
                 -attribute.getDerived(CharacterDerivedAttribute.FULLNESS_DRAIN) * deltaTime * 0.1f);
     }

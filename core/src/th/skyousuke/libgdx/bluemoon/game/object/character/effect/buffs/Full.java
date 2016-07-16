@@ -16,6 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
@@ -29,35 +30,35 @@ public class Full extends AbstractCharacterEffect {
     @Override
     public void enter(AbstractCharacter character) {
         lastBonusHealthRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * 0.5f;
+                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGEN) * 0.5f;
         lastBonusManaRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION) * 0.5f;
+                .getBaseDerived(CharacterDerivedAttribute.MANA_REGEN) * 0.5f;
 
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN,
                 lastBonusHealthRegeneration);
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN,
                 lastBonusManaRegeneration);
     }
 
     @Override
     protected void overTimeEffect(AbstractCharacter character, float activeTime) {
         float bonusHealthRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGENERATION) * 0.5f;
+                .getBaseDerived(CharacterDerivedAttribute.HEALTH_REGEN) * 0.5f;
         float bonusManaRegeneration = character.getAttribute()
-                .getBaseDerived(CharacterDerivedAttribute.MANA_REGENERATION) * 0.5f;
+                .getBaseDerived(CharacterDerivedAttribute.MANA_REGEN) * 0.5f;
 
         if (lastBonusHealthRegeneration != bonusHealthRegeneration) {
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN,
                     -lastBonusHealthRegeneration);
             lastBonusHealthRegeneration = bonusHealthRegeneration;
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN,
                     lastBonusHealthRegeneration);
         }
         if (lastBonusManaRegeneration != bonusManaRegeneration) {
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN,
                     -lastBonusManaRegeneration);
             lastBonusManaRegeneration = bonusManaRegeneration;
-            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+            character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN,
                     lastBonusManaRegeneration);
         }
 
@@ -69,14 +70,14 @@ public class Full extends AbstractCharacterEffect {
 
     @Override
     public void exit(AbstractCharacter character) {
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGENERATION,
+        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.HEALTH_REGEN,
                 -lastBonusHealthRegeneration);
-        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGENERATION,
+        character.getAttribute().addAdditionalDerived(CharacterDerivedAttribute.MANA_REGEN,
                 -lastBonusManaRegeneration);
     }
 
     @Override
     public String getName() {
-        return "Full";
+        return LanguageManager.instance.getText("full");
     }
 }
