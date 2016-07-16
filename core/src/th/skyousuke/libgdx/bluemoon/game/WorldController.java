@@ -23,6 +23,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
 
 import th.skyousuke.libgdx.bluemoon.framework.CameraHelper;
+import th.skyousuke.libgdx.bluemoon.framework.Language;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
 public class WorldController extends InputAdapter {
@@ -42,6 +44,7 @@ public class WorldController extends InputAdapter {
         level = new Level();
         cameraHelper = new CameraHelper();
         controlledPlayer = level.John;
+        cameraHelper.setTarget(controlledPlayer);
 
         worldTime = new WorldTime();
         worldListeners = new Array<>();
@@ -79,6 +82,9 @@ public class WorldController extends InputAdapter {
             handleInputCamera(deltaTime);
         else
             handleInputPlayer();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) LanguageManager.instance.setCurrentLanguage(Language.THAI);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) LanguageManager.instance.setCurrentLanguage(Language.ENGLISH);
     }
 
     public void update(float deltaTime) {
@@ -102,12 +108,9 @@ public class WorldController extends InputAdapter {
         }
     }
 
-    public WorldTime getWorldTime() {
-        return worldTime;
-    }
-
-    public void addWorldListener(WorldListener worldListener) {
-        worldListeners.add(worldListener);
+    public void addListener(WorldListener listener) {
+        worldListeners.add(listener);
+        worldTime.addListener(listener);
     }
 
 }

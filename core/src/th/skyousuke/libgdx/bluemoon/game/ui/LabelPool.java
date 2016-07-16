@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Pool;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
@@ -30,12 +30,10 @@ import th.skyousuke.libgdx.bluemoon.game.ui.LabelPool.PooledLabel;
  */
 public class LabelPool extends Pool<PooledLabel> {
 
-    private static final LabelPool pool = new LabelPool(Assets.instance.customSkin);
+    private static final LabelPool pool = new LabelPool();
+    private static final LabelStyle labelStyle = Assets.instance.customSkin.get(LabelStyle.class);
 
-    private Skin skin;
-
-    private LabelPool(Skin skin) {
-        this.skin = skin;
+    private LabelPool() {
     }
 
     public static PooledLabel obtainLabel() {
@@ -48,12 +46,15 @@ public class LabelPool extends Pool<PooledLabel> {
 
     @Override
     protected PooledLabel newObject() {
-        return new PooledLabel(skin);
+        return new PooledLabel(labelStyle);
     }
 
     public PooledLabel obtain(CharSequence text) {
-        Gdx.app.log("", Integer.toString(getFree()));
         PooledLabel label = super.obtain();
+        if (label.getStyle() != labelStyle) {
+            Gdx.app.log("", "พบการเปลี่ยน Style");
+            label.setStyle(labelStyle);
+        }
         label.setPosition(0, 0);
         label.setText(text);
         return label;
@@ -61,8 +62,8 @@ public class LabelPool extends Pool<PooledLabel> {
 
     public class PooledLabel extends Label {
 
-        public PooledLabel(Skin skin) {
-            super("", skin);
+        public PooledLabel(LabelStyle style) {
+            super("", style);
         }
 
         @Override

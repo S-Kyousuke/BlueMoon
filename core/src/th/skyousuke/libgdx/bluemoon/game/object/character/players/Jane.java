@@ -17,6 +17,7 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
 public class Jane extends AbstractPlayer {
@@ -27,7 +28,7 @@ public class Jane extends AbstractPlayer {
 
     @Override
     public String getName() {
-        return "Jane";
+        return LanguageManager.instance.getText("jane");
     }
 
 }

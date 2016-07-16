@@ -72,13 +72,13 @@ public class CharacterAttribute {
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_HEALTH,
                 271 + (vitality * 29.0f));
 
-        setBaseDerivedAttribute(CharacterDerivedAttribute.HEALTH_REGENERATION,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.HEALTH_REGEN,
                 getBaseDerived(CharacterDerivedAttribute.MAX_HEALTH) * 0.01f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.MAX_MANA,
                 90 + (intelligence * 10.0f));
 
-        setBaseDerivedAttribute(CharacterDerivedAttribute.MANA_REGENERATION,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.MANA_REGEN,
                 getBaseDerived(CharacterDerivedAttribute.MAX_MANA) * 0.01f);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.PHYSICAL_DAMAGE,
@@ -105,13 +105,13 @@ public class CharacterAttribute {
         setBaseDerivedAttribute(CharacterDerivedAttribute.FISHING,
                 1.0f + survival);
 
-        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_EFFICIENCY,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOL_EFFICIENCY,
                 1 + (8.081f * (strength - 1)) / (100f + strength - 1));
 
-        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_SPEED,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOL_SPEED,
                 1 + (8.081f * (agility - 1)) / (100f + agility - 1));
 
-        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOLS_LEVEL,
+        setBaseDerivedAttribute(CharacterDerivedAttribute.TOOL_LEVEL,
                 1.0f + intelligence);
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.ITEM_CHANCE,

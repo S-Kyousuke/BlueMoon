@@ -29,6 +29,7 @@ public class WorldTime {
     public static final float SECONDS_PER_WORLD_HOUR = SECONDS_PER_WORLD_DAY / 24.0f;
     public static final float SECONDS_PER_WORLD_MINUTE = SECONDS_PER_WORLD_HOUR / 60.0f;
     public static float SECONDS_PER_WORLD_SECOND = SECONDS_PER_WORLD_MINUTE / 60.0f;
+
     private final Array<WorldListener> worldListeners;
     private int worldDay;
     private float dayTimeInSecond;
@@ -80,7 +81,7 @@ public class WorldTime {
         addDayTimeInSecond(value * SECONDS_PER_WORLD_SECOND);
     }
 
-    public int getDay() {
+    public int getDays() {
         return worldDay;
     }
 
@@ -100,8 +101,12 @@ public class WorldTime {
         return (int) (dayTimeInSecond / SECONDS_PER_WORLD_SECOND) % 60;
     }
 
-    public void addWorldListener(WorldListener worldListener) {
-        worldListeners.add(worldListener);
+    public void addListener(WorldListener listener) {
+        worldListeners.add(listener);
+    }
+
+    public void removeListener(WorldListener listener) {
+        worldListeners.removeValue(listener, true);
     }
 
 }

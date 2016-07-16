@@ -20,20 +20,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.I18NBundle;
+
+import java.util.Locale;
 
 public class Assets implements Disposable, AssetErrorListener {
 
     public static final Assets instance = new Assets();
-
-    public AssetManager manager;
 
     public TextureAtlas johnAltas;
     public TextureAtlas janeAltas;
@@ -52,10 +52,13 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public TiledMap mainMap;
 
-    public BitmapFont thaiFont24;
-
     public Skin skin;
     public Skin customSkin;
+
+    public I18NBundle thaiLanguage;
+    public I18NBundle englishLanguage;
+
+    private AssetManager manager;
 
     private Assets() {
     }
@@ -66,53 +69,56 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.setLoader(TiledMap.class, new TmxMapLoader());
 
         //load assets here
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
 
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
 
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
-        manager.load("images/characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
+        manager.load("characters/character.atlas", TextureAtlas.class);
 
         manager.load("maps/main.tmx", TiledMap.class);
-
-        manager.load("fonts/thai24.fnt", BitmapFont.class);
 
         manager.load("skins/uiskin.json", Skin.class, new SkinParameter("skins/uiskin.atlas"));
         manager.load("skins/custom_skin.json", Skin.class, new SkinParameter("skins/custom_skin.atlas"));
 
+        manager.load("i18n/strings_th_TH", I18NBundle.class,
+                new I18NBundleParameter(new Locale("th", "TH")));
+        manager.load("i18n/strings_en_US", I18NBundle.class,
+                new I18NBundleParameter(Locale.US));
+
         manager.finishLoading();
 
         //get assets here
-        johnAltas = manager.get("images/characters/character.atlas");
-        janeAltas = manager.get("images/characters/character.atlas");
-        player3Altas = manager.get("images/characters/character.atlas");
-        player4Altas = manager.get("images/characters/character.atlas");
+        johnAltas = manager.get("characters/character.atlas");
+        janeAltas = manager.get("characters/character.atlas");
+        player3Altas = manager.get("characters/character.atlas");
+        player4Altas = manager.get("characters/character.atlas");
 
-        villager1Altas = manager.get("images/characters/character.atlas");
-        villager2Altas = manager.get("images/characters/character.atlas");
-        villager3Altas = manager.get("images/characters/character.atlas");
-        villager4Altas = manager.get("images/characters/character.atlas");
+        villager1Altas = manager.get("characters/character.atlas");
+        villager2Altas = manager.get("characters/character.atlas");
+        villager3Altas = manager.get("characters/character.atlas");
+        villager4Altas = manager.get("characters/character.atlas");
 
-        monster1Altas = manager.get("images/characters/character.atlas");
-        monster2Altas = manager.get("images/characters/character.atlas");
-        monster3Altas = manager.get("images/characters/character.atlas");
-        monster4Altas = manager.get("images/characters/character.atlas");
+        monster1Altas = manager.get("characters/character.atlas");
+        monster2Altas = manager.get("characters/character.atlas");
+        monster3Altas = manager.get("characters/character.atlas");
+        monster4Altas = manager.get("characters/character.atlas");
 
         mainMap = manager.get("maps/main.tmx");
 
-        thaiFont24 = manager.get("fonts/thai24.fnt");
-
         skin = manager.get("skins/uiskin.json");
-        skin.getFont("default-font").getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
         customSkin = manager.get("skins/custom_skin.json");
+
+        thaiLanguage = manager.get("i18n/strings_th_TH");
+        englishLanguage = manager.get("i18n/strings_en_US");
     }
 
     @SuppressWarnings("rawtypes")

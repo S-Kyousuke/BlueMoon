@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 
-import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 
 /**
@@ -33,29 +33,31 @@ public class TimeWindow extends Window {
 
     public TimeWindow(Skin skin) {
         super(skin);
-        init();
-    }
-
-    public void init() {
-        timeLabel = new Label("Day 1\n%24:%00d", Assets.instance.skin);
-        timeLabel.setAlignment(Align.center);
-        row().align(Align.left);
-        add(timeLabel).expand().fill();
-        pack();
-        setWidth(80f);
         setMovable(false);
 
-        setTitle("Time");
+        timeLabel = LabelPool.obtainLabel();
+        timeLabel.setAlignment(Align.center);
+        row();
+        add(timeLabel).expand().fill().padTop(5f).padBottom(5f);
         padLeft(10f);
         padRight(10f);
+        setTime(0, 0, 0);
+        pack();
+        setWidth(85f);
+    }
+
+    public void initContent() {
+        setTime(0, 0, 0);
+        setTitle(LanguageManager.instance.getText("timeWindowTitle"));
     }
 
     public void setTime(WorldTime time) {
-        setTime(time.getDay(), time.getHours(), time.getMintues());
+        setTime(time.getDays(), time.getHours(), time.getMintues());
     }
 
-    public void setTime(int day, int hours, int minutes) {
-        timeLabel.setText(String.format("Day %d\n%02d:%02d", day, hours, minutes));
+    public void setTime(int days, int hours, int minutes) {
+        timeLabel.setText(String.format("%s\n%02d:%02d",
+                LanguageManager.instance.getFormattedText("day", days), hours, minutes));
     }
 
 }

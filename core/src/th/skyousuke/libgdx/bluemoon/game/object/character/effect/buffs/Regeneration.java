@@ -16,6 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
@@ -55,6 +56,6 @@ public class Regeneration extends AbstractCharacterEffect {
 
     @Override
     public String getName() {
-        return type.name().substring(0, 1) + type.name().toLowerCase().substring(1) + " Regeneration";
+        return LanguageManager.instance.getText(type.name().toLowerCase() + "Regeneration");
     }
 }
