@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
+import java.text.DecimalFormat;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
@@ -50,6 +51,8 @@ public class StatusWindow extends Window {
     private Label effectPaneLabel;
     private Table effectTable;
     private ScrollPane effectPane;
+
+    private static DecimalFormat decimalFormat = new DecimalFormat("#.0");
 
     public StatusWindow(Skin skin) {
         super(skin);
@@ -132,10 +135,10 @@ public class StatusWindow extends Window {
                 maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
         }
-        statusLabels.get(statusType).setText(String.format("%s: %.1f/%.1f",
-                LanguageManager.instance.getText(statusType.name().toLowerCase()),
-                character.getStatus().getValue(statusType),
-                maxStatusValue));
+        statusLabels.get(statusType).setText(
+                LanguageManager.instance.getText(statusType.name().toLowerCase()) + ": " +
+                        decimalFormat.format(character.getStatus().getValue(statusType)) + '/' +
+                        decimalFormat.format(maxStatusValue));
     }
 
     public void updateEffect() {

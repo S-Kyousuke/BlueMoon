@@ -30,10 +30,11 @@ public class LanguageManager {
     public Array<LanguageListener> listeners;
 
     private Language currentLanguage;
+    private I18NBundle currentBundle;
 
     private LanguageManager() {
-        currentLanguage = Language.THAI;
         listeners = new Array<>();
+        setCurrentLanguage(Language.THAI);
     }
 
     public Language getCurrentLanguage() {
@@ -43,6 +44,7 @@ public class LanguageManager {
     public void setCurrentLanguage(Language language) {
         if (currentLanguage != language) {
             currentLanguage = language;
+            updateCurrentBundle();
             for (LanguageListener listener : listeners) {
                 listener.onLanguageChange(currentLanguage);
             }
@@ -50,20 +52,20 @@ public class LanguageManager {
     }
 
     public String getText(String key) {
-        return getCurrentBundle().get(key);
+        return currentBundle.get(key);
     }
 
     public String getFormattedText(String key, Object... args) {
-        return getCurrentBundle().format(key, args);
+        return currentBundle.format(key, args);
     }
 
-    private I18NBundle getCurrentBundle() {
+    private void updateCurrentBundle() {
         switch (currentLanguage) {
             case ENGLISH:
-                return Assets.instance.englishLanguage;
+                currentBundle = Assets.instance.englishLanguage;
             case THAI:
             default:
-                return Assets.instance.thaiLanguage;
+                currentBundle = Assets.instance.thaiLanguage;
         }
     }
 
@@ -74,6 +76,5 @@ public class LanguageManager {
     public void removeListener(LanguageListener listener) {
         listeners.removeValue(listener, true);
     }
-
 
 }
