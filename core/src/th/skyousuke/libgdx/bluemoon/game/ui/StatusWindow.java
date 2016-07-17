@@ -52,7 +52,7 @@ public class StatusWindow extends Window {
     private Table effectTable;
     private ScrollPane effectPane;
 
-    private static DecimalFormat decimalFormat = new DecimalFormat("#.0");
+    private static DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
     public StatusWindow(Skin skin) {
         super(skin);
