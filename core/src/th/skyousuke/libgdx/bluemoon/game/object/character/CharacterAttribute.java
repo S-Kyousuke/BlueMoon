@@ -200,19 +200,20 @@ public class CharacterAttribute {
 
     private void informDerivedChangeToListener(CharacterDerivedAttribute derivedAttribute, float oldValue) {
         for (AttributeAndStatusListener listener : listeners) {
-            listener.onDerivedAttributeChange(derivedAttribute, oldValue, getDerived(derivedAttribute));
+            final float newValue = getDerived(derivedAttribute);
+            listener.onDerivedAttributeChange(derivedAttribute, oldValue, newValue);
             switch (derivedAttribute) {
                 case MAX_STAMINA:
-                    listener.onMaxStatusChange(CharacterStatusType.STAMINA, oldValue, getDerived(derivedAttribute));
+                    listener.onMaxStatusChange(CharacterStatusType.STAMINA, oldValue, newValue);
                     break;
                 case MAX_HEALTH:
-                    listener.onMaxStatusChange(CharacterStatusType.HEALTH, oldValue, getDerived(derivedAttribute));
+                    listener.onMaxStatusChange(CharacterStatusType.HEALTH, oldValue, newValue);
                     break;
                 case MAX_MANA:
-                    listener.onMaxStatusChange(CharacterStatusType.MANA, oldValue, getDerived(derivedAttribute));
+                    listener.onMaxStatusChange(CharacterStatusType.MANA, oldValue, newValue);
                     break;
                 case MAX_FULLNESS:
-                    listener.onMaxStatusChange(CharacterStatusType.FULLNESS, oldValue, getDerived(derivedAttribute));
+                    listener.onMaxStatusChange(CharacterStatusType.FULLNESS, oldValue, newValue);
                     break;
             }
         }
