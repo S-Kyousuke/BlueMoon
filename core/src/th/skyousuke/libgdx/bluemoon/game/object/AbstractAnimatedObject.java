@@ -60,7 +60,7 @@ public abstract class AbstractAnimatedObject extends AbstractGameObject {
 
     protected void addAnimation(AnimationKey key, int regionStart, int size, PlayMode mode) {
         if (hasKey(key)) {
-            Gdx.app.error(getName(), String.format("addAnimation() ERROR: Duplicate Key %s", key.name()));
+            Gdx.app.error(getName(), "addAnimation() ERROR: Duplicate Key " + key.name());
         }
         Array<AtlasRegion> animationRegions = new Array<>();
         animationRegions.addAll(regions, regionStart, size);

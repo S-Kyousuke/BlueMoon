@@ -63,6 +63,7 @@ public class LanguageManager {
         switch (currentLanguage) {
             case ENGLISH:
                 currentBundle = Assets.instance.englishLanguage;
+                break;
             case THAI:
             default:
                 currentBundle = Assets.instance.thaiLanguage;
