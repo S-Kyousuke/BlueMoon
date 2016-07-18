@@ -31,6 +31,10 @@ public class TimeWindow extends Window {
 
     private Label timeLabel;
 
+    private int hours;
+    private int days;
+    private int minutes;
+
     public TimeWindow(Skin skin) {
         super(skin);
         setMovable(false);
@@ -41,23 +45,34 @@ public class TimeWindow extends Window {
         add(timeLabel).expand().fill().padTop(5f).padBottom(5f);
         padLeft(10f);
         padRight(10f);
-        setTime(0, 0, 0);
+        initContent();
         pack();
         setWidth(85f);
     }
 
     public void initContent() {
-        setTime(0, 0, 0);
+        updateLabel();
         setTitle(LanguageManager.instance.getText("timeWindowTitle"));
     }
 
     public void setTime(WorldTime time) {
-        setTime(time.getDays(), time.getHours(), time.getMintues());
+        setTime(time.getDays(), time.getHours(), time.getMinutes());
     }
 
     public void setTime(int days, int hours, int minutes) {
-        timeLabel.setText(String.format("%s\n%02d:%02d",
-                LanguageManager.instance.getFormattedText("day", days), hours, minutes));
+        if (days != this.days || hours != this.hours || minutes != this.minutes) {
+            this.days = days;
+            this.hours = hours;
+            this.minutes = minutes;
+            updateLabel();
+        }
+    }
+
+    private void updateLabel() {
+        timeLabel.setText(
+                LanguageManager.instance.getFormattedText("day", days) + '\n'
+                        + ((hours < 10) ? 0 : "") + hours + ':'
+                        + ((minutes < 10) ? 0 : "") + minutes);
     }
 
 }

@@ -29,8 +29,10 @@ import com.google.common.base.CaseFormat;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.Format;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
+import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
 
@@ -44,11 +46,9 @@ public class AttributeWindow extends Window {
 
     private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeNumberLabels;
     private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeNumberLabels;
-
     private EnumMap<CharacterPrimaryAttribute, Label> primaryAttributeLabels;
     private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels;
-
-    private Label derivedAttributeTitleLabel = LabelPool.obtainLabel();
+    private Label derivedAttributeTitleLabel;
 
     public AttributeWindow(Skin skin) {
         super(skin);
@@ -60,9 +60,10 @@ public class AttributeWindow extends Window {
         row().padTop(5f);
 
         primaryAttributeNumberLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
+        derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
         primaryAttributeLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
         derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute.class);
-        derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
+        derivedAttributeTitleLabel = LabelPool.obtainLabel();
 
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             Label attributeLabel = LabelPool.obtainLabel();
@@ -146,14 +147,18 @@ public class AttributeWindow extends Window {
     }
 
     public void updatePrimaryAttribute(CharacterPrimaryAttribute primaryAttribute) {
-        primaryAttributeNumberLabels.get(primaryAttribute).setText(String.format("%d (%+d)",
-                character.getAttribute().getBasePrimary(primaryAttribute),
-                character.getAttribute().getAdditionalPrimary(primaryAttribute)));
+        final CharacterAttribute attribute = character.getAttribute();
+        primaryAttributeNumberLabels.get(primaryAttribute)
+                .setText(attribute.getBasePrimary(primaryAttribute) + " (+"
+                        + attribute.getAdditionalPrimary(primaryAttribute) + ')');
     }
 
     public void updateDerivedAttribute(CharacterDerivedAttribute derivedAttribute) {
-        derivedAttributeNumberLabels.get(derivedAttribute).setText(String.format("%.1f (%+.1f)",
-                character.getAttribute().getBaseDerived(derivedAttribute),
-                character.getAttribute().getAdditionalDerived(derivedAttribute)));
+        final CharacterAttribute attribute = character.getAttribute();
+        Format.decimalFormat.applyPattern("0.0");
+        derivedAttributeNumberLabels.get(derivedAttribute)
+                .setText(Format.decimalFormat.format(attribute.getBaseDerived(derivedAttribute)) + " (+"
+                        + Format.decimalFormat.format(attribute.getAdditionalDerived(derivedAttribute)) + ')');
     }
+
 }

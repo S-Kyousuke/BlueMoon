@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.Format;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
@@ -132,10 +133,11 @@ public class StatusWindow extends Window {
                 maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
         }
-        statusLabels.get(statusType).setText(String.format("%s: %.1f/%.1f",
-                LanguageManager.instance.getText(statusType.name().toLowerCase()),
-                character.getStatus().getValue(statusType),
-                maxStatusValue));
+        Format.decimalFormat.applyPattern("0.0");
+        statusLabels.get(statusType)
+                .setText(LanguageManager.instance.getText(statusType.name().toLowerCase()) + ": "
+                        + Format.decimalFormat.format(character.getStatus().getValue(statusType)) + '/'
+                        + Format.decimalFormat.format(maxStatusValue));
     }
 
     public void updateEffect() {

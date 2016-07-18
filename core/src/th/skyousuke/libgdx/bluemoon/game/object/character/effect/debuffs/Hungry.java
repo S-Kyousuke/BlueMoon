@@ -59,13 +59,13 @@ public class Hungry extends Starve {
         float timeToLevelUp = Float.MAX_VALUE;
         switch (level) {
             case 1:
-                timeToLevelUp = WorldTime.SECONDS_PER_WORLD_DAY;
+                timeToLevelUp = WorldTime.WORLD_DAY_TO_REAL_SECOND;
                 break;
             case 2:
-                timeToLevelUp = WorldTime.SECONDS_PER_WORLD_DAY * 2;
+                timeToLevelUp = 2 * WorldTime.WORLD_DAY_TO_REAL_SECOND;
                 break;
             case 3:
-                timeToLevelUp = WorldTime.SECONDS_PER_WORLD_DAY * 3;
+                timeToLevelUp = 3 * WorldTime.WORLD_DAY_TO_REAL_SECOND;
                 break;
         }
         if (levelActiveTime >= timeToLevelUp) {

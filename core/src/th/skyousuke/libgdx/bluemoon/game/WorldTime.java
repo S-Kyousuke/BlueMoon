@@ -19,94 +19,128 @@ package th.skyousuke.libgdx.bluemoon.game;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Game world time class
+ * Game world time class.
+ * Time can be negative. (It's just reference.)
  * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
  */
 public class WorldTime {
 
-    public static final int SECONDS_PER_WORLD_DAY = 1440;
+    public static final float WORLD_SECOND_TO_REAL_SECOND = 1 / 60f;
 
-    public static final float SECONDS_PER_WORLD_HOUR = SECONDS_PER_WORLD_DAY / 24.0f;
-    public static final float SECONDS_PER_WORLD_MINUTE = SECONDS_PER_WORLD_HOUR / 60.0f;
-    public static float SECONDS_PER_WORLD_SECOND = SECONDS_PER_WORLD_MINUTE / 60.0f;
+    public static final float WORLD_MINUTE_TO_REAL_SECOND = 60 * WORLD_SECOND_TO_REAL_SECOND;
+    public static final float WORLD_HOUR_TO_REAL_SECOND = 60 * WORLD_MINUTE_TO_REAL_SECOND;
+    public static final float WORLD_DAY_TO_REAL_SECOND = 24 * WORLD_HOUR_TO_REAL_SECOND;
 
-    private final Array<WorldListener> worldListeners;
-    private int worldDay;
-    private float dayTimeInSecond;
+    private Array<WorldListener> worldListeners;
+
+    /*for caching only*/
+    private int worldDays;
+    private int worldHours;
+    private int worldMinutes;
+    private float worldSeconds;
 
     public WorldTime() {
-        worldDay = 1;
-        worldListeners = new Array<>();
-        setTime(6, 0, 0);
+        this(1, 6, 0, 0);
     }
 
-    private void addDayTimeInSecond(float value) {
-        dayTimeInSecond += value;
-        if (dayTimeInSecond > SECONDS_PER_WORLD_DAY) {
-            ++worldDay;
-            dayTimeInSecond -= SECONDS_PER_WORLD_DAY;
+    public WorldTime(int day, int hours, int minutes, float seconds) {
+        setTime(day, hours, minutes, seconds);
+    }
+
+    public WorldTime setTime(int days, int hours, int minutes, float seconds) {
+        if (hours < 0 || hours > 24)
+            throw new IllegalArgumentException("Invalid hour setting: hours = " + hours);
+        if (minutes < 0 || minutes > 60)
+            throw new IllegalArgumentException("Invalid minute setting: minutes = " + minutes);
+        if (seconds < 0 || seconds > 60)
+            throw new IllegalArgumentException("Invalid second setting: seconds = " + seconds);
+
+        worldDays = days;
+        worldHours = hours;
+        worldMinutes = minutes;
+        worldSeconds = seconds;
+
+        if (worldListeners != null) {
+            for (WorldListener worldListener : worldListeners) {
+                worldListener.onTimeChange(this);
+            }
         }
-        for (WorldListener worldListener : worldListeners) {
-            worldListener.onTimeChange(this);
+        return this;
+    }
+
+    public WorldTime addDays(float days) {
+        return addHours(days * 24);
+    }
+
+    public WorldTime addHours(float hours) {
+        return addMinutes(hours * 60);
+    }
+
+    public WorldTime addMinutes(float minutes) {
+        return addSeconds(minutes * 60);
+    }
+
+    public WorldTime addSeconds(float seconds) {
+        float totalSeconds = worldSeconds + seconds;
+        while (totalSeconds < 0) {
+            totalSeconds += 86400;
+            --worldDays;
         }
+        final int minutesWithCarry = worldMinutes + (int) (totalSeconds / 60);
+        final int hoursWithCarry = worldHours + minutesWithCarry / 60;
+
+        return setTime(worldDays + (hoursWithCarry / 24),
+                hoursWithCarry % 24,
+                minutesWithCarry % 60,
+                totalSeconds % 60);
     }
 
-    public void update(float deltaTime) {
-        addDayTimeInSecond(deltaTime);
+    public final int getDays() {
+        return worldDays;
     }
 
-    public void setTime(int hours, int minutes, int seconds) {
-        dayTimeInSecond = 0;
-        addHours(hours);
-        addMinutes(minutes);
-        addSeconds(seconds);
+    public WorldTime setDays(int days) {
+        return setTime(days, worldHours, worldMinutes, worldSeconds);
     }
 
-    public void addDays(float value) {
-        int integerValue = (int) value;
-        float fractionalValue = value - integerValue;
-        worldDay += integerValue;
-        addDayTimeInSecond(fractionalValue * SECONDS_PER_WORLD_DAY);
+    public final int getHours() {
+        return worldHours;
     }
 
-    public void addHours(float value) {
-        addDayTimeInSecond(value * SECONDS_PER_WORLD_HOUR);
+    public WorldTime setHours(int hours) {
+        return setTime(worldDays, hours, worldMinutes, worldSeconds);
     }
 
-    public void addMinutes(float value) {
-        addDayTimeInSecond(value * SECONDS_PER_WORLD_MINUTE);
+    public final int getMinutes() {
+        return worldMinutes;
     }
 
-    public void addSeconds(float value) {
-        addDayTimeInSecond(value * SECONDS_PER_WORLD_SECOND);
+    public WorldTime setMinutes(int minutes) {
+        return setTime(worldDays, worldHours, minutes, worldSeconds);
     }
 
-    public int getDays() {
-        return worldDay;
+    public final float getSeconds() {
+        return worldSeconds;
     }
 
-    public void setDay(int day) {
-        worldDay = day;
-    }
-
-    public int getHours() {
-        return (int) (dayTimeInSecond / SECONDS_PER_WORLD_HOUR);
-    }
-
-    public int getMintues() {
-        return (int) (dayTimeInSecond / SECONDS_PER_WORLD_MINUTE) % 60;
-    }
-
-    public int getSeconds() {
-        return (int) (dayTimeInSecond / SECONDS_PER_WORLD_SECOND) % 60;
+    public WorldTime setSeconds(float seconds) {
+        return setTime(worldDays, worldHours, worldMinutes, seconds);
     }
 
     public void addListener(WorldListener listener) {
+        if (worldListeners == null) {
+            worldListeners = new Array<>();
+        }
         worldListeners.add(listener);
     }
 
     public void removeListener(WorldListener listener) {
-        worldListeners.removeValue(listener, true);
+        if (worldListeners != null)
+            worldListeners.removeValue(listener, true);
+    }
+
+    public void update(float realDeltaTime) {
+        addSeconds(realDeltaTime / WORLD_SECOND_TO_REAL_SECOND);
     }
 
 }
