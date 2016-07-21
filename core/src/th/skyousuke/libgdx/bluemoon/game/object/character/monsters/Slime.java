@@ -17,17 +17,22 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character.monsters;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractMonster;
 
-public class Monster1 extends AbstractMonster {
+public class Slime extends AbstractMonster {
 
-    public Monster1() {
+    public Slime() {
         super(Assets.instance.monster1Altas);
-
     }
 
     @Override
     public String getName() {
-        return "Monster1";
+        return LanguageManager.instance.getText("slime");
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
     }
 }

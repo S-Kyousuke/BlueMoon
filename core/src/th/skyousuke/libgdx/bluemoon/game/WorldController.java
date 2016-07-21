@@ -20,18 +20,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.utils.Array;
 
 import th.skyousuke.libgdx.bluemoon.framework.CameraHelper;
 import th.skyousuke.libgdx.bluemoon.framework.Language;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
+import th.skyousuke.libgdx.bluemoon.game.object.character.MessageType;
 
 public class WorldController extends InputAdapter {
 
     public Level level;
     public CameraHelper cameraHelper;
     public AbstractPlayer controlledPlayer;
+    public MessageManager messageManager;
 
     private WorldTime worldTime;
     private Array<WorldListener> worldListeners;
@@ -43,8 +47,11 @@ public class WorldController extends InputAdapter {
     public void init() {
         level = new Level();
         cameraHelper = new CameraHelper();
-        controlledPlayer = level.John;
+        controlledPlayer = level.john;
         cameraHelper.setTarget(controlledPlayer);
+        messageManager = MessageManager.getInstance();
+        messageManager.setDebugEnabled(true);
+        messageManager.addListener(level.slime, MessageType.SAY_MSG);
 
         worldTime = new WorldTime();
         worldListeners = new Array<>();
@@ -85,25 +92,28 @@ public class WorldController extends InputAdapter {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) LanguageManager.instance.setCurrentLanguage(Language.THAI);
         if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) LanguageManager.instance.setCurrentLanguage(Language.ENGLISH);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) messageManager.dispatchMessage(2f, MessageType.SAY_MSG);
     }
 
     public void update(float deltaTime) {
         handleInput(deltaTime);
+        GdxAI.getTimepiece().update(deltaTime);
+        messageManager.update();
         level.update(deltaTime);
         cameraHelper.update(deltaTime);
         worldTime.update(deltaTime);
     }
 
-    public void swapPlayer() {
-        if (controlledPlayer == level.John) {
-            controlledPlayer = level.Jane;
+    private void swapPlayer() {
+        if (controlledPlayer == level.john) {
+            controlledPlayer = level.jane;
             for (WorldListener worldListener : worldListeners) {
-                worldListener.onPlayerChange(level.John, level.Jane);
+                worldListener.onPlayerChange(level.john, level.jane);
             }
         } else {
-            controlledPlayer = level.John;
+            controlledPlayer = level.john;
             for (WorldListener worldListener : worldListeners) {
-                worldListener.onPlayerChange(level.Jane, level.John);
+                worldListener.onPlayerChange(level.jane, level.john);
             }
         }
     }

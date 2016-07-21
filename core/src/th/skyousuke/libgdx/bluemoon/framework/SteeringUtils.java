@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.item;
+package th.skyousuke.libgdx.bluemoon.framework;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 
-import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
+/**
+ * Steering utility class.
+ * Created by Skyousuke <surasek@gmail.com> on 20/7/2559.
+ */
+public class SteeringUtils {
 
-public abstract class AbstractItem extends AbstractAnimatedObject {
+    private SteeringUtils() {
+    }
 
-    private static final float FRICTION = 500f;
+    public static float vectorToAngle (Vector2 vector) {
+        return (float)Math.atan2(-vector.x, vector.y);
+    }
 
-    public AbstractItem(TextureAtlas atlas) {
-        super(atlas);
-        friction.set(FRICTION, FRICTION);
+    public static Vector2 angleToVector (Vector2 outVector, float angle) {
+        outVector.x = -(float)Math.sin(angle);
+        outVector.y = (float)Math.cos(angle);
+        return outVector;
     }
 
 }

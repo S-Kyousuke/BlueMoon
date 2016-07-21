@@ -16,24 +16,25 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 
 import th.skyousuke.libgdx.bluemoon.framework.Direction;
-import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
+import th.skyousuke.libgdx.bluemoon.game.object.AbstractSteeringAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs.Full;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs.Hungry;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.AttackingState;
 import th.skyousuke.libgdx.bluemoon.game.object.character.states.IdlingState;
 
-public abstract class AbstractCharacter extends AbstractAnimatedObject implements AttributeAndStatusListener {
+public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject implements AttributeAndStatusListener {
 
     private static final float FRICTION = 1000f;
 
     private CharacterState state;
     private Direction viewDirection;
-    private boolean movable;
 
     private CharacterStatus status;
     private CharacterAttribute attribute;
@@ -42,6 +43,7 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
 
     protected AbstractCharacter(TextureAtlas atlas) {
         super(atlas);
+        setIndependentFacing(true);
 
         attribute = new CharacterAttribute();
         status = new CharacterStatus(attribute);
@@ -50,11 +52,10 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
 
         status.addListener(this);
         status.setToMax();
+        attribute.addListener(this);
 
         setState(new IdlingState(this));
         viewDirection = Direction.DOWN;
-        movable = true;
-
         friction.set(FRICTION, FRICTION);
 
         addAnimation(AnimationKey.IDLE_LEFT, 0, 1, PlayMode.LOOP);
@@ -95,24 +96,23 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
     }
 
     public void move(Direction direction) {
-        if (!movable) return;
+        float movingSpeed = getMaxLinearSpeed();
         viewDirection = direction;
-        float movingSpeed = attribute.getDerived(CharacterDerivedAttribute.MOVING_SPEED);
         switch (direction) {
             case LEFT:
-                velocity.x = -movingSpeed;
+                this.linearVelocity.x = -movingSpeed;
                 break;
             case RIGHT:
-                velocity.x = movingSpeed;
+                this.linearVelocity.x = movingSpeed;
                 break;
             case UP:
-                velocity.y = movingSpeed;
+                this.linearVelocity.y = movingSpeed;
                 break;
             case DOWN:
-                velocity.y = -movingSpeed;
+                this.linearVelocity.y = -movingSpeed;
                 break;
         }
-        velocity.setLength(movingSpeed);
+        this.linearVelocity.limit(movingSpeed);
     }
 
     public CharacterStatus getStatus() {
@@ -131,12 +131,12 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
         return inventory;
     }
 
-    public Direction viewDirection() {
+    public Direction getViewDirection() {
         return viewDirection;
     }
 
     public boolean isMoving() {
-        return !velocity.isZero();
+        return (linearVelocity.len() > getMaxLinearSpeed()/5);
     }
 
     public void setState(CharacterState state) {
@@ -177,7 +177,22 @@ public abstract class AbstractCharacter extends AbstractAnimatedObject implement
 
     @Override
     public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue) {
+        if (derivedAttribute == CharacterDerivedAttribute.MOVING_SPEED) {
+            setMaxLinearSpeed(newValue);
+            setMaxLinearAcceleration(newValue * 2);
+        }
+    }
 
+    @Override
+    protected void applySteering(SteeringAcceleration<Vector2> steering, float time) {
+        super.applySteering(steering, time);
+        if (isMoving()) {
+            final float angle = getLinearVelocity().angle();
+            if (angle > 225 && angle < 315) viewDirection = Direction.DOWN;
+            else if (angle > 135) viewDirection = Direction.LEFT;
+            else if (angle > 45) viewDirection = Direction.UP;
+            else viewDirection = Direction.RIGHT;
+        }
     }
 
 }

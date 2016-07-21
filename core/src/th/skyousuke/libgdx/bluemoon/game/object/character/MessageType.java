@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.item;
+package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+/**
+ * Message type class for ai system.
+ * Created by Skyousuke <surasek@gmail.com> on 18/7/2559.
+ */
+public class MessageType {
 
-import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
+    public static final int WALK_UP = 0;
+    public static final int WALK_DOWN = 1;
+    public static final int WALK_LEFT = 2;
+    public static final int WALK_RIGHT = 3;
+    public static final int SAY_MSG = 4;
 
-public abstract class AbstractItem extends AbstractAnimatedObject {
-
-    private static final float FRICTION = 500f;
-
-    public AbstractItem(TextureAtlas atlas) {
-        super(atlas);
-        friction.set(FRICTION, FRICTION);
+    private MessageType() {
     }
 
 }

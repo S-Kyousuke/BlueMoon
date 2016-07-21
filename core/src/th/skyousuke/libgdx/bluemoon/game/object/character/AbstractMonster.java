@@ -16,13 +16,16 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
  * Monster base class.
  * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public class AbstractMonster extends AbstractCharacter {
+public class AbstractMonster extends AbstractCharacter implements Telegraph {
 
     public AbstractMonster(TextureAtlas atlas) {
         super(atlas);
@@ -36,6 +39,24 @@ public class AbstractMonster extends AbstractCharacter {
     @Override
     public String getName() {
         return null;
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        switch (msg.message) {
+            case MessageType.WALK_UP:
+                break;
+            case MessageType.WALK_DOWN:
+                break;
+            case MessageType.WALK_LEFT:
+                break;
+            case MessageType.WALK_RIGHT:
+                break;
+            case MessageType.SAY_MSG:
+                Gdx.app.log("Monster say", "Hello!");
+                return true;
+        }
+        return false;
     }
 
 }

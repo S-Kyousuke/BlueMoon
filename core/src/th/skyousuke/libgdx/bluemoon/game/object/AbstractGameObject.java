@@ -31,29 +31,31 @@ public abstract class AbstractGameObject {
     protected final Vector2 dimension;
     protected final Vector2 origin;
     protected final Vector2 scale;
-    protected final Vector2 velocity;
+    protected final Vector2 linearVelocity;
     protected final Vector2 acceleration;
-    protected Rectangle bounds;
+    private final Rectangle bounds;
+    protected float angularVelocity;
     protected float rotation;
     protected CollisionCheck collisionCheck;
+    private boolean applyFriction;
 
     public AbstractGameObject(float width, float height) {
         position = new Vector2();
         dimension = new Vector2();
         origin = new Vector2();
         scale = new Vector2(1, 1);
-        rotation = 0;
-
-        velocity = new Vector2();
+        linearVelocity = new Vector2();
         friction = new Vector2();
         acceleration = new Vector2();
-        bounds = new Rectangle();
 
         collisionCheck = new NullCollsionCheck();
 
         if (width == 0 || height == 0)
             throw new IllegalArgumentException("Invalid object dimension");
         setDimension(width, height);
+
+        bounds = new Rectangle();
+        applyFriction = true;
     }
 
     public void update(float deltaTime) {
@@ -63,12 +65,12 @@ public abstract class AbstractGameObject {
         updateMotionX(deltaTime);
         updateMotionY(deltaTime);
 
-        setPositionX(position.x + velocity.x * deltaTime);
+        setPositionX(position.x + linearVelocity.x * deltaTime);
         if (collisionCheck.isCollidesLeft() || collisionCheck.isCollidesRight()) {
             responseCollisionX(oldPositionX);
         }
 
-        setPositionY(position.y + velocity.y * deltaTime);
+        setPositionY(position.y + linearVelocity.y * deltaTime);
         if (collisionCheck.isCollidesTop() || collisionCheck.isCollidesBottom()) {
             responseCollisionY(oldPositionY);
         }
@@ -92,30 +94,29 @@ public abstract class AbstractGameObject {
     }
 
     protected void updateMotionX(float deltaTime) {
-        if (velocity.x != 0) {
-            if (velocity.x > 0) {
-                velocity.x = Math.max(velocity.x - friction.x * deltaTime, 0);
+        if (linearVelocity.x != 0 && applyFriction) {
+            if (linearVelocity.x > 0) {
+                linearVelocity.x = Math.max(linearVelocity.x - friction.x * deltaTime, 0);
             } else {
-                velocity.x = Math.min(velocity.x + friction.x * deltaTime, 0);
+                linearVelocity.x = Math.min(linearVelocity.x + friction.x * deltaTime, 0);
             }
         }
-        velocity.x += acceleration.x * deltaTime;
+        linearVelocity.x += acceleration.x * deltaTime;
     }
 
     protected void updateMotionY(float deltaTime) {
-        if (velocity.y != 0) {
-            if (velocity.y > 0)
-                velocity.y = Math.max(velocity.y - friction.y * deltaTime, 0);
+        if (linearVelocity.y != 0 && applyFriction) {
+            if (linearVelocity.y > 0)
+                linearVelocity.y = Math.max(linearVelocity.y - friction.y * deltaTime, 0);
             else
-                velocity.y = Math.min(velocity.y + friction.y * deltaTime, 0);
+                linearVelocity.y = Math.min(linearVelocity.y + friction.y * deltaTime, 0);
 
         }
-        velocity.y += acceleration.y * deltaTime;
+        linearVelocity.y += acceleration.y * deltaTime;
     }
 
     public void setPosition(float x, float y) {
         position.set(x, y);
-        bounds.set(position.x, position.y, dimension.x, dimension.y);
     }
 
     public void setPositionX(float x) {
@@ -143,6 +144,15 @@ public abstract class AbstractGameObject {
         dimension.y = height * scale.y;
 
         origin.set(dimension.x / 2, dimension.y / 2);
+    }
+
+    public Rectangle getBounds() {
+        bounds.set(position.x, position.y, dimension.x, dimension.y);
+        return bounds;
+    }
+
+    public void setApplyFriction(boolean applyFriction) {
+        this.applyFriction = applyFriction;
     }
 
     public abstract String getName();

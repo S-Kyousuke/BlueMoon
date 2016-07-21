@@ -46,12 +46,13 @@ public class IdlingState extends CharacterState {
 
     @Override
     public void updateCharacter(float deltaTime) {
-        if (character.isMoving()) character.setState(new MovingState(character));
+        if (character.isMoving())
+            character.setState(new MovingState(character));
     }
 
     @Override
     public void setAnimation() {
-        switch (character.viewDirection()) {
+        switch (character.getViewDirection()) {
             case LEFT:
                 character.setAnimation(AnimationKey.IDLE_LEFT, 0);
                 break;

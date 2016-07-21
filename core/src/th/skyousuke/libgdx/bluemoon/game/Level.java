@@ -16,51 +16,65 @@
 
 package th.skyousuke.libgdx.bluemoon.game;
 
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractGameObject;
+import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractMonster;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
+import th.skyousuke.libgdx.bluemoon.game.object.character.monsters.Slime;
 import th.skyousuke.libgdx.bluemoon.game.object.character.players.Jane;
 import th.skyousuke.libgdx.bluemoon.game.object.character.players.John;
 
 public class Level {
 
-    public AbstractPlayer John;
-    public AbstractPlayer Jane;
+    public AbstractPlayer john;
+    public AbstractPlayer jane;
+    public AbstractMonster slime;
 
     private TiledMap map;
     private Array<AbstractGameObject> allObjects;
     private ZOrderComparator zOrderComparator;
 
     public Level() {
-        John = new John();
-        Jane = new Jane();
+        john = new John();
+        jane = new Jane();
+        slime = new Slime();
+        john.setPosition(100, 0);
+        jane.setPosition(200, 0);
+        slime.setPosition(300, 0);
+
+        slime.setMaxLinearSpeed(100);
+        slime.setMaxLinearAcceleration(300);
+
+        final Arrive<Vector2> arriveSB = new Arrive<>(slime, john)
+                .setTimeToTarget(0.1f)
+                .setArrivalTolerance(0.001f)
+                .setDecelerationRadius(30);
+        slime.setSteeringBehavior(arriveSB);
 
         map = Assets.instance.mainMap;
         allObjects = new Array<>();
         zOrderComparator = new ZOrderComparator();
 
-        // add all object here
-        //...
-        allObjects.add(John);
-        allObjects.add(Jane);
+        allObjects.add(john);
+        allObjects.add(jane);
+        allObjects.add(slime);
     }
 
     public void update(float deltaTime) {
-
-        // add logic here
-        //...
-        John.update(deltaTime);
-        Jane.update(deltaTime);
-
+        for (AbstractGameObject o : allObjects) {
+            o.update(deltaTime);
+        }
         allObjects.sort(zOrderComparator);
     }
 
@@ -77,7 +91,6 @@ public class Level {
         // for debugging only
         shapeRenderer.begin(ShapeType.Line);
         shapeRenderer.end();
-
     }
 
     private static class ZOrderComparator implements Comparator<AbstractGameObject> {
