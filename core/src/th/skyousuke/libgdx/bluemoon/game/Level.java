@@ -16,13 +16,11 @@
 
 package th.skyousuke.libgdx.bluemoon.game;
 
-import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
@@ -52,15 +50,6 @@ public class Level {
         john.setPosition(100, 0);
         jane.setPosition(200, 0);
         slime.setPosition(300, 0);
-
-        slime.setMaxLinearSpeed(100);
-        slime.setMaxLinearAcceleration(300);
-
-        final Arrive<Vector2> arriveSB = new Arrive<>(slime, john)
-                .setTimeToTarget(0.1f)
-                .setArrivalTolerance(0.001f)
-                .setDecelerationRadius(30);
-        slime.setSteeringBehavior(arriveSB);
 
         map = Assets.instance.mainMap;
         allObjects = new Array<>();

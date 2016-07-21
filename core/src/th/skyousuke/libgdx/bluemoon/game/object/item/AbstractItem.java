@@ -22,7 +22,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.AbstractAnimatedObject;
 
 public abstract class AbstractItem extends AbstractAnimatedObject {
 
-    private static final float FRICTION = 500f;
+    private static final float FRICTION = 1000f;
 
     public AbstractItem(TextureAtlas atlas) {
         super(atlas);

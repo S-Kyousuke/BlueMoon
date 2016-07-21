@@ -46,15 +46,17 @@ public class WorldController extends InputAdapter {
 
     public void init() {
         level = new Level();
+        worldTime = new WorldTime();
+        worldListeners = new Array<>();
         cameraHelper = new CameraHelper();
-        controlledPlayer = level.john;
-        cameraHelper.setTarget(controlledPlayer);
+
         messageManager = MessageManager.getInstance();
         messageManager.setDebugEnabled(true);
         messageManager.addListener(level.slime, MessageType.SAY_MSG);
 
-        worldTime = new WorldTime();
-        worldListeners = new Array<>();
+        controlledPlayer = level.john;
+        cameraHelper.setTarget(controlledPlayer);
+        level.slime.follow(controlledPlayer);
     }
 
     private void handleInputCamera(float deltaTime) {
@@ -116,6 +118,7 @@ public class WorldController extends InputAdapter {
                 worldListener.onPlayerChange(level.jane, level.john);
             }
         }
+        level.slime.follow(controlledPlayer);
     }
 
     public void addListener(WorldListener listener) {

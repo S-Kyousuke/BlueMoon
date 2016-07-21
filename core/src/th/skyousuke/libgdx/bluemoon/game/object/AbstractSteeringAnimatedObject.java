@@ -47,9 +47,10 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
 
     private SteeringBehavior<Vector2> steeringBehavior;
 
-    public AbstractSteeringAnimatedObject(TextureAtlas atlas) {
+    public AbstractSteeringAnimatedObject(TextureAtlas atlas, boolean independentFacing) {
         super(atlas);
-        independentFacing = false;
+        this.independentFacing = independentFacing;
+
     }
 
     @Override
@@ -155,7 +156,7 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
 
     @Override
     public float getZeroLinearSpeedThreshold() {
-        return 0.001f;
+        return maxLinearSpeed / 10;
     }
 
     @Override
@@ -180,6 +181,11 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
         setApplyFriction(false);
     }
 
+    public void removeSteeringBehavior() {
+        steeringBehavior = null;
+        setApplyFriction(true);
+    }
+
     protected void applySteering(SteeringAcceleration<Vector2> steering, float time) {
         linearVelocity.mulAdd(steering.linear, time).limit(getMaxLinearSpeed());
 
@@ -187,12 +193,16 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
             rotation += (angularVelocity * time) * MathUtils.radiansToDegrees;
             angularVelocity += steering.angular * time;
         } else {
-            if (!linearVelocity.isZero(getZeroLinearSpeedThreshold())) {
+            if (isMoving()) {
                 float newOrientation = vectorToAngle(linearVelocity);
                 angularVelocity = (newOrientation - rotation * MathUtils.degreesToRadians) * time;
                 rotation = newOrientation * MathUtils.radiansToDegrees;
             }
         }
+    }
+
+    public boolean isMoving() {
+        return !linearVelocity.isZero(getZeroLinearSpeedThreshold());
     }
 
     @Override

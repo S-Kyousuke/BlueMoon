@@ -62,9 +62,6 @@ public abstract class AbstractGameObject {
         float oldPositionX = position.x;
         float oldPositionY = position.y;
 
-        updateMotionX(deltaTime);
-        updateMotionY(deltaTime);
-
         setPositionX(position.x + linearVelocity.x * deltaTime);
         if (collisionCheck.isCollidesLeft() || collisionCheck.isCollidesRight()) {
             responseCollisionX(oldPositionX);
@@ -74,6 +71,9 @@ public abstract class AbstractGameObject {
         if (collisionCheck.isCollidesTop() || collisionCheck.isCollidesBottom()) {
             responseCollisionY(oldPositionY);
         }
+
+        updateMotionX(deltaTime);
+        updateMotionY(deltaTime);
     }
 
     protected void responseCollisionX(float oldPositionX) {

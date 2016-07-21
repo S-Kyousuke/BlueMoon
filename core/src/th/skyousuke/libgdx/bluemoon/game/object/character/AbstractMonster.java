@@ -19,7 +19,9 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.msg.Telegraph;
+import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Monster base class.
@@ -27,8 +29,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public class AbstractMonster extends AbstractCharacter implements Telegraph {
 
+    private final Arrive<Vector2> arriveSteeringBehavior;
+
     public AbstractMonster(TextureAtlas atlas) {
         super(atlas);
+        arriveSteeringBehavior = new Arrive<>(this)
+                .setTimeToTarget(0.1f)
+                .setArrivalTolerance(0.001f)
+                .setDecelerationRadius(30);
     }
 
     @Override
@@ -40,6 +48,7 @@ public class AbstractMonster extends AbstractCharacter implements Telegraph {
     public String getName() {
         return null;
     }
+
 
     @Override
     public boolean handleMessage(Telegram msg) {
@@ -58,5 +67,11 @@ public class AbstractMonster extends AbstractCharacter implements Telegraph {
         }
         return false;
     }
+
+    public void follow(AbstractCharacter character) {
+        arriveSteeringBehavior.setTarget(character);
+        setSteeringBehavior(arriveSteeringBehavior);
+    }
+
 
 }

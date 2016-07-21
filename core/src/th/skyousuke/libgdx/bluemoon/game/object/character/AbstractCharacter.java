@@ -42,8 +42,7 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
     private Inventory inventory;
 
     protected AbstractCharacter(TextureAtlas atlas) {
-        super(atlas);
-        setIndependentFacing(true);
+        super(atlas, true);
 
         attribute = new CharacterAttribute();
         status = new CharacterStatus(attribute);
@@ -51,10 +50,8 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
         inventory = new Inventory();
 
         status.addListener(this);
-        status.setToMax();
         attribute.addListener(this);
 
-        setState(new IdlingState(this));
         viewDirection = Direction.DOWN;
         friction.set(FRICTION, FRICTION);
 
@@ -72,6 +69,13 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
         addAnimation(AnimationKey.ATK_UP, 24, 4, PlayMode.NORMAL);
         addAnimation(AnimationKey.ATK_LEFT, 28, 4, PlayMode.NORMAL);
         addAnimation(AnimationKey.ATK_RIGHT, 32, 4, PlayMode.NORMAL);
+
+        final float movingSpeed = attribute.getDerived(CharacterDerivedAttribute.MOVING_SPEED);
+        setMaxLinearSpeed(movingSpeed);
+        setMaxLinearAcceleration(movingSpeed * 2);
+
+        status.setToMax();
+        setState(new IdlingState(this));
     }
 
     @Override
@@ -133,10 +137,6 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
 
     public Direction getViewDirection() {
         return viewDirection;
-    }
-
-    public boolean isMoving() {
-        return (linearVelocity.len() > getMaxLinearSpeed()/5);
     }
 
     public void setState(CharacterState state) {

@@ -35,4 +35,5 @@ public class Slime extends AbstractMonster {
     public void update(float deltaTime) {
         super.update(deltaTime);
     }
+
 }
