@@ -99,7 +99,6 @@ public class WorldGui extends InputAdapter implements Disposable,
         stage.addActor(tutorialBox);
 
         Gdx.input.setInputProcessor(stage);
-        //stage.setDebugAll(true);
     }
 
     private void listenToMenu() {
@@ -256,4 +255,5 @@ public class WorldGui extends InputAdapter implements Disposable,
         table.add(tutorialText).padLeft(10f).padRight(10f);
         return table;
     }
+
 }

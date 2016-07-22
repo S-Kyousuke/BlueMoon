@@ -29,8 +29,8 @@ import com.badlogic.gdx.utils.Array;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.Format;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.NumberFormat;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
@@ -58,7 +58,7 @@ public class StatusWindow extends Window {
         addStatusButtons = new EnumMap<>(CharacterStatusType.class);
         subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
 
-        for (CharacterStatusType statusType : CharacterStatusType.values()) {
+        for (final CharacterStatusType statusType : CharacterStatusType.values()) {
             statusLabels.put(statusType, LabelPool.obtainLabel());
             addStatusButtons.put(statusType, new ImageButton(Assets.instance.customSkin, "plus"));
             addStatusButtons.get(statusType).addListener(new ClickListener() {
@@ -133,11 +133,10 @@ public class StatusWindow extends Window {
                 maxStatusValue = character.getAttribute().getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
                 break;
         }
-        Format.decimalFormat.applyPattern("0.0");
         statusLabels.get(statusType)
                 .setText(LanguageManager.instance.getText(statusType.name().toLowerCase()) + ": "
-                        + Format.decimalFormat.format(character.getStatus().getValue(statusType)) + '/'
-                        + Format.decimalFormat.format(maxStatusValue));
+                        + NumberFormat.formatFloat(character.getStatus().getValue(statusType), 1) + '/'
+                        + NumberFormat.formatFloat(maxStatusValue, 1));
     }
 
     public void updateEffect() {

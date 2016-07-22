@@ -16,18 +16,23 @@
 
 package th.skyousuke.libgdx.bluemoon;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.utils.I18NBundle;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.screen.WorldScreen;
 
 public class BlueMoon extends Game {
 
-    public static final int SCENE_WIDTH = 1280;
-    public static final int SCENE_HEIGHT = 720;
+    public static final int SCENE_WIDTH = 1024;
+    public static final int SCENE_HEIGHT = 576;
 
     @Override
     public void create() {
+        I18NBundle.setSimpleFormatter(true);
         Assets.instance.init();
         setScreen(new WorldScreen(this));
     }
@@ -37,4 +42,11 @@ public class BlueMoon extends Game {
         Assets.instance.dispose();
     }
 
+    @Override
+    public void render() {
+        if (Gdx.input.isKeyJustPressed(Keys.ENTER) && Gdx.app.getType() == ApplicationType.WebGL) {
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
+        super.render();
+    }
 }

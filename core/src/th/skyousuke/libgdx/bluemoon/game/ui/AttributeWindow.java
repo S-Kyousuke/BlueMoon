@@ -29,8 +29,8 @@ import com.google.common.base.CaseFormat;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.Format;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.NumberFormat;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
@@ -65,7 +65,7 @@ public class AttributeWindow extends Window {
         derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute.class);
         derivedAttributeTitleLabel = LabelPool.obtainLabel();
 
-        for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
+        for (final CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             Label attributeLabel = LabelPool.obtainLabel();
             Label attributeNumberLabel = LabelPool.obtainLabel();
 
@@ -124,8 +124,11 @@ public class AttributeWindow extends Window {
 
     public void initContent() {
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
-            derivedAttributeLabels.get(derivedAttribute).setText(LanguageManager.instance.getText(CaseFormat
-                    .UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, derivedAttribute.name())));
+            derivedAttributeLabels
+                    .get(derivedAttribute)
+                    .setText(LanguageManager.instance
+                            .getText(CaseFormat.UPPER_UNDERSCORE
+                                    .to(CaseFormat.LOWER_CAMEL, derivedAttribute.name())));
         }
 
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
@@ -148,17 +151,18 @@ public class AttributeWindow extends Window {
 
     public void updatePrimaryAttribute(CharacterPrimaryAttribute primaryAttribute) {
         final CharacterAttribute attribute = character.getAttribute();
-        primaryAttributeNumberLabels.get(primaryAttribute)
+        primaryAttributeNumberLabels
+                .get(primaryAttribute)
                 .setText(attribute.getBasePrimary(primaryAttribute) + " (+"
                         + attribute.getAdditionalPrimary(primaryAttribute) + ')');
     }
 
     public void updateDerivedAttribute(CharacterDerivedAttribute derivedAttribute) {
         final CharacterAttribute attribute = character.getAttribute();
-        Format.decimalFormat.applyPattern("0.0");
-        derivedAttributeNumberLabels.get(derivedAttribute)
-                .setText(Format.decimalFormat.format(attribute.getBaseDerived(derivedAttribute)) + " (+"
-                        + Format.decimalFormat.format(attribute.getAdditionalDerived(derivedAttribute)) + ')');
+        derivedAttributeNumberLabels
+                .get(derivedAttribute)
+                .setText(NumberFormat.formatFloat(attribute.getBaseDerived(derivedAttribute), 1) + " (+"
+                        + NumberFormat.formatFloat(attribute.getAdditionalDerived(derivedAttribute), 1) + ')');
     }
 
 }
