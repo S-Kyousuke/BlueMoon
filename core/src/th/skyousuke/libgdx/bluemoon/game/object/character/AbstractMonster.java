@@ -16,7 +16,6 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
@@ -25,7 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Monster base class.
- * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public class AbstractMonster extends AbstractCharacter implements Telegraph {
 
@@ -62,7 +61,6 @@ public class AbstractMonster extends AbstractCharacter implements Telegraph {
             case MessageType.WALK_RIGHT:
                 break;
             case MessageType.SAY_MSG:
-                Gdx.app.log("Monster say", "Hello!");
                 return true;
         }
         return false;

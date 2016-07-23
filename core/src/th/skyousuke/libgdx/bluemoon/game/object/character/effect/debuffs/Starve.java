@@ -25,7 +25,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
 
 /**
  * Debuff applied to character when character has no fullness for a long time.
- * Created by Skyousuke <surasek@gmail.com> on 2/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 2/7/2559.
  */
 public class Starve extends AbstractCharacterEffect {
 

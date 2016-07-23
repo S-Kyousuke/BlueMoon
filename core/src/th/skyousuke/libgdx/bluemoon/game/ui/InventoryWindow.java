@@ -26,7 +26,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.Inventory;
 
 /**
  * Character inventory window class.
- * Created by Skyousuke <surasek@gmail.com> on 6/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 6/7/2559.
  */
 public class InventoryWindow extends Window {
 

@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Game world time class.
  * Time can be negative. (It's just reference.)
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 4/7/2559.
  */
 public class WorldTime {
 

@@ -20,9 +20,12 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.Language;
+import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.screen.WorldScreen;
 
 public class BlueMoon extends Game {
@@ -30,10 +33,13 @@ public class BlueMoon extends Game {
     public static final int SCENE_WIDTH = 1024;
     public static final int SCENE_HEIGHT = 576;
 
+    private boolean fullscreen;
+
     @Override
     public void create() {
-        I18NBundle.setSimpleFormatter(true);
+        fullscreen = false;
         Assets.instance.init();
+        setGlobalInput();
         setScreen(new WorldScreen(this));
     }
 
@@ -42,11 +48,36 @@ public class BlueMoon extends Game {
         Assets.instance.dispose();
     }
 
-    @Override
-    public void render() {
-        if (Gdx.input.isKeyJustPressed(Keys.ENTER) && Gdx.app.getType() == ApplicationType.WebGL) {
-            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        }
-        super.render();
+    private void setGlobalInput() {
+        final InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(new InputAdapter() {
+            @Override
+            public boolean keyUp(int keycode) {
+                switch (keycode) {
+                    case Keys.F1:
+                        if (LanguageManager.instance.getCurrentLanguage() == Language.THAI)
+                            LanguageManager.instance.setCurrentLanguage(Language.ENGLISH);
+                        else LanguageManager.instance.setCurrentLanguage(Language.THAI);
+                        break;
+                    case Keys.F2:
+                        if (fullscreen) {
+                            Gdx.graphics.setWindowedMode(SCENE_WIDTH, SCENE_HEIGHT);
+                            fullscreen = false;
+                        } else {
+                            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                            fullscreen = true;
+                        }
+                        break;
+                    case Keys.ESCAPE:
+                        if (fullscreen && Gdx.app.getType() == ApplicationType.WebGL) {
+                            fullscreen = false;
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
+
 }

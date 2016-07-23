@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 /**
  * Character derived attribute enumeration.
- * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 26/6/2559.
  */
 public enum CharacterDerivedAttribute {
     MOVING_SPEED,

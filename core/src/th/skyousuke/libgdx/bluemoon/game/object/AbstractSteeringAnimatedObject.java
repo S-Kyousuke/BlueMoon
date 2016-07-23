@@ -28,7 +28,7 @@ import th.skyousuke.libgdx.bluemoon.game.GameLocation;
 
 /**
  * Steering agent class for testing Steering Behaviors ai system.
- * Created by Skyousuke <surasek@gmail.com> on 19/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 19/7/2559.
  */
 public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObject implements Steerable<Vector2> {
 
@@ -104,14 +104,12 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
 
     @Override
     public float vectorToAngle(Vector2 vector) {
-        return (float) Math.atan2(-vector.x, vector.y);
+        return vectorToAngle(vector);
     }
 
     @Override
     public Vector2 angleToVector(Vector2 outVector, float angle) {
-        outVector.x = -(float) Math.sin(angle);
-        outVector.y = (float) Math.cos(angle);
-        return outVector;
+        return angleToVector(outVector, angle);
     }
 
     @Override

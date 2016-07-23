@@ -17,7 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.game.object;
 
 /**
- * Created by Skyousuke <surasek@gmail.com> on 26/6/2559.
+ * All animation enum.
+ * Created by S.Kyousuke <surasek@gmail.com> on 26/6/2559.
  */
 public enum AnimationKey {
     IDLE_LEFT,

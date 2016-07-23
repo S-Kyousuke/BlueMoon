@@ -20,7 +20,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
 
 /**
  * Character listener to fire event when effect has been changed.
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 4/7/2559.
  */
 public interface CharacterEffectListener {
 

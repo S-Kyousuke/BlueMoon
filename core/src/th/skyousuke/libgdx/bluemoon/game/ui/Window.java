@@ -29,12 +29,11 @@ import com.badlogic.gdx.utils.Align;
 
 /**
  * Window class that more lightweight than LibGDX window.
- * Created by Skyousuke <surasek@gmail.com> on 8/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 8/7/2559.
  */
 public class Window extends Table {
 
     private final Label titleLabel;
-    private WindowStyle style;
     private boolean keepWithinStage;
     private boolean movable;
     private boolean dragging;
@@ -45,7 +44,7 @@ public class Window extends Table {
 
     public Window(String titleName, Skin skin) {
         titleLabel = new Label(titleName, skin);
-        style = skin.get(WindowStyle.class);
+        final WindowStyle style = skin.get(WindowStyle.class);
 
         setBackground(style.background);
 

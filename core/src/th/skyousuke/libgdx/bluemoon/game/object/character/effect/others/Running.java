@@ -24,7 +24,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
 
 /**
  * Character running state
- * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 29/6/2559.
  */
 public class Running extends AbstractCharacterEffect {
 

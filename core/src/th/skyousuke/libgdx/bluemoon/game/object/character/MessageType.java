@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 /**
  * Message type class for ai system.
- * Created by Skyousuke <surasek@gmail.com> on 18/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 18/7/2559.
  */
 public class MessageType {
 

@@ -26,7 +26,7 @@ import th.skyousuke.libgdx.bluemoon.game.ui.LabelPool.PooledLabel;
 
 /**
  * A pool of custom skin LibGDX text label that can be reused to avoid allocation.
- * Created by Skyousuke <surasek@gmail.com> on 12/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
 public class LabelPool extends Pool<PooledLabel> {
 

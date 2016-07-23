@@ -25,7 +25,7 @@ import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 
 /**
  * Game time window class
- * Created by Skyousuke <surasek@gmail.com> on 12/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
 public class TimeWindow extends Window {
 

@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.framework;
 
 /**
  * Detect language change
- * Created by Skyousuke <surasek@gmail.com> on 15/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 15/7/2559.
  */
 public interface LanguageListener {
 

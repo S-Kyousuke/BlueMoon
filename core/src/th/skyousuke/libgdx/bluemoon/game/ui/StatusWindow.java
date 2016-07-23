@@ -38,7 +38,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
 
 /**
  * Character status window class
- * Created by Skyousuke <surasek@gmail.com> on 12/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
 public class StatusWindow extends Window {
 

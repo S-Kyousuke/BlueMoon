@@ -23,7 +23,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterState;
 
 /**
  * Character Attacking state.
- * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public class AttackingState extends CharacterState {
 

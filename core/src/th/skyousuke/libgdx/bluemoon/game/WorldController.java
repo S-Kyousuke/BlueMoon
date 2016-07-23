@@ -25,8 +25,6 @@ import com.badlogic.gdx.ai.msg.MessageManager;
 import com.badlogic.gdx.utils.Array;
 
 import th.skyousuke.libgdx.bluemoon.framework.CameraHelper;
-import th.skyousuke.libgdx.bluemoon.framework.Language;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 import th.skyousuke.libgdx.bluemoon.game.object.character.MessageType;
 
@@ -91,10 +89,6 @@ public class WorldController extends InputAdapter {
             handleInputCamera(deltaTime);
         else
             handleInputPlayer();
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) LanguageManager.instance.setCurrentLanguage(Language.THAI);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) LanguageManager.instance.setCurrentLanguage(Language.ENGLISH);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) messageManager.dispatchMessage(2f, MessageType.SAY_MSG);
     }
 
     public void update(float deltaTime) {

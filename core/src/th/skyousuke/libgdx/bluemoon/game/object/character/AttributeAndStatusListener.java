@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 /**
  * Listener interface for trigger event when status or attribute change
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 4/7/2559.
  */
 public interface AttributeAndStatusListener {
 

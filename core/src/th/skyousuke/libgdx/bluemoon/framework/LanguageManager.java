@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 
 /**
  * Language manager class for localization.
- * Created by Skyousuke <surasek@gmail.com> on 15/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 15/7/2559.
  */
 public class LanguageManager {
 

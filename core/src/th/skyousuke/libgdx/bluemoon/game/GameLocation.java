@@ -24,7 +24,7 @@ import th.skyousuke.libgdx.bluemoon.framework.SteeringUtils;
 
 /**
  * Game locaton class for ai system.
- * Created by Skyousuke <surasek@gmail.com> on 20/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 20/7/2559.
  */
 public class GameLocation implements Location<Vector2> {
 

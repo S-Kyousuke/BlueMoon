@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
 /**
  * Regeneration effect type enum
- * Created by Skyousuke <surasek@gmail.com> on 29/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 29/6/2559.
  */
 public enum RegenerationType {
     HEALTH,

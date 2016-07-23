@@ -18,6 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -45,12 +46,13 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
 
 /**
  * Game World GUI Class
- * Created by Skyousuke <surasek@gmail.com> on 30/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 30/6/2559.
  */
 public class WorldGui extends InputAdapter implements Disposable,
         WorldListener, AttributeAndStatusListener, CharacterEffectListener, LanguageListener {
 
     private Stage stage;
+    private InputMultiplexer multiplexer;
 
     private StatusWindow statusWindow;
     private AttributeWindow attributeWindow;
@@ -77,8 +79,12 @@ public class WorldGui extends InputAdapter implements Disposable,
         Table menu = createMenu();
         tutorialBox = createTutorialBox();
 
+        statusWindow.setVisible(false);
+        attributeWindow.setVisible(false);
+        inventoryWindow.setVisible(false);
+
         attributeWindow.setPosition(BlueMoon.SCENE_WIDTH - attributeWindow.getWidth(), 0);
-        inventoryWindow.setPosition(0, 280);
+        inventoryWindow.setPosition(0, 250);
         timeWindow.setPosition(
                 BlueMoon.SCENE_WIDTH - timeWindow.getWidth(),
                 BlueMoon.SCENE_HEIGHT - timeWindow.getHeight());
@@ -98,31 +104,37 @@ public class WorldGui extends InputAdapter implements Disposable,
         stage.addActor(menu);
         stage.addActor(tutorialBox);
 
-        Gdx.input.setInputProcessor(stage);
+        multiplexer = (InputMultiplexer) (Gdx.input.getInputProcessor());
+        multiplexer.addProcessor(stage);
     }
 
     private void listenToMenu() {
         toggleStatusWindowButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!statusWindow.isVisible()) statusWindow.setVisible(true);
-                else statusWindow.setVisible(false);
+                toggleWindowVisible(statusWindow);
             }
         });
         toggleAttributeWindowButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!attributeWindow.isVisible()) attributeWindow.setVisible(true);
-                else attributeWindow.setVisible(false);
+                toggleWindowVisible(attributeWindow);
             }
         });
         toggleInventoryWindowButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!inventoryWindow.isVisible()) inventoryWindow.setVisible(true);
-                else inventoryWindow.setVisible(false);
+                toggleWindowVisible(inventoryWindow);
             }
         });
+    }
+
+    private void toggleWindowVisible(Window window) {
+        if (!window.isVisible()) {
+            window.setVisible(true);
+            window.toFront();
+        }
+        else window.setVisible(false);
     }
 
     private Table createMenu() {
@@ -154,6 +166,7 @@ public class WorldGui extends InputAdapter implements Disposable,
 
     @Override
     public void dispose() {
+        multiplexer.removeProcessor(stage);
         stage.dispose();
     }
 
@@ -246,10 +259,8 @@ public class WorldGui extends InputAdapter implements Disposable,
         initGuiContent();
     }
 
-    /* Control tutorial text box */
     private Table createTutorialBox() {
         tutorialText = LabelPool.obtainLabel();
-
         Table table = new Table();
         table.setBackground(Assets.instance.customSkin.getDrawable("dimGrayDraw"));
         table.add(tutorialText).padLeft(10f).padRight(10f);

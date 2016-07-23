@@ -30,12 +30,16 @@ public class WorldScreen extends AbstractGameScreen {
     private WorldRenderer worldRenderer;
     private WorldGui worldGui;
 
+    private boolean pause;
+
     public WorldScreen(Game game) {
         super(game);
     }
 
     @Override
     public void show() {
+        pause = false;
+
         worldController = new WorldController();
         worldRenderer = new WorldRenderer(worldController);
         worldGui = new WorldGui(worldController);
@@ -43,14 +47,16 @@ public class WorldScreen extends AbstractGameScreen {
 
     @Override
     public void render(float deltaTime) {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (!pause) {
+            Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        worldController.update(deltaTime);
-        worldRenderer.render();
+            worldController.update(deltaTime);
+            worldRenderer.render();
 
-        worldGui.update(deltaTime);
-        worldGui.render();
+            worldGui.update(deltaTime);
+            worldGui.render();
+        }
     }
 
     @Override
@@ -65,4 +71,13 @@ public class WorldScreen extends AbstractGameScreen {
         worldGui.dispose();
     }
 
+    @Override
+    public void pause() {
+        pause = true;
+    }
+
+    @Override
+    public void resume() {
+        pause = false;
+    }
 }

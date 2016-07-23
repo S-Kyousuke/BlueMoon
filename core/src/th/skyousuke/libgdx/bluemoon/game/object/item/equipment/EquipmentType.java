@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.game.object.item.equipment;
 
 /**
  * Equipment Type enumeration.
- * Created by Skyousuke <surasek@gmail.com> on 5/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 5/7/2559.
  */
 public enum EquipmentType {
     HELMET,

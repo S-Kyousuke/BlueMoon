@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Align;
 
 /**
  * (Not Complete) Custom text dialog class
- * Created by Skyousuke <surasek@gmail.com> on 28/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 28/6/2559.
  */
 public class TextDialog extends Actor {
 

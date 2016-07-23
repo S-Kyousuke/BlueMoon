@@ -20,7 +20,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
  * Player base class.
- * Created by Skyousuke <surasek@gmail.com> on 27/6/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 27/6/2559.
  */
 public abstract class AbstractPlayer extends AbstractCharacter {
 

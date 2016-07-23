@@ -22,7 +22,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharact
 
 /**
  * Character effect class for storing and applying all effects to character.
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 4/7/2559.
  */
 public class CharacterEffect {
 

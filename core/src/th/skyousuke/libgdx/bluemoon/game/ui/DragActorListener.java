@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 /**
  * Causes an actor to move along with the mouse cursor (or touch) when an actor is being dragged.
- * Created by Skyousuke <surasek@gmail.com> on 6/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 6/7/2559.
  */
 public class DragActorListener extends InputListener {
 

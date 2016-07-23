@@ -26,7 +26,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.item.equipment.EquipmentType;
 
 /**
  * Game Inventory Class (Collection of items your character is currently carrying or equipping)
- * Created by Skyousuke <surasek@gmail.com> on 4/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 4/7/2559.
  */
 public class Inventory {
 

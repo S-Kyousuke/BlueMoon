@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  * Automatically focus scroll when mouse cursor is entered or exited scroll pane.
- * Created by Skyousuke <surasek@gmail.com> on 12/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
 public class FocusScrollListener extends ClickListener {
 

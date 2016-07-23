@@ -18,7 +18,7 @@ package th.skyousuke.libgdx.bluemoon.framework;
 
 /**
  * The utility class contains any objects that use for changing any number to specific strings.
- * Created by Skyousuke <surasek@gmail.com> on 17/7/2559.
+ * Created by S.Kyousuke <surasek@gmail.com> on 17/7/2559.
  */
 public class NumberFormat {
 
