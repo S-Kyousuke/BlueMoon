@@ -31,6 +31,7 @@ public class WorldScreen extends AbstractGameScreen {
     private WorldGui worldGui;
 
     private boolean pause;
+    private boolean ready;
 
     public WorldScreen(Game game) {
         super(game);
@@ -57,6 +58,9 @@ public class WorldScreen extends AbstractGameScreen {
             worldGui.update(deltaTime);
             worldGui.render();
         }
+        else if (ready) {
+            pause = false;
+        }
     }
 
     @Override
@@ -74,10 +78,11 @@ public class WorldScreen extends AbstractGameScreen {
     @Override
     public void pause() {
         pause = true;
+        ready = false;
     }
 
     @Override
     public void resume() {
-        pause = false;
+        ready = true;
     }
 }

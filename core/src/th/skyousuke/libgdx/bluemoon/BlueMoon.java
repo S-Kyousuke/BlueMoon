@@ -79,5 +79,4 @@ public class BlueMoon extends Game {
         });
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
-
 }

@@ -36,13 +36,10 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
             new SteeringAcceleration<>(new Vector2());
 
     private boolean tagged;
-
     private float maxLinearSpeed = 100;
     private float maxLinearAcceleration = 200;
-
     private float maxAngularSpeed = 5;
     private float maxAngularAcceleration = 10;
-
     private boolean independentFacing;
 
     private SteeringBehavior<Vector2> steeringBehavior;
@@ -186,7 +183,6 @@ public abstract class AbstractSteeringAnimatedObject extends AbstractAnimatedObj
 
     protected void applySteering(SteeringAcceleration<Vector2> steering, float time) {
         linearVelocity.mulAdd(steering.linear, time).limit(getMaxLinearSpeed());
-
         if (independentFacing) {
             rotation += (angularVelocity * time) * MathUtils.radiansToDegrees;
             angularVelocity += steering.angular * time;

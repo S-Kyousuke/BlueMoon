@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Vector2;
  * Monster base class.
  * Created by S.Kyousuke <surasek@gmail.com> on 27/6/2559.
  */
-public class AbstractMonster extends AbstractCharacter implements Telegraph {
+public abstract class AbstractMonster extends AbstractCharacter implements Telegraph {
 
     private final Arrive<Vector2> arriveSteeringBehavior;
 
@@ -42,12 +42,6 @@ public class AbstractMonster extends AbstractCharacter implements Telegraph {
     public void interact() {
 
     }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
 
     @Override
     public boolean handleMessage(Telegram msg) {
@@ -70,6 +64,4 @@ public class AbstractMonster extends AbstractCharacter implements Telegraph {
         arriveSteeringBehavior.setTarget(character);
         setSteeringBehavior(arriveSteeringBehavior);
     }
-
-
 }
