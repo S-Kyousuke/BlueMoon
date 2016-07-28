@@ -1,8 +1,5 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-    "default-font": {
-      "file": "default.fnt"
-    },
     "thai-font": {
       "file": "thai_24.fnt"
     }
@@ -31,17 +28,18 @@
       "b": 0,
       "g": 0,
       "r": 0
+    },
+    "darkRed": {
+      "r": 0.68,
+      "g": 0.25,
+      "b": 0.25,
+      "a": 1
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
     "darkRedDraw": {
       "name": "white",
-      "color": {
-        "r": 0.68,
-        "g": 0.25,
-        "b": 0.25,
-        "a": 1
-      }
+      "color": "darkRed"
     },
     "grayDraw": {
       "name": "white",
@@ -61,13 +59,31 @@
         "a": 1
       }
     },
+    "windowBackgroundDraw": {
+      "name": "white",
+      "color": {
+        "r": 0.25,
+        "g": 0.25,
+        "b": 0.25,
+        "a": 1
+      }
+    },
     "dimGrayDraw": {
       "name": "white",
       "color": {
         "r": 0,
         "g": 0,
         "b": 0,
-        "a": 0.45
+        "a": 0.3
+      }
+    },
+    "dimWhiteDraw": {
+      "name": "white",
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1,
+        "a": 0.2
       }
     }
   },
@@ -91,7 +107,7 @@
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
     "default": {
       "down": "darkRedDraw",
-      "up": "grayDraw",
+      "up": "dimGrayDraw",
       "font": "thai-font",
       "fontColor": "white"
     },
@@ -122,12 +138,28 @@
   },
   "th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow$InventoryWindowStyle": {
     "default": {
-      "itemSlot": "darkGrayDraw"
+      "itemSlot": "dimWhiteDraw"
     }
   },
   "th.skyousuke.libgdx.bluemoon.game.ui.Window$WindowStyle": {
     "default": {
-      "background": "default-window"
+      "background": "window"
     }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+    "default": {
+      "vScroll": "scroll",
+      "hScrollKnob": "scroll_knob",
+      "background": "windowBackgroundDraw",
+      "hScroll": "scroll",
+      "vScrollKnob": "scroll_knob"
+    },
+    "noBackground": {
+      "vScroll": "scroll",
+      "hScrollKnob": "scroll_knob",
+      "hScroll": "scroll",
+      "vScrollKnob": "scroll_knob"
+    }
+
   }
 }

@@ -16,14 +16,15 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.villagers;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractVillager;
 
 public class Villager1 extends AbstractVillager {
 
-    public Villager1() {
-        super(Assets.instance.villager1Altas);
-
+    public Villager1(TiledMapTileLayer tileLayer) {
+        super(Assets.instance.villager1Altas, tileLayer);
     }
 
     @Override

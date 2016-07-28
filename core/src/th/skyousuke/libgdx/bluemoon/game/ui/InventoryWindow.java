@@ -37,6 +37,7 @@ public class InventoryWindow extends Window {
 
     public InventoryWindow(Skin skin) {
         super(skin);
+        setColor(1, 1, 1, 0.8f);
         style = skin.get(InventoryWindowStyle.class);
         //itemSlots = new Array<>();
 

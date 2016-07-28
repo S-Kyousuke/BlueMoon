@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.game.object.character.villagers;
+package th.skyousuke.libgdx.bluemoon.framework.collision;
 
-import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractVillager;
+public class NullCollisionCheck implements CollisionCheck {
 
-public class Villager3 extends AbstractVillager {
-
-    public Villager3() {
-        super(Assets.instance.villager3Altas);
-
-
+    @Override
+    public void checkAndResponseX() {
     }
 
     @Override
-    public String getName() {
-        return "Villager3";
+    public void checkAndResponseY() {
     }
 
 }

@@ -17,7 +17,6 @@
 package th.skyousuke.libgdx.bluemoon.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ai.GdxAI;
@@ -47,44 +46,36 @@ public class WorldController extends InputAdapter {
         worldTime = new WorldTime();
         worldListeners = new Array<>();
         cameraHelper = new CameraHelper();
+        cameraHelper.setMapDimension(level.map);
 
         messageManager = MessageManager.getInstance();
         messageManager.setDebugEnabled(true);
         messageManager.addListener(level.slime, MessageType.SAY_MSG);
 
         controlledPlayer = level.john;
-        cameraHelper.setTarget(controlledPlayer);
-        level.slime.follow(controlledPlayer);
     }
 
     private void handleInputCamera(float deltaTime) {
         final float CAMERA_SPEED = 100f;
         final float CAMERA_ZOOM_SPEED = 1f;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) cameraHelper.addPostion(0, CAMERA_SPEED * deltaTime);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) cameraHelper.addPostion(0, -CAMERA_SPEED * deltaTime);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) cameraHelper.addPostion(-CAMERA_SPEED * deltaTime, 0);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) cameraHelper.addPostion(CAMERA_SPEED * deltaTime, 0);
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) cameraHelper.addZoom(CAMERA_ZOOM_SPEED * deltaTime);
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) cameraHelper.addZoom(-CAMERA_ZOOM_SPEED * deltaTime);
+        if (Gdx.input.isKeyPressed(Keys.UP)) cameraHelper.addPosition(0, CAMERA_SPEED * deltaTime);
+        if (Gdx.input.isKeyPressed(Keys.DOWN)) cameraHelper.addPosition(0, -CAMERA_SPEED * deltaTime);
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) cameraHelper.addPosition(-CAMERA_SPEED * deltaTime, 0);
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) cameraHelper.addPosition(CAMERA_SPEED * deltaTime, 0);
+        if (Gdx.input.isKeyPressed(Keys.Z)) cameraHelper.addZoom(CAMERA_ZOOM_SPEED * deltaTime);
+        if (Gdx.input.isKeyPressed(Keys.X)) cameraHelper.addZoom(-CAMERA_ZOOM_SPEED * deltaTime);
     }
 
     private void handleInputPlayer() {
         controlledPlayer.handleInput();
-    }
-
-    private void handleInput(float deltaTime) {
-        if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
-            if (cameraHelper.hasTarget())
-                cameraHelper.setTarget(null);
-            else
-                cameraHelper.setTarget(controlledPlayer);
-        }
         if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-            if (!cameraHelper.hasTarget()) return;
             swapPlayer();
             cameraHelper.setTarget(controlledPlayer);
         }
+    }
+
+    private void handleInput(float deltaTime) {
         if (!cameraHelper.hasTarget())
             handleInputCamera(deltaTime);
         else
@@ -96,7 +87,7 @@ public class WorldController extends InputAdapter {
         GdxAI.getTimepiece().update(deltaTime);
         messageManager.update();
         level.update(deltaTime);
-        cameraHelper.update(deltaTime);
+        cameraHelper.update();
         worldTime.update(deltaTime);
     }
 
@@ -112,12 +103,16 @@ public class WorldController extends InputAdapter {
                 worldListener.onPlayerChange(level.jane, level.john);
             }
         }
-        level.slime.follow(controlledPlayer);
     }
 
     public void addListener(WorldListener listener) {
         worldListeners.add(listener);
         worldTime.addListener(listener);
+    }
+
+    public void removeListener(WorldListener listener) {
+        worldListeners.removeValue(listener, true);
+        worldTime.removeListener(listener);
     }
 
 }

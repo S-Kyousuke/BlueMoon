@@ -5,43 +5,50 @@ filter: Linear,Linear
 repeat: none
 thai_24
   rotate: false
-  xy: 1, 141
+  xy: 1, 38
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 0
-default
+window
   rotate: false
-  xy: 1, 11
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-default-window
-  rotate: false
-  xy: 259, 365
+  xy: 1, 4
   size: 1, 32
   split: 0, 0, 24, 0
   orig: 1, 32
   offset: 0, 0
   index: -1
+scroll
+  rotate: false
+  xy: 259, 292
+  size: 16, 2
+  orig: 16, 2
+  offset: 0, 0
+  index: -1
+scroll_knob
+  rotate: false
+  xy: 4, 34
+  size: 16, 2
+  orig: 16, 2
+  offset: 0, 0
+  index: -1
 minus
   rotate: false
-  xy: 1, 1
+  xy: 259, 282
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 plus
   rotate: false
-  xy: 262, 389
+  xy: 4, 24
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 259, 362
+  xy: 1, 1
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

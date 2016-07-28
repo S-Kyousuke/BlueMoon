@@ -16,11 +16,15 @@
 
 package th.skyousuke.libgdx.bluemoon.game;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
@@ -35,25 +39,31 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.players.John;
 
 public class Level {
 
+    public Music music;
+    public TiledMap map;
+
     public AbstractPlayer john;
     public AbstractPlayer jane;
     public AbstractMonster slime;
 
-    private TiledMap map;
     private Array<AbstractGameObject> allObjects;
     private ZOrderComparator zOrderComparator;
 
     public Level() {
-        john = new John();
-        jane = new Jane();
-        slime = new Slime();
-        john.setPosition(100, 0);
-        jane.setPosition(200, 0);
-        slime.setPosition(300, 0);
-
         map = Assets.instance.mainMap;
+        music = Assets.instance.music;
+        music.setLooping(true);
+
         allObjects = new Array<>();
         zOrderComparator = new ZOrderComparator();
+        final TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers().get(0);
+
+        john = new John(tileLayer);
+        jane = new Jane(tileLayer);
+        slime = new Slime(tileLayer);
+        john.setPosition(500, 500);
+        jane.setPosition(700, 500);
+        slime.setPosition(900, 500);
 
         allObjects.add(john);
         allObjects.add(jane);
@@ -78,7 +88,16 @@ public class Level {
         batch.end();
 
         // for debugging only
+        //drawDebug(shapeRenderer);
+    }
+
+    private void drawDebug(ShapeRenderer shapeRenderer) {
+        shapeRenderer.setColor(Color.RED);
         shapeRenderer.begin(ShapeType.Line);
+        for (AbstractGameObject o : allObjects) {
+            final Rectangle bounds = o.getBounds();
+            shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+        }
         shapeRenderer.end();
     }
 
@@ -88,5 +107,4 @@ public class Level {
             return Float.compare(object2.getPosition().y, object1.getPosition().y);
         }
     }
-
 }

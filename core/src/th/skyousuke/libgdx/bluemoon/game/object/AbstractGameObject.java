@@ -22,7 +22,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import th.skyousuke.libgdx.bluemoon.framework.collision.CollisionCheck;
-import th.skyousuke.libgdx.bluemoon.framework.collision.NullCollsionCheck;
+import th.skyousuke.libgdx.bluemoon.framework.collision.NullCollisionCheck;
 
 public abstract class AbstractGameObject {
 
@@ -47,41 +47,27 @@ public abstract class AbstractGameObject {
         linearVelocity = new Vector2();
         friction = new Vector2();
         acceleration = new Vector2();
+        collisionCheck = new NullCollisionCheck();
 
-        collisionCheck = new NullCollsionCheck();
+        bounds = new Rectangle();
+        applyFriction = true;
 
         if (width == 0 || height == 0)
             throw new IllegalArgumentException("Invalid object dimension");
         setDimension(width, height);
-
-        bounds = new Rectangle();
-        applyFriction = true;
     }
 
     public void update(float deltaTime) {
-        float oldPositionX = position.x;
-        float oldPositionY = position.y;
-
-        setPositionX(position.x + linearVelocity.x * deltaTime);
-        if (collisionCheck.isCollidesLeft() || collisionCheck.isCollidesRight()) {
-            responseCollisionX(oldPositionX);
+        if (linearVelocity.x != 0) {
+            setPositionX(position.x + linearVelocity.x * deltaTime);
+            collisionCheck.checkAndResponseX();
         }
-
-        setPositionY(position.y + linearVelocity.y * deltaTime);
-        if (collisionCheck.isCollidesTop() || collisionCheck.isCollidesBottom()) {
-            responseCollisionY(oldPositionY);
+        if (linearVelocity.y != 0) {
+            setPositionY(position.y + linearVelocity.y * deltaTime);
+            collisionCheck.checkAndResponseY();
         }
-
-        updateMotionX(deltaTime);
-        updateMotionY(deltaTime);
-    }
-
-    protected void responseCollisionX(float oldPositionX) {
-        setPositionX(oldPositionX);
-    }
-
-    protected void responseCollisionY(float oldPositionY) {
-        setPositionY(oldPositionY);
+        updateVelocityX(deltaTime);
+        updateVelocityY(deltaTime);
     }
 
     public abstract void render(SpriteBatch batch);
@@ -93,7 +79,7 @@ public abstract class AbstractGameObject {
                 1.0f, 1.0f, rotation);
     }
 
-    protected void updateMotionX(float deltaTime) {
+    protected void updateVelocityX(float deltaTime) {
         if (linearVelocity.x != 0 && applyFriction) {
             if (linearVelocity.x > 0) {
                 linearVelocity.x = Math.max(linearVelocity.x - friction.x * deltaTime, 0);
@@ -104,7 +90,7 @@ public abstract class AbstractGameObject {
         linearVelocity.x += acceleration.x * deltaTime;
     }
 
-    protected void updateMotionY(float deltaTime) {
+    protected void updateVelocityY(float deltaTime) {
         if (linearVelocity.y != 0 && applyFriction) {
             if (linearVelocity.y > 0)
                 linearVelocity.y = Math.max(linearVelocity.y - friction.y * deltaTime, 0);
@@ -117,6 +103,8 @@ public abstract class AbstractGameObject {
 
     public void setPosition(float x, float y) {
         position.set(x, y);
+        bounds.x = position.x;
+        bounds.y = position.y;
     }
 
     public void setPositionX(float x) {
@@ -142,12 +130,12 @@ public abstract class AbstractGameObject {
     private void setDimension(float width, float height) {
         dimension.x = width * scale.x;
         dimension.y = height * scale.y;
-
+        bounds.width = dimension.x;
+        bounds.height = dimension.y;
         origin.set(dimension.x / 2, dimension.y / 2);
     }
 
     public Rectangle getBounds() {
-        bounds.set(position.x, position.y, dimension.x, dimension.y);
         return bounds;
     }
 

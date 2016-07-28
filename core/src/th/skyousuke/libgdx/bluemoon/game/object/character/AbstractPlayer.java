@@ -17,6 +17,7 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 /**
  * Player base class.
@@ -24,8 +25,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
  */
 public abstract class AbstractPlayer extends AbstractCharacter {
 
-    public AbstractPlayer(TextureAtlas atlas) {
-        super(atlas);
+    public AbstractPlayer(TextureAtlas atlas, TiledMapTileLayer tileLayer) {
+        super(atlas, tileLayer);
     }
 
     @Override

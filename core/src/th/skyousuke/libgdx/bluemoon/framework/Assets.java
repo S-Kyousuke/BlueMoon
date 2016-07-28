@@ -22,6 +22,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -35,20 +36,13 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public static final Assets instance = new Assets();
 
+    public Music music;
+
     public TextureAtlas johnAltas;
     public TextureAtlas janeAltas;
-    public TextureAtlas player3Altas;
-    public TextureAtlas player4Altas;
 
     public TextureAtlas villager1Altas;
-    public TextureAtlas villager2Altas;
-    public TextureAtlas villager3Altas;
-    public TextureAtlas villager4Altas;
-
-    public TextureAtlas monster1Altas;
-    public TextureAtlas monster2Altas;
-    public TextureAtlas monster3Altas;
-    public TextureAtlas monster4Altas;
+    public TextureAtlas slimeAltas;
 
     public TiledMap mainMap;
 
@@ -68,20 +62,9 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.setErrorListener(this);
         manager.setLoader(TiledMap.class, new TmxMapLoader());
 
-        //load assets here
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
+        /* load assets here */
+        manager.load("music/music.mp3", Music.class);
 
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
-
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
-        manager.load("characters/character.atlas", TextureAtlas.class);
         manager.load("characters/character.atlas", TextureAtlas.class);
 
         manager.load("maps/main.tmx", TiledMap.class);
@@ -89,28 +72,20 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.load("skins/uiskin.json", Skin.class, new SkinParameter("skins/uiskin.atlas"));
         manager.load("skins/custom_skin.json", Skin.class, new SkinParameter("skins/custom_skin.atlas"));
 
-        manager.load("i18n/strings_th_TH", I18NBundle.class,
-                new I18NBundleParameter(new Locale("th", "TH")));
-        manager.load("i18n/strings_en_US", I18NBundle.class,
-                new I18NBundleParameter(Locale.US));
+        manager.load("i18n/strings_th_TH", I18NBundle.class, new I18NBundleParameter(new Locale("th", "TH")));
+        manager.load("i18n/strings_en_US", I18NBundle.class, new I18NBundleParameter(Locale.US));
 
         manager.finishLoading();
 
-        //get assets here
+        /* get assets here */
+        music = manager.get("music/music.mp3");
+
         johnAltas = manager.get("characters/character.atlas");
         janeAltas = manager.get("characters/character.atlas");
-        player3Altas = manager.get("characters/character.atlas");
-        player4Altas = manager.get("characters/character.atlas");
 
         villager1Altas = manager.get("characters/character.atlas");
-        villager2Altas = manager.get("characters/character.atlas");
-        villager3Altas = manager.get("characters/character.atlas");
-        villager4Altas = manager.get("characters/character.atlas");
 
-        monster1Altas = manager.get("characters/character.atlas");
-        monster2Altas = manager.get("characters/character.atlas");
-        monster3Altas = manager.get("characters/character.atlas");
-        monster4Altas = manager.get("characters/character.atlas");
+        slimeAltas = manager.get("characters/character.atlas");
 
         mainMap = manager.get("maps/main.tmx");
 
@@ -131,5 +106,6 @@ public class Assets implements Disposable, AssetErrorListener {
     public void dispose() {
         manager.dispose();
     }
+
 
 }

@@ -18,12 +18,8 @@ package th.skyousuke.libgdx.bluemoon.framework.collision;
 
 public interface CollisionCheck {
 
-    boolean isCollidesRight();
+    void checkAndResponseX();
 
-    boolean isCollidesLeft();
-
-    boolean isCollidesTop();
-
-    boolean isCollidesBottom();
+    void checkAndResponseY();
 
 }

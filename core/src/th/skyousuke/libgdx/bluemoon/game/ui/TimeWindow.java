@@ -41,18 +41,18 @@ public class TimeWindow extends Window {
 
         timeLabel = LabelPool.obtainLabel();
         timeLabel.setAlignment(Align.center);
+        setColor(1, 1, 1, 0.8f);
         row();
         add(timeLabel).expand().fill().padTop(5f).padBottom(5f);
         padLeft(10f);
         padRight(10f);
-        initContent();
-        pack();
-        setWidth(85f);
     }
 
     public void initContent() {
         updateLabel();
         setTitle(LanguageManager.instance.getText("timeWindowTitle"));
+        pack();
+        setWidth(85f);
     }
 
     public void setTime(WorldTime time) {

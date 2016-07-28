@@ -16,7 +16,6 @@
 
 package th.skyousuke.libgdx.bluemoon;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -24,21 +23,25 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.Language;
+import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
+import th.skyousuke.libgdx.bluemoon.framework.GamePreferencesListener;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.screen.WorldScreen;
 
-public class BlueMoon extends Game {
+public class BlueMoon extends Game implements GamePreferencesListener {
 
     public static final int SCENE_WIDTH = 1024;
     public static final int SCENE_HEIGHT = 576;
 
-    private boolean fullscreen;
-
     @Override
     public void create() {
-        fullscreen = false;
         Assets.instance.init();
+
+        GamePreferences.instance.load();
+        GamePreferences.instance.addListener(this);
+        setGameLanguage(GamePreferences.instance);
+        setDisplayMode(GamePreferences.instance);
+
         setGlobalInput();
         setScreen(new WorldScreen(this));
     }
@@ -48,35 +51,65 @@ public class BlueMoon extends Game {
         Assets.instance.dispose();
     }
 
-    private void setGlobalInput() {
-        final InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(new InputAdapter() {
+    private void setGameLanguage(GamePreferences gamePreferences) {
+        LanguageManager.instance.setCurrentLanguage(gamePreferences.language);
+    }
+
+    private void setDisplayMode(GamePreferences gamePreferences) {
+        if (gamePreferences.fullscreen)
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        else
+            Gdx.graphics.setWindowedMode(SCENE_WIDTH, SCENE_HEIGHT);
+    }
+
+    @Override
+    public void onGamePreferencesChange(GamePreferences gamePreferences) {
+        setGameLanguage(gamePreferences);
+        setDisplayMode(gamePreferences);
+    }
+
+    private InputAdapter getDesktopInput() {
+        return new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
                 switch (keycode) {
-                    case Keys.F1:
-                        if (LanguageManager.instance.getCurrentLanguage() == Language.THAI)
-                            LanguageManager.instance.setCurrentLanguage(Language.ENGLISH);
-                        else LanguageManager.instance.setCurrentLanguage(Language.THAI);
-                        break;
-                    case Keys.F2:
-                        if (fullscreen) {
-                            Gdx.graphics.setWindowedMode(SCENE_WIDTH, SCENE_HEIGHT);
-                            fullscreen = false;
-                        } else {
-                            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                            fullscreen = true;
-                        }
-                        break;
                     case Keys.ESCAPE:
-                        if (fullscreen && Gdx.app.getType() == ApplicationType.WebGL) {
-                            fullscreen = false;
+                        Gdx.app.exit();
+                        break;
+                }
+                return true;
+            }
+        };
+    }
+
+    private InputAdapter getHtmlInput() {
+        return new InputAdapter() {
+            @Override
+            public boolean keyUp(int keycode) {
+                switch (keycode) {
+                    case Keys.ESCAPE:
+                        if (GamePreferences.instance.fullscreen) {
+                            GamePreferences.instance.fullscreen = false;
+                            GamePreferences.instance.save();
                         }
                         break;
                 }
                 return true;
             }
-        });
+        };
+    }
+
+    private void setGlobalInput() {
+        final InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        switch (Gdx.app.getType()) {
+            case WebGL:
+                inputMultiplexer.addProcessor(getHtmlInput());
+                break;
+            case Desktop:
+                inputMultiplexer.addProcessor(getDesktopInput());
+                break;
+        }
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
+
 }

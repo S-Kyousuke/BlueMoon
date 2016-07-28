@@ -39,21 +39,26 @@ public class Window extends Table {
     private boolean dragging;
 
     public Window(Skin skin) {
-        this("Untitled", skin);
+        this("", skin);
     }
 
-    public Window(String titleName, Skin skin) {
-        titleLabel = new Label(titleName, skin);
-        final WindowStyle style = skin.get(WindowStyle.class);
+    public Window(Skin skin, String styleName) {
+        this("", skin, styleName);
+    }
 
-        setBackground(style.background);
+    public Window(CharSequence title, Skin skin) {
+        this(title, skin, "default");
+    }
 
+    public Window(CharSequence title, Skin skin, String styleName) {
+        titleLabel = new Label(title, skin);
+
+        setBackground(skin.get(styleName, WindowStyle.class).background);
         keepWithinStage = true;
         movable = true;
 
         setTouchable(Touchable.enabled);
         setClip(true);
-
         addListener(new DragActorListener(this) {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {

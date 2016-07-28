@@ -52,7 +52,7 @@ public class AttributeWindow extends Window {
 
     public AttributeWindow(Skin skin) {
         super(skin);
-
+        setColor(1, 1, 1, 0.8f);
         align(Align.topLeft);
         padLeft(10f);
         padRight(10);
@@ -109,7 +109,7 @@ public class AttributeWindow extends Window {
             derivedAttributeTable.add(attributeNumberLabel).align(Align.right).padRight(10f);
         }
 
-        ScrollPane derivedAttributePane = new ScrollPane(derivedAttributeTable, Assets.instance.skin);
+        ScrollPane derivedAttributePane = new ScrollPane(derivedAttributeTable, Assets.instance.customSkin);
         derivedAttributePane.setFadeScrollBars(false);
         derivedAttributePane.setForceScroll(false, true);
         derivedAttributePane.addListener(new FocusScrollListener(derivedAttributePane));
@@ -117,9 +117,6 @@ public class AttributeWindow extends Window {
         add(derivedAttributeTitleLabel).align(Align.left).padTop(5f).colspan(4);
         row().colspan(4);
         add(derivedAttributePane).fill().expand();
-        pack();
-        setWidth(340f);
-        setHeight(420f);
     }
 
     public void initContent() {
@@ -129,6 +126,9 @@ public class AttributeWindow extends Window {
                     .setText(LanguageManager.instance
                             .getText(CaseFormat.UPPER_UNDERSCORE
                                     .to(CaseFormat.LOWER_CAMEL, derivedAttribute.name())));
+            pack();
+            setWidth(340f);
+            setHeight(420f);
         }
 
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {

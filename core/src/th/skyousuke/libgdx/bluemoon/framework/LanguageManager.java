@@ -29,19 +29,19 @@ public class LanguageManager {
 
     public Array<LanguageListener> listeners;
 
-    private Language currentLanguage;
+    private int currentLanguage;
     private I18NBundle currentBundle;
 
     private LanguageManager() {
         listeners = new Array<>();
-        setCurrentLanguage(Language.THAI);
+        setCurrentLanguage(Languages.THAI);
     }
 
-    public Language getCurrentLanguage() {
+    public int getCurrentLanguage() {
         return currentLanguage;
     }
 
-    public void setCurrentLanguage(Language language) {
+    public void setCurrentLanguage(int language) {
         if (currentLanguage != language) {
             currentLanguage = language;
             updateCurrentBundle();
@@ -61,12 +61,14 @@ public class LanguageManager {
 
     private void updateCurrentBundle() {
         switch (currentLanguage) {
-            case ENGLISH:
+            case Languages.ENGLISH:
                 currentBundle = Assets.instance.englishLanguage;
                 break;
-            case THAI:
-            default:
+            case Languages.THAI:
                 currentBundle = Assets.instance.thaiLanguage;
+                break;
+            default:
+                throw new IllegalStateException("Language not found: " + Languages.toString(currentLanguage));
         }
     }
 

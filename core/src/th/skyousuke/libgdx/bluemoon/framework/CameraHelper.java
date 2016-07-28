@@ -17,6 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.framework;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -28,6 +30,9 @@ public class CameraHelper {
     private float zoom;
     private AbstractGameObject target;
 
+    private int levelWidth;
+    private int levelHeight;
+
     public CameraHelper() {
         position = new Vector2();
         zoom = 1.0f;
@@ -37,7 +42,7 @@ public class CameraHelper {
         this.position.set(x, y);
     }
 
-    public void addPostion(float x, float y) {
+    public void addPosition(float x, float y) {
         this.position.add(x, y);
     }
 
@@ -60,6 +65,7 @@ public class CameraHelper {
     }
 
     public void applyTo(OrthographicCamera camera) {
+        keepInLevel(camera);
         camera.position.x = position.x;
         camera.position.y = position.y;
         camera.zoom = zoom;
@@ -82,10 +88,37 @@ public class CameraHelper {
         return this.target.equals(target);
     }
 
-    public void update(float deltaTime) {
+    public void update() {
         if (!hasTarget()) return;
         position.x = target.getPosition().x + target.getOrigin().x;
         position.y = target.getPosition().y + target.getOrigin().y;
+    }
+
+    private void keepInLevel(OrthographicCamera camera) {
+        final float halfCameraWidth = camera.viewportWidth * 0.5f;
+        final float halfCameraHeight = camera.viewportHeight * 0.5f;
+
+        if (position.x > levelWidth - halfCameraWidth * zoom) {
+            position.x = levelWidth - halfCameraWidth * zoom;
+        } else if (position.x < halfCameraWidth * zoom)
+            position.x = halfCameraWidth * zoom;
+
+        if (position.y > levelHeight - halfCameraHeight * zoom)
+            position.y = levelHeight - halfCameraHeight * zoom;
+        else if (position.y < halfCameraHeight * zoom)
+            position.y = halfCameraHeight * zoom;
+    }
+
+    public void setMapDimension(TiledMap map) {
+        final MapProperties properties = map.getProperties();
+
+        final int mapWidth = properties.get("width", Integer.class);
+        final int mapHeight = properties.get("height", Integer.class);
+        final int tilePixelWidth = properties.get("tilewidth", Integer.class);
+        final int tilePixelHeight = properties.get("tileheight", Integer.class);
+
+        levelWidth = mapWidth * tilePixelWidth;
+        levelHeight = mapHeight * tilePixelHeight;
     }
 
 }

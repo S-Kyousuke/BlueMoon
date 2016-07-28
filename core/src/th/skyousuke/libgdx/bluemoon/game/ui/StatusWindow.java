@@ -54,6 +54,7 @@ public class StatusWindow extends Window {
 
     public StatusWindow(Skin skin) {
         super(skin);
+        setColor(1, 1, 1, 0.8f);
         statusLabels = new EnumMap<>(CharacterStatusType.class);
         addStatusButtons = new EnumMap<>(CharacterStatusType.class);
         subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
@@ -78,7 +79,7 @@ public class StatusWindow extends Window {
 
         effectTable = new Table();
         effectTable.align(Align.top);
-        effectPane = new ScrollPane(effectTable, Assets.instance.skin);
+        effectPane = new ScrollPane(effectTable, Assets.instance.customSkin);
         effectPaneLabel = LabelPool.obtainLabel();
         effectPane.setFadeScrollBars(false);
         effectPane.setForceScroll(false, true);
@@ -99,13 +100,13 @@ public class StatusWindow extends Window {
         row();
         add(effectPane).fill().expand().colspan(3);
         row();
-        pack();
-        setWidth(240f);
-        setHeight(260f);
     }
 
     public void initContent() {
         effectPaneLabel.setText(LanguageManager.instance.getText("effect") + ':');
+        pack();
+        setWidth(240f);
+        setHeight(260f);
     }
 
     public void setCharacter(AbstractCharacter character) {

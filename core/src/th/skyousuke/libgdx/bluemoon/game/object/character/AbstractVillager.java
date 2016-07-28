@@ -17,11 +17,12 @@
 package th.skyousuke.libgdx.bluemoon.game.object.character;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public abstract class AbstractVillager extends AbstractCharacter {
 
-    public AbstractVillager(TextureAtlas atlas) {
-        super(atlas);
+    public AbstractVillager(TextureAtlas atlas, TiledMapTileLayer tileLayer) {
+        super(atlas, tileLayer);
     }
 
     @Override

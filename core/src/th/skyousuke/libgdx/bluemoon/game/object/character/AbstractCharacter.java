@@ -19,9 +19,11 @@ package th.skyousuke.libgdx.bluemoon.game.object.character;
 import com.badlogic.gdx.ai.steer.SteeringAcceleration;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 import th.skyousuke.libgdx.bluemoon.framework.Direction;
+import th.skyousuke.libgdx.bluemoon.framework.collision.TiledCollisionCheck;
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractSteeringAnimatedObject;
 import th.skyousuke.libgdx.bluemoon.game.object.AnimationKey;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs.Full;
@@ -41,8 +43,9 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
     private CharacterEffect effect;
     private Inventory inventory;
 
-    protected AbstractCharacter(TextureAtlas atlas) {
+    protected AbstractCharacter(TextureAtlas atlas, TiledMapTileLayer tileLayer) {
         super(atlas, true);
+        collisionCheck = new TiledCollisionCheck(this, tileLayer, "blocked");
 
         attribute = new CharacterAttribute();
         status = new CharacterStatus(attribute);

@@ -16,7 +16,6 @@
 
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Pool;
@@ -52,7 +51,6 @@ public class LabelPool extends Pool<PooledLabel> {
     public PooledLabel obtain(CharSequence text) {
         PooledLabel label = super.obtain();
         if (label.getStyle() != labelStyle) {
-            Gdx.app.log("", "พบการเปลี่ยน Style");
             label.setStyle(labelStyle);
         }
         label.setPosition(0, 0);

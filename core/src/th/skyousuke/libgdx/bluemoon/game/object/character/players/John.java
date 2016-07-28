@@ -16,14 +16,16 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
 public class John extends AbstractPlayer {
 
-    public John() {
-        super(Assets.instance.johnAltas);
+    public John(TiledMapTileLayer tileLayer) {
+        super(Assets.instance.johnAltas, tileLayer);
     }
 
     @Override

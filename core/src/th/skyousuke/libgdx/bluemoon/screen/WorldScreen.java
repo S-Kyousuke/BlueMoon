@@ -20,11 +20,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
+import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
+import th.skyousuke.libgdx.bluemoon.framework.GamePreferencesListener;
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
 import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
 import th.skyousuke.libgdx.bluemoon.game.ui.WorldGui;
 
-public class WorldScreen extends AbstractGameScreen {
+public class WorldScreen extends AbstractGameScreen implements GamePreferencesListener {
 
     private WorldController worldController;
     private WorldRenderer worldRenderer;
@@ -44,6 +46,10 @@ public class WorldScreen extends AbstractGameScreen {
         worldController = new WorldController();
         worldRenderer = new WorldRenderer(worldController);
         worldGui = new WorldGui(worldController);
+
+        GamePreferences.instance.addListener(this);
+        applyControlSetting(GamePreferences.instance);
+        applyMusicSetting(GamePreferences.instance);
     }
 
     @Override
@@ -57,8 +63,7 @@ public class WorldScreen extends AbstractGameScreen {
 
             worldGui.update(deltaTime);
             worldGui.render();
-        }
-        else if (ready) {
+        } else if (ready) {
             pause = false;
         }
     }
@@ -73,6 +78,7 @@ public class WorldScreen extends AbstractGameScreen {
     public void hide() {
         worldRenderer.dispose();
         worldGui.dispose();
+        GamePreferences.instance.removeListener(this);
     }
 
     @Override
@@ -85,4 +91,27 @@ public class WorldScreen extends AbstractGameScreen {
     public void resume() {
         ready = true;
     }
+
+    @Override
+    public void onGamePreferencesChange(GamePreferences gamePreferences) {
+        applyControlSetting(gamePreferences);
+        applyMusicSetting(gamePreferences);
+        worldGui.initTutorialText(gamePreferences);
+    }
+
+    private void applyControlSetting(GamePreferences gamePreferences) {
+        if (gamePreferences.controlPlayer)
+            worldController.cameraHelper.setTarget(worldController.controlledPlayer);
+        else
+            worldController.cameraHelper.setTarget(null);
+    }
+
+    private void applyMusicSetting(GamePreferences gamePreferences) {
+        if (gamePreferences.music)
+            worldController.level.music.play();
+        else
+            worldController.level.music.stop();
+    }
+
+
 }

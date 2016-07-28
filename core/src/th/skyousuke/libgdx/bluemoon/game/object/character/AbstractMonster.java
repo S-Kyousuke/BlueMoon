@@ -20,6 +20,7 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.ai.steer.behaviors.Arrive;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -30,8 +31,8 @@ public abstract class AbstractMonster extends AbstractCharacter implements Teleg
 
     private final Arrive<Vector2> arriveSteeringBehavior;
 
-    public AbstractMonster(TextureAtlas atlas) {
-        super(atlas);
+    public AbstractMonster(TextureAtlas atlas, TiledMapTileLayer tileLayer) {
+        super(atlas, tileLayer);
         arriveSteeringBehavior = new Arrive<>(this)
                 .setTimeToTarget(0.1f)
                 .setArrivalTolerance(0.001f)
