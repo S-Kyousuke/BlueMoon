@@ -79,7 +79,7 @@ public class StatusWindow extends Window {
 
         effectTable = new Table();
         effectTable.align(Align.top);
-        effectPane = new ScrollPane(effectTable, Assets.instance.customSkin);
+        effectPane = new ScrollPane(effectTable, Assets.instance.customSkin, "dimBackground");
         effectPaneLabel = LabelPool.obtainLabel();
         effectPane.setFadeScrollBars(false);
         effectPane.setForceScroll(false, true);

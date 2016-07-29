@@ -109,7 +109,8 @@ public class AttributeWindow extends Window {
             derivedAttributeTable.add(attributeNumberLabel).align(Align.right).padRight(10f);
         }
 
-        ScrollPane derivedAttributePane = new ScrollPane(derivedAttributeTable, Assets.instance.customSkin);
+        ScrollPane derivedAttributePane =
+                new ScrollPane(derivedAttributeTable, Assets.instance.customSkin, "dimBackground");
         derivedAttributePane.setFadeScrollBars(false);
         derivedAttributePane.setForceScroll(false, true);
         derivedAttributePane.addListener(new FocusScrollListener(derivedAttributePane));

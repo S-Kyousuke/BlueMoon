@@ -107,11 +107,12 @@ public class WorldScreen extends AbstractGameScreen implements GamePreferencesLi
     }
 
     private void applyMusicSetting(GamePreferences gamePreferences) {
-        if (gamePreferences.music)
+        if (gamePreferences.music) {
             worldController.level.music.play();
+        }
         else
             worldController.level.music.stop();
+        worldController.level.music.setVolume(gamePreferences.musicVolume);
     }
-
 
 }

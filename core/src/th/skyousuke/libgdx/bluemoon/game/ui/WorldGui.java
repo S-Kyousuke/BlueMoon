@@ -158,10 +158,10 @@ public class WorldGui extends InputAdapter implements Disposable,
     }
 
     private Table createMenu() {
-        toggleStatusWindowButton = new TextButton("", Assets.instance.customSkin);
-        toggleAttributeWindowButton = new TextButton("", Assets.instance.customSkin);
-        toggleInventoryWindowButton = new TextButton("", Assets.instance.customSkin);
-        toggleSettingWindowButton = new TextButton("", Assets.instance.customSkin);
+        toggleStatusWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
+        toggleAttributeWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
+        toggleInventoryWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
+        toggleSettingWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
 
         Table menu = new Table();
         menu.row();
@@ -290,10 +290,10 @@ public class WorldGui extends InputAdapter implements Disposable,
 
     private Table createTutorialBox() {
         tutorialText = LabelPool.obtainLabel();
-        Table table = new Table();
-        table.setBackground(Assets.instance.customSkin.getDrawable("dimGrayDraw"));
-        table.add(tutorialText).padLeft(10f).padRight(10f);
-        return table;
+        Table textBox = new Table();
+        textBox.setBackground(Assets.instance.customSkin.getDrawable("dimDarkGrayDraw"));
+        textBox.add(tutorialText).padLeft(10f).padRight(10f);
+        return textBox;
     }
 
 }

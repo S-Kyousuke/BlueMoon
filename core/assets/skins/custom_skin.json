@@ -5,35 +5,47 @@
     }
   },
   "com.badlogic.gdx.graphics.Color": {
-    "green": {
-      "a": 1,
-      "b": 0,
-      "g": 1,
-      "r": 0
-    },
-    "white": {
-      "a": 1,
-      "b": 1,
-      "g": 1,
-      "r": 1
-    },
-    "red": {
-      "a": 1,
-      "b": 0,
-      "g": 0,
-      "r": 1
-    },
-    "black": {
-      "a": 1,
-      "b": 0,
-      "g": 0,
-      "r": 0
+    "white":  {
+      "r": 1,
+      "g": 1,      
+      "b": 1,     
+      "a": 1
     },
     "darkRed": {
-      "r": 0.68,
-      "g": 0.25,
-      "b": 0.25,
+      "r": 0.627,
+      "g": 0.173,      
+      "b": 0.173,     
       "a": 1
+    },
+    "gray": {
+      "r": 0.204,
+      "g": 0.204,      
+      "b": 0.204,     
+      "a": 1
+    },
+    "dimGray": {
+      "r": 0.204,
+      "g": 0.204,      
+      "b": 0.204,     
+      "a": 0.4
+    },
+    "darkGray": {
+      "r": 0.102,
+      "g": 0.102,      
+      "b": 0.102,     
+      "a": 1
+    },
+    "dimDarkGray": {
+      "r": 0.102,
+      "g": 0.102,      
+      "b": 0.102,     
+      "a": 0.4
+    },
+    "dimWhite": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.2
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
@@ -43,48 +55,23 @@
     },
     "grayDraw": {
       "name": "white",
-      "color": {
-        "r": 0.50,
-        "g": 0.50,
-        "b": 0.50,
-        "a": 1
-      }
-    },
-    "darkGrayDraw": {
-      "name": "white",
-      "color": {
-        "r": 0.3,
-        "g": 0.3,
-        "b": 0.3,
-        "a": 1
-      }
-    },
-    "windowBackgroundDraw": {
-      "name": "white",
-      "color": {
-        "r": 0.25,
-        "g": 0.25,
-        "b": 0.25,
-        "a": 1
-      }
+      "color": "gray"
     },
     "dimGrayDraw": {
       "name": "white",
-      "color": {
-        "r": 0,
-        "g": 0,
-        "b": 0,
-        "a": 0.3
-      }
+      "color": "dimGray"
+    },
+    "darkGrayDraw": {
+      "name": "white",
+      "color": "darkGray"
+    },
+    "dimDarkGrayDraw": {
+      "name": "white",
+      "color": "dimDarkGray"
     },
     "dimWhiteDraw": {
       "name": "white",
-      "color": {
-        "r": 1,
-        "g": 1,
-        "b": 1,
-        "a": 0.2
-      }
+      "color": "dimWhite"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
@@ -96,43 +83,49 @@
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
       "down": "darkRedDraw",
-      "up": "grayDraw"
+      "up": "darkGrayDraw"
     },
     "toggle": {
       "down": "darkRedDraw",
       "checked": "darkRedDraw",
-      "up": "grayDraw"
+      "up": "darkGrayDraw"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
     "default": {
       "down": "darkRedDraw",
-      "up": "dimGrayDraw",
+      "up": "darkGrayDraw",
       "font": "thai-font",
       "fontColor": "white"
     },
     "toggle": {
       "down": "darkRedDraw",
-      "up": "grayDraw",
+      "up": "darkGrayDraw",
       "checked": "darkRedDraw",
       "font": "thai-font",
       "fontColor": "white",
-      "downFontColor": "red"
+      "downFontColor": "white"
+    },
+    "menu": {
+      "down": "darkRedDraw",
+      "up": "dimDarkGrayDraw",      
+      "font": "thai-font",
+      "fontColor": "white"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
     "default": {
-      "up": "grayDraw",
+      "up": "darkGrayDraw",
       "down": "darkRedDraw"
     },
     "plus": {
       "imageUp": "plus",
-      "up": "grayDraw",
+      "up": "darkGrayDraw",
       "down": "darkRedDraw"
     },
     "minus": {
       "imageUp": "minus",
-      "up": "grayDraw",
+      "up": "darkGrayDraw",
       "down": "darkRedDraw"
     }
   },
@@ -143,23 +136,76 @@
   },
   "th.skyousuke.libgdx.bluemoon.game.ui.Window$WindowStyle": {
     "default": {
-      "background": "window"
+      "background": "window_bg"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
-    "default": {
-      "vScroll": "scroll",
+    "default": {      
+      "background": "grayDraw",
+      "vScroll": "scroll_bg",      
+      "hScroll": "scroll_bg",
       "hScrollKnob": "scroll_knob",
-      "background": "windowBackgroundDraw",
-      "hScroll": "scroll",
+      "vScrollKnob": "scroll_knob"
+    },
+    "dimBackground": {
+      "background": "dimGrayDraw",
+      "vScroll": "scroll_bg",      
+      "hScroll": "scroll_bg",
+      "hScrollKnob": "scroll_knob",
       "vScrollKnob": "scroll_knob"
     },
     "noBackground": {
-      "vScroll": "scroll",
+      "vScroll": "scroll_bg",      
+      "hScroll": "scroll_bg",
       "hScrollKnob": "scroll_knob",
-      "hScroll": "scroll",
       "vScrollKnob": "scroll_knob"
     }
-
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+    "default-horizontal": { 
+      "background": "slider_bg", 
+      "knob": "slider_knob" 
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+    "default": { 
+      "selection": "darkRedDraw", 
+      "background": "darkGrayDraw",
+      "font": "thai-font", 
+      "fontColor": "white",
+      "cursor": "white" 
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+	  "default": { 
+      "checkboxOn": "check_on", 
+      "checkboxOff": "check_off", 
+      "font": "thai-font", 
+      "fontColor": "white"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
+    "default": {       
+      "font": "thai-font" ,
+      "fontColorUnselected": "white",
+      "fontColorSelected": "white",
+      "selection": "darkRedDraw"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle": {
+    "default": {       
+      "plus": "tree_plus", 
+      "minus": "tree_minus", 
+      "selection": "darkRedDraw" 
+    }
+  },  
+  "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
+    "default": {   
+      "font": "thai-font",
+      "fontColor": "white",   
+      "background": "select_bg",
+      "scrollStyle": "default",
+		  "listStyle": "default"
+    }
   }
 }
