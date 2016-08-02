@@ -81,7 +81,12 @@ public class SettingWindow extends Window {
 
         updateLabel();
         pack();
-        //setWidth(300f);
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        if (visible) readSettings();
+        super.setVisible(visible);
     }
 
     public void readSettings() {
