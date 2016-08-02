@@ -50,30 +50,33 @@ public class CharacterStatus {
     }
 
     public void setValue(CharacterStatusType statusType, float value) {
-        float oldValue = getValue(statusType);
-        float maxValue = 0f;
-        switch (statusType) {
-            case HEALTH:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
-                break;
-            case MANA:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_MANA);
-                break;
-            case STAMINA:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_STAMINA);
-                break;
-            case FULLNESS:
-                maxValue = characterAttribute.getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
-                break;
-        }
-        status.put(statusType, MathUtils.clamp(value, 0, maxValue));
-        for (AttributeAndStatusListener listener : listeners) {
-            listener.onStatusChange(statusType, oldValue, getValue(statusType));
+        final float oldValue = getValue(statusType);
+        status.put(statusType, MathUtils.clamp(value, 0, getMaxValue(statusType)));
+        final float newValue = getValue(statusType);
+        if (oldValue != newValue) {
+            for (AttributeAndStatusListener listener : listeners) {
+                listener.onStatusChange(statusType, oldValue, newValue);
+            }
         }
     }
 
     public float getValue(CharacterStatusType statusType) {
         return status.get(statusType);
+    }
+
+    public float getMaxValue(CharacterStatusType statusType) {
+        switch (statusType) {
+            case HEALTH:
+                return characterAttribute.getDerived(CharacterDerivedAttribute.MAX_HEALTH);
+            case MANA:
+                return characterAttribute.getDerived(CharacterDerivedAttribute.MAX_MANA);
+            case STAMINA:
+                return characterAttribute.getDerived(CharacterDerivedAttribute.MAX_STAMINA);
+            case FULLNESS:
+                return characterAttribute.getDerived(CharacterDerivedAttribute.MAX_FULLNESS);
+            default:
+                return 0;
+        }
     }
 
     public void addValue(CharacterStatusType statusType, float value) {

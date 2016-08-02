@@ -6,6 +6,6 @@ package th.skyousuke.libgdx.bluemoon.framework;
  */
 public interface GamePreferencesListener {
 
-    void onGamePreferencesChange(GamePreferences gamePreferences);
+    void onGamePreferencesChange();
 
 }

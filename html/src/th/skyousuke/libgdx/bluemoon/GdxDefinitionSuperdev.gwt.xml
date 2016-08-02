@@ -14,5 +14,4 @@
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
     <extend-configuration-property name="gdx.reflect.include" value="th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow.InventoryWindowStyle" />
     <extend-configuration-property name="gdx.reflect.include" value="th.skyousuke.libgdx.bluemoon.game.ui.Window.WindowStyle" />
-
 </module>

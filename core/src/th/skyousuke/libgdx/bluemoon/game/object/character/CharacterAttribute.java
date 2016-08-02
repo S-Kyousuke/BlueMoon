@@ -56,7 +56,6 @@ public class CharacterAttribute {
         int agility = getPrimary(CharacterPrimaryAttribute.AGILITY);
         int intelligence = getPrimary(CharacterPrimaryAttribute.INTELLIGENCE);
         int vitality = getPrimary(CharacterPrimaryAttribute.VITALITY);
-        int charisma = getPrimary(CharacterPrimaryAttribute.CHARISMA);
         int luck = getPrimary(CharacterPrimaryAttribute.LUCK);
         int survival = getPrimary(CharacterPrimaryAttribute.SURVIVAL);
 
@@ -122,12 +121,6 @@ public class CharacterAttribute {
 
         setBaseDerivedAttribute(CharacterDerivedAttribute.EVENT_CHANCE,
                 1 + (4.0408f * (luck - 1)) / (100f + luck - 1));
-
-        setBaseDerivedAttribute(CharacterDerivedAttribute.FRIENDSHIP,
-                1 + (8.081f * (charisma - 1)) / (100f + charisma - 1));
-
-        setBaseDerivedAttribute(CharacterDerivedAttribute.SHOPPING_PRICE,
-                1 - (2.02449f * (charisma - 1)) / (150f + charisma - 1));
     }
 
     public void setBaseDerivedAttribute(CharacterDerivedAttribute derivedAttribute, float value) {

@@ -17,21 +17,15 @@
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import th.skyousuke.libgdx.bluemoon.BlueMoon;
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageListener;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
@@ -59,16 +53,12 @@ public class WorldGui extends InputAdapter implements Disposable,
     private StatusWindow statusWindow;
     private AttributeWindow attributeWindow;
     private InventoryWindow inventoryWindow;
-    private TimeWindow timeWindow;
     private SettingWindow settingWindow;
+    private HelpWindow helpWindow;
 
-    private TextButton toggleAttributeWindowButton;
-    private TextButton toggleInventoryWindowButton;
-    private TextButton toggleStatusWindowButton;
-    private TextButton toggleSettingWindowButton;
-
-    private Label tutorialText;
-    private Table tutorialBox;
+    private TimeHud timeHud;
+    private MenuHud menuHud;
+    private CharacterHud characterHud;
 
     private AbstractPlayer player;
 
@@ -80,102 +70,73 @@ public class WorldGui extends InputAdapter implements Disposable,
         statusWindow = new StatusWindow(Assets.instance.customSkin);
         attributeWindow = new AttributeWindow(Assets.instance.customSkin);
         inventoryWindow = new InventoryWindow(Assets.instance.customSkin);
-        timeWindow = new TimeWindow(Assets.instance.customSkin);
+        timeHud = new TimeHud(Assets.instance.customSkin);
         settingWindow = new SettingWindow(Assets.instance.customSkin);
-        tutorialBox = createTutorialBox();
-        Table menu = createMenu();
+        helpWindow = new HelpWindow(Assets.instance.customSkin);
+
         FpsLabel fpsLabel = new FpsLabel(LabelPool.obtainLabel());
 
+        characterHud = new CharacterHud();
+        characterHud.setPosition(0, stage.getHeight() - characterHud.getHeight());
+
+        menuHud = new MenuHud();
+        menuHud.setPosition(stage.getWidth() - menuHud.getWidth(), 0);
+        menuHud.setCharacterWindow(attributeWindow);
+        menuHud.setInventoryWindow(inventoryWindow);
+        menuHud.setSettingWindow(settingWindow);
+        menuHud.setHelpWindow(helpWindow);
+
         initGuiContent();
-        hideMovableWindow();
+        hideWindow();
 
         statusWindow.setY(40);
         attributeWindow.setPosition(BlueMoon.SCENE_WIDTH - attributeWindow.getWidth(), 0);
         inventoryWindow.setPosition(BlueMoon.SCENE_WIDTH / 2 - inventoryWindow.getWidth() / 2, 0);
-        timeWindow.setPosition(
-                BlueMoon.SCENE_WIDTH - timeWindow.getWidth(),
-                BlueMoon.SCENE_HEIGHT - timeWindow.getHeight());
+        timeHud.setPosition(
+                BlueMoon.SCENE_WIDTH - timeHud.getWidth(),
+                BlueMoon.SCENE_HEIGHT - timeHud.getHeight());
         settingWindow.setPosition(0, 330);
         fpsLabel.setX(5);
 
         listenToPlayer();
-        listenToMenu();
         worldController.addListener(this);
         LanguageManager.instance.addListener(this);
 
         stage.addActor(statusWindow);
         stage.addActor(attributeWindow);
-        stage.addActor(timeWindow);
+        stage.addActor(timeHud);
         stage.addActor(inventoryWindow);
         stage.addActor(inventoryWindow);
         stage.addActor(settingWindow);
-        stage.addActor(menu);
         stage.addActor(fpsLabel);
-        stage.addActor(tutorialBox);
+        stage.addActor(helpWindow);
+        stage.addActor(menuHud);
+        stage.addActor(characterHud);
+        //stage.setDebugAll(true);
 
         multiplexer = (InputMultiplexer) (Gdx.input.getInputProcessor());
         multiplexer.addProcessor(stage);
     }
 
-    private void hideMovableWindow() {
+    private void hideWindow() {
         statusWindow.setVisible(false);
         attributeWindow.setVisible(false);
         inventoryWindow.setVisible(false);
         settingWindow.setVisible(false);
-    }
-
-    private void listenToMenu() {
-        toggleStatusWindowButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                toggleVisibleAndSetToFront(statusWindow);
-            }
-        });
-        toggleAttributeWindowButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                toggleVisibleAndSetToFront(attributeWindow);
-            }
-        });
-        toggleInventoryWindowButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                toggleVisibleAndSetToFront(inventoryWindow);
-            }
-        });
-        toggleSettingWindowButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                toggleVisibleAndSetToFront(settingWindow);
-                settingWindow.readSettings();
-            }
-        });
-    }
-
-    private void toggleVisibleAndSetToFront(Actor actor) {
-        actor.setVisible(!actor.isVisible());
-        actor.toFront();
-    }
-
-    private Table createMenu() {
-        toggleStatusWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
-        toggleAttributeWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
-        toggleInventoryWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
-        toggleSettingWindowButton = new TextButton("", Assets.instance.customSkin, "menu");
-
-        Table menu = new Table();
-        menu.row();
-        menu.add(toggleStatusWindowButton).width(60).height(30);
-        menu.add(toggleAttributeWindowButton).padLeft(10f).width(80).height(30);
-        menu.add(toggleInventoryWindowButton).padLeft(10f).width(80).height(30);
-        menu.add(toggleSettingWindowButton).padLeft(10f).width(70).height(30);
-        menu.pack();
-        menu.setPosition(0, BlueMoon.SCENE_HEIGHT - menu.getHeight());
-        return menu;
+        helpWindow.setVisible(false);
     }
 
     public void update(float deltaTime) {
         stage.act(deltaTime);
+
+        // TODO: For debugging only.
+        if (Gdx.input.isKeyJustPressed(Keys.F7)) {
+            statusWindow.setVisible(!statusWindow.isVisible());
+        }
+        if (Gdx.input.isKeyJustPressed(Keys.F8)) {
+            attributeWindow.setVisible(!attributeWindow.isVisible());
+        }
+
     }
 
     public void render() {
@@ -224,43 +185,28 @@ public class WorldGui extends InputAdapter implements Disposable,
 
     private void initPlayerContent() {
         statusWindow.setCharacter(player);
+        characterHud.setCharacter(player);
         attributeWindow.setCharacter(player);
         inventoryWindow.setCharacter(player);
-    }
-
-    private void initMenuLabel() {
-        toggleStatusWindowButton.setText(LanguageManager.instance.getText("statusLabel"));
-        toggleAttributeWindowButton.setText(LanguageManager.instance.getText("attributeLabel"));
-        toggleInventoryWindowButton.setText(LanguageManager.instance.getText("inventoryLabel"));
-        toggleSettingWindowButton.setText(LanguageManager.instance.getText("settingLabel"));
-    }
-
-    public void initTutorialText(GamePreferences gamePreferences) {
-        if (gamePreferences.controlPlayer)
-            tutorialText.setText(LanguageManager.instance.getText("playerTutorial"));
-        else
-            tutorialText.setText(LanguageManager.instance.getText("cameraTutorial"));
-        tutorialBox.pack();
-        tutorialBox.setPosition(
-                BlueMoon.SCENE_WIDTH / 2 - tutorialBox.getWidth() / 2,
-                BlueMoon.SCENE_HEIGHT - tutorialBox.getHeight());
     }
 
     private void initGuiContent() {
         statusWindow.initContent();
         attributeWindow.initContent();
         inventoryWindow.initContent();
-        timeWindow.initContent();
+        timeHud.initContent();
         settingWindow.initContent();
-
-        initMenuLabel();
+        initHelpWindow();
         initPlayerContent();
-        initTutorialText(GamePreferences.instance);
+    }
+
+    public void initHelpWindow() {
+        helpWindow.initContent();
     }
 
     @Override
     public void onTimeChange(WorldTime time) {
-        timeWindow.setTime(time);
+        timeHud.setTime(time);
     }
 
     @Override
@@ -276,24 +222,18 @@ public class WorldGui extends InputAdapter implements Disposable,
     @Override
     public void onStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
         statusWindow.updateStatus(statusType);
+        characterHud.updateStatus(statusType);
     }
 
     @Override
     public void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
         statusWindow.updateStatus(statusType);
+        characterHud.updateStatus(statusType);
     }
 
     @Override
     public void onLanguageChange(int currentLanguage) {
         initGuiContent();
-    }
-
-    private Table createTutorialBox() {
-        tutorialText = LabelPool.obtainLabel();
-        Table textBox = new Table();
-        textBox.setBackground(Assets.instance.customSkin.getDrawable("dimDarkGrayDraw"));
-        textBox.add(tutorialText).padLeft(10f).padRight(10f);
-        return textBox;
     }
 
 }

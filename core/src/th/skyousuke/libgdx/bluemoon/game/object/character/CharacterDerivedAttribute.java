@@ -42,6 +42,4 @@ public enum CharacterDerivedAttribute {
     ITEM_CHANCE,
     UPGRADE_CHANCE,
     EVENT_CHANCE,
-    FRIENDSHIP,
-    SHOPPING_PRICE
 }

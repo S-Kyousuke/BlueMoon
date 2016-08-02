@@ -25,7 +25,6 @@ public enum CharacterPrimaryAttribute {
     AGILITY,
     VITALITY,
     INTELLIGENCE,
-    CHARISMA,
     LUCK,
     SURVIVAL
 }

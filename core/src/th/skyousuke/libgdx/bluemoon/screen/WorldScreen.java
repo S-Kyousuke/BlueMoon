@@ -48,8 +48,8 @@ public class WorldScreen extends AbstractGameScreen implements GamePreferencesLi
         worldGui = new WorldGui(worldController);
 
         GamePreferences.instance.addListener(this);
-        applyControlSetting(GamePreferences.instance);
-        applyMusicSetting(GamePreferences.instance);
+        applyControlSetting();
+        applyMusicSetting();
     }
 
     @Override
@@ -93,26 +93,27 @@ public class WorldScreen extends AbstractGameScreen implements GamePreferencesLi
     }
 
     @Override
-    public void onGamePreferencesChange(GamePreferences gamePreferences) {
-        applyControlSetting(gamePreferences);
-        applyMusicSetting(gamePreferences);
-        worldGui.initTutorialText(gamePreferences);
+    public void onGamePreferencesChange( ) {
+        applyControlSetting();
+        applyMusicSetting();
+        worldGui.initHelpWindow();
     }
 
-    private void applyControlSetting(GamePreferences gamePreferences) {
-        if (gamePreferences.controlPlayer)
+    private void applyControlSetting( ) {
+        if (GamePreferences.instance.controlPlayer)
             worldController.cameraHelper.setTarget(worldController.controlledPlayer);
         else
             worldController.cameraHelper.setTarget(null);
     }
 
-    private void applyMusicSetting(GamePreferences gamePreferences) {
-        if (gamePreferences.music) {
+    private void applyMusicSetting( ) {
+        GamePreferences preferences = GamePreferences.instance;
+        if (preferences.music) {
             worldController.level.music.play();
         }
         else
             worldController.level.music.stop();
-        worldController.level.music.setVolume(gamePreferences.musicVolume);
+        worldController.level.music.setVolume(preferences.musicVolume);
     }
 
 }

@@ -43,6 +43,9 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
     private CharacterEffect effect;
     private Inventory inventory;
 
+    private int level;
+    private float experience;
+
     protected AbstractCharacter(TextureAtlas atlas, TiledMapTileLayer tileLayer) {
         super(atlas, true);
         collisionCheck = new TiledCollisionCheck(this, tileLayer, "blocked");
@@ -51,6 +54,8 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
         status = new CharacterStatus(attribute);
         effect = new CharacterEffect(this);
         inventory = new Inventory();
+        level = 1;
+        experience = 0;
 
         status.addListener(this);
         attribute.addListener(this);
@@ -170,12 +175,10 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
 
     @Override
     public void onMaxStatusChange(CharacterStatusType statusType, float oldValue, float newValue) {
-
     }
 
     @Override
     public void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue) {
-
     }
 
     @Override
@@ -196,6 +199,26 @@ public abstract class AbstractCharacter extends AbstractSteeringAnimatedObject i
             else if (angle > 45) viewDirection = Direction.UP;
             else viewDirection = Direction.RIGHT;
         }
+    }
+
+    public float getExperience() {
+        return experience;
+    }
+
+    public void setExperience(float experience) {
+        this.experience = experience;
+    }
+
+    public float getExperienceNeedToReachNextLevel() {
+        return 100f; //TODO
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
 }

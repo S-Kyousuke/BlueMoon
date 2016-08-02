@@ -5,6 +5,12 @@
     }
   },
   "com.badlogic.gdx.graphics.Color": {
+    "uiBackground": {
+      "r": 0.141,
+      "g": 0.11,
+      "b": 0.11,
+      "a": 1
+    },
     "white":  {
       "r": 1,
       "g": 1,      
@@ -12,9 +18,33 @@
       "a": 1
     },
     "darkRed": {
-      "r": 0.627,
-      "g": 0.173,      
-      "b": 0.173,     
+      "r": 0.667,
+      "g": 0,
+      "b": 0,
+      "a": 1
+    },
+    "darkBlue": {
+      "r": 0.129,
+      "g": 0.267,
+      "b": 0.471,
+      "a": 1
+    },
+    "darkYellow": {
+      "r": 0.667,
+      "g": 0.533,
+      "b": 0,
+      "a": 1
+    },
+    "darkOrange": {
+      "r": 0.667,
+      "g": 0.267,
+      "b": 0,
+      "a": 1
+    },
+    "emerald": {
+      "r": 0.373,
+      "g": 0.827,
+      "b": 0.373,
       "a": 1
     },
     "gray": {
@@ -49,9 +79,29 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "uiBackgroundDraw": {
+      "name": "white",
+      "color": "uiBackground"
+    },
     "darkRedDraw": {
       "name": "white",
       "color": "darkRed"
+    },
+    "darkBlueDraw": {
+      "name": "white",
+      "color": "darkBlue"
+    },
+    "darkYellowDraw": {
+      "name": "white",
+      "color": "darkYellow"
+    },
+    "darkOrangeDraw": {
+      "name": "white",
+      "color": "darkOrange"
+    },
+    "emeraldDraw": {
+      "name": "white",
+      "color": "emerald"
     },
     "grayDraw": {
       "name": "white",

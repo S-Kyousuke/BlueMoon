@@ -39,8 +39,8 @@ public class BlueMoon extends Game implements GamePreferencesListener {
 
         GamePreferences.instance.load();
         GamePreferences.instance.addListener(this);
-        setGameLanguage(GamePreferences.instance);
-        setDisplayMode(GamePreferences.instance);
+        setGameLanguage();
+        setDisplayMode();
 
         setGlobalInput();
         setScreen(new WorldScreen(this));
@@ -51,21 +51,21 @@ public class BlueMoon extends Game implements GamePreferencesListener {
         Assets.instance.dispose();
     }
 
-    private void setGameLanguage(GamePreferences gamePreferences) {
-        LanguageManager.instance.setCurrentLanguage(gamePreferences.language);
+    private void setGameLanguage() {
+        LanguageManager.instance.setCurrentLanguage(GamePreferences.instance.language);
     }
 
-    private void setDisplayMode(GamePreferences gamePreferences) {
-        if (gamePreferences.fullscreen)
+    private void setDisplayMode( ) {
+        if (GamePreferences.instance.fullscreen)
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         else
             Gdx.graphics.setWindowedMode(SCENE_WIDTH, SCENE_HEIGHT);
     }
 
     @Override
-    public void onGamePreferencesChange(GamePreferences gamePreferences) {
-        setGameLanguage(gamePreferences);
-        setDisplayMode(gamePreferences);
+    public void onGamePreferencesChange() {
+        setGameLanguage();
+        setDisplayMode();
     }
 
     private InputAdapter getDesktopInput() {

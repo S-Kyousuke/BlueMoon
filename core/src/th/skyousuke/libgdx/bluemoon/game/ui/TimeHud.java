@@ -16,10 +16,12 @@
 
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 
@@ -27,32 +29,43 @@ import th.skyousuke.libgdx.bluemoon.game.WorldTime;
  * Game time window class
  * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
-public class TimeWindow extends Window {
+public class TimeHud extends Table {
 
+    private Image timeIcon;
+    private Label dayLabel;
     private Label timeLabel;
 
     private int hours;
     private int days;
     private int minutes;
 
-    public TimeWindow(Skin skin) {
+    public TimeHud(Skin skin) {
         super(skin);
-        setMovable(false);
+
+        setBackground(Assets.instance.customSkin.getDrawable("uiBackgroundDraw"));
+        timeIcon = new Image(Assets.instance.ui.findRegion("time_icon"));
 
         timeLabel = LabelPool.obtainLabel();
-        timeLabel.setAlignment(Align.center);
-        setColor(1, 1, 1, 0.8f);
+        dayLabel = LabelPool.obtainLabel();
+
+        Table table = new Table();
+        table.row();
+        table.add(dayLabel);
+        table.row();
+        table.add(timeLabel);
+
+        padLeft(12);
+        padRight(8);
         row();
-        add(timeLabel).expand().fill().padTop(5f).padBottom(5f);
-        padLeft(10f);
-        padRight(10f);
+        add(timeIcon).padRight(5);
+        add(table).padTop(5).padBottom(5).expandX().fillX();
     }
 
     public void initContent() {
-        updateLabel();
-        setTitle(LanguageManager.instance.getText("timeWindowTitle"));
+        updateDayLabel();
+        updateTimeLabel();
         pack();
-        setWidth(85f);
+        setWidth(110);
     }
 
     public void setTime(WorldTime time) {
@@ -60,19 +73,23 @@ public class TimeWindow extends Window {
     }
 
     public void setTime(int days, int hours, int minutes) {
-        if (days != this.days || hours != this.hours || minutes != this.minutes) {
+        if (days != this.days) {
             this.days = days;
+            updateDayLabel();
+        }
+        if (hours != this.hours || minutes != this.minutes) {
             this.hours = hours;
             this.minutes = minutes;
-            updateLabel();
+            updateTimeLabel();
         }
     }
 
-    private void updateLabel() {
-        timeLabel.setText(
-                LanguageManager.instance.getFormattedText("day", days) + '\n'
-                        + ((hours < 10) ? 0 : "") + hours + ':'
-                        + ((minutes < 10) ? 0 : "") + minutes);
+    private void updateDayLabel() {
+        dayLabel.setText(LanguageManager.instance.getFormattedText("day", days));
+    }
+
+    private void updateTimeLabel() {
+        timeLabel.setText("" + ((hours < 10) ? 0 : "") + hours + ':' + ((minutes < 10) ? 0 : "") + minutes);
     }
 
 }

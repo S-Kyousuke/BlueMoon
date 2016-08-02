@@ -57,7 +57,7 @@ public class GamePreferences {
         preferences.flush();
 
         for (GamePreferencesListener listener : listeners) {
-            listener.onGamePreferencesChange(instance);
+            listener.onGamePreferencesChange();
         }
     }
 

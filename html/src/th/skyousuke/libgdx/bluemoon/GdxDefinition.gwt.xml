@@ -11,5 +11,4 @@
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />
     <extend-configuration-property name="gdx.reflect.include" value="th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow.InventoryWindowStyle" />
     <extend-configuration-property name="gdx.reflect.include" value="th.skyousuke.libgdx.bluemoon.game.ui.Window.WindowStyle" />
-
 </module>

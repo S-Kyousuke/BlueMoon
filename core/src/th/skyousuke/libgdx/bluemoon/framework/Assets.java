@@ -36,6 +36,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public static final Assets instance = new Assets();
 
+    public TextureAtlas ui;
+
     public Music music;
 
     public TextureAtlas johnAltas;
@@ -62,6 +64,8 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.setErrorListener(this);
         manager.setLoader(TiledMap.class, new TmxMapLoader());
 
+        manager.load("ui/ui.atlas", TextureAtlas.class);
+
         /* load assets here */
         manager.load("music/music.mp3", Music.class);
 
@@ -69,8 +73,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
         manager.load("maps/main.tmx", TiledMap.class);
 
-        manager.load("skins/uiskin.json", Skin.class, new SkinParameter("skins/uiskin.atlas"));
-        manager.load("skins/custom_skin.json", Skin.class, new SkinParameter("skins/custom_skin.atlas"));
+        manager.load("ui/uiskin.json", Skin.class, new SkinParameter("ui/uiskin.atlas"));
+        manager.load("ui/custom_skin.json", Skin.class, new SkinParameter("ui/custom_skin.atlas"));
 
         manager.load("i18n/strings_th_TH", I18NBundle.class, new I18NBundleParameter(new Locale("th", "TH")));
         manager.load("i18n/strings_en_US", I18NBundle.class, new I18NBundleParameter(Locale.US));
@@ -78,6 +82,8 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.finishLoading();
 
         /* get assets here */
+
+        ui = manager.get("ui/ui.atlas");
         music = manager.get("music/music.mp3");
 
         johnAltas = manager.get("characters/character.atlas");
@@ -89,8 +95,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
         mainMap = manager.get("maps/main.tmx");
 
-        skin = manager.get("skins/uiskin.json");
-        customSkin = manager.get("skins/custom_skin.json");
+        skin = manager.get("ui/uiskin.json");
+        customSkin = manager.get("ui/custom_skin.json");
 
         thaiLanguage = manager.get("i18n/strings_th_TH");
         englishLanguage = manager.get("i18n/strings_en_US");
