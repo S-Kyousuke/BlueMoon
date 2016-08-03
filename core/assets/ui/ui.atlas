@@ -3,65 +3,121 @@ ui.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-character_icon
-  rotate: false
-  xy: 1, 77
-  size: 36, 36
-  orig: 36, 36
-  offset: 0, 0
-  index: -1
-character_icon_over
+button_space
   rotate: false
   xy: 1, 39
-  size: 36, 36
-  orig: 36, 36
+  size: 52, 24
+  orig: 52, 24
   offset: 0, 0
   index: -1
-help_icon
-  rotate: false
-  xy: 39, 77
-  size: 36, 36
-  orig: 36, 36
-  offset: 0, 0
-  index: -1
-help_icon_over
+character_icon
   rotate: false
   xy: 1, 1
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
-inventory_icon
-  rotate: false
-  xy: 39, 39
-  size: 36, 36
-  orig: 36, 36
-  offset: 0, 0
-  index: -1
-inventory_icon_over
-  rotate: false
-  xy: 77, 77
-  size: 36, 36
-  orig: 36, 36
-  offset: 0, 0
-  index: -1
-setting_icon
+character_icon_over
   rotate: false
   xy: 39, 1
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
+button_c
+  rotate: false
+  xy: 55, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+help_icon
+  rotate: false
+  xy: 77, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+button_down
+  rotate: false
+  xy: 81, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+button_left
+  rotate: false
+  xy: 107, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+help_icon_over
+  rotate: false
+  xy: 115, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+button_right
+  rotate: false
+  xy: 133, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+inventory_icon
+  rotate: false
+  xy: 153, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+button_up
+  rotate: false
+  xy: 159, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+button_x
+  rotate: false
+  xy: 185, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+inventory_icon_over
+  rotate: false
+  xy: 191, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+button_z
+  rotate: false
+  xy: 211, 39
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+setting_icon
+  rotate: false
+  xy: 229, 1
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
 setting_icon_over
   rotate: false
-  xy: 77, 39
+  xy: 267, 27
   size: 36, 36
   orig: 36, 36
   offset: 0, 0
   index: -1
 time_icon
   rotate: false
-  xy: 77, 7
+  xy: 305, 33
   size: 30, 30
   orig: 30, 30
   offset: 0, 0

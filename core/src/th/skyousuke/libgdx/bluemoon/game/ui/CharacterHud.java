@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
-import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.NumberFormat;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatus;
@@ -55,8 +54,7 @@ public class CharacterHud extends Table {
 
     private AbstractCharacter character;
 
-    public CharacterHud() {
-        final Skin skin = Assets.instance.customSkin;
+    public CharacterHud(Skin skin) {
         final Drawable background = skin.getDrawable("uiBackgroundDraw");
 
         nameLabel = LabelPool.obtainLabel();
@@ -69,10 +67,10 @@ public class CharacterHud extends Table {
         staminaBar = new StatusBar(BAR_WIDTH, BAR_HEIGHT, background, skin.getDrawable("darkYellowDraw"));
         fullnessBar = new StatusBar(BAR_WIDTH, BAR_HEIGHT, background, skin.getDrawable("darkOrangeDraw"));
 
-        initHud();
+        init();
     }
 
-    private void initHud() {
+    private void init() {
         add(createLeftSection());
         add(createRightSection());
         pack();

@@ -1,14 +1,14 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-    "thai-font": {
+    "thaiFont": {
       "file": "thai_24.fnt"
     }
   },
   "com.badlogic.gdx.graphics.Color": {
     "uiBackground": {
-      "r": 0.141,
-      "g": 0.11,
-      "b": 0.11,
+      "r": 0.102,
+      "g": 0.102,
+      "b": 0.102,
       "a": 1
     },
     "white":  {
@@ -71,11 +71,17 @@
       "b": 0.102,     
       "a": 0.4
     },
+    "dimDarkRed": {
+      "r": 0.667,
+      "g": 0,
+      "b": 0,
+      "a": 0.8
+    },
     "dimWhite": {
       "r": 1,
       "g": 1,
       "b": 1,
-      "a": 0.2
+      "a": 0.118
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
@@ -119,6 +125,10 @@
       "name": "white",
       "color": "dimDarkGray"
     },
+    "dimDarkRedDraw": {
+      "name": "white",
+      "color": "dimDarkRed"
+    },
     "dimWhiteDraw": {
       "name": "white",
       "color": "dimWhite"
@@ -126,57 +136,57 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": {
-      "font": "thai-font",
+      "font": "thaiFont",
       "fontColor": "white"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "default": {
-      "down": "darkRedDraw",
-      "up": "darkGrayDraw"
+      "down": "dimDarkRedDraw",
+      "up": "dimWhiteDraw"
     },
     "toggle": {
-      "down": "darkRedDraw",
-      "checked": "darkRedDraw",
-      "up": "darkGrayDraw"
+      "down": "dimDarkRedDraw",
+      "checked": "dimDarkRedDraw",
+      "up": "dimWhiteDraw"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
     "default": {
-      "down": "darkRedDraw",
-      "up": "darkGrayDraw",
-      "font": "thai-font",
+      "down": "dimDarkRedDraw",
+      "up": "dimWhiteDraw",
+      "font": "thaiFont",
       "fontColor": "white"
     },
     "toggle": {
-      "down": "darkRedDraw",
-      "up": "darkGrayDraw",
-      "checked": "darkRedDraw",
-      "font": "thai-font",
+      "down": "dimDarkRedDraw",
+      "up": "dimWhiteDraw",
+      "checked": "dimDarkRedDraw",
+      "font": "thaiFont",
       "fontColor": "white",
       "downFontColor": "white"
     },
     "menu": {
-      "down": "darkRedDraw",
-      "up": "dimDarkGrayDraw",      
-      "font": "thai-font",
+      "down": "dimDarkRedDraw",
+      "up": "dimWhiteDraw",
+      "font": "thaiFont",
       "fontColor": "white"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
     "default": {
-      "up": "darkGrayDraw",
-      "down": "darkRedDraw"
+      "up": "dimWhiteDraw",
+      "down": "dimDarkRedDraw"
     },
     "plus": {
       "imageUp": "plus",
-      "up": "darkGrayDraw",
-      "down": "darkRedDraw"
+      "up": "dimWhiteDraw",
+      "down": "dimDarkRedDraw"
     },
     "minus": {
       "imageUp": "minus",
-      "up": "darkGrayDraw",
-      "down": "darkRedDraw"
+      "up": "dimWhiteDraw",
+      "down": "dimDarkRedDraw"
     }
   },
   "th.skyousuke.libgdx.bluemoon.game.ui.InventoryWindow$InventoryWindowStyle": {
@@ -187,6 +197,9 @@
   "th.skyousuke.libgdx.bluemoon.game.ui.Window$WindowStyle": {
     "default": {
       "background": "window_bg"
+    },
+    "noTitle": {
+      "background": "uiBackgroundDraw"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
@@ -219,9 +232,9 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
     "default": { 
-      "selection": "darkRedDraw", 
+      "selection": "dimDarkRedDraw",
       "background": "darkGrayDraw",
-      "font": "thai-font", 
+      "font": "thaiFont", 
       "fontColor": "white",
       "cursor": "white" 
     }
@@ -230,28 +243,28 @@
 	  "default": { 
       "checkboxOn": "check_on", 
       "checkboxOff": "check_off", 
-      "font": "thai-font", 
+      "font": "thaiFont", 
       "fontColor": "white"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
     "default": {       
-      "font": "thai-font" ,
+      "font": "thaiFont" ,
       "fontColorUnselected": "white",
       "fontColorSelected": "white",
-      "selection": "darkRedDraw"
+      "selection": "dimDarkRedDraw"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle": {
     "default": {       
       "plus": "tree_plus", 
       "minus": "tree_minus", 
-      "selection": "darkRedDraw" 
+      "selection": "dimDarkRedDraw"
     }
   },  
   "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
     "default": {   
-      "font": "thai-font",
+      "font": "thaiFont",
       "fontColor": "white",   
       "background": "select_bg",
       "scrollStyle": "default",

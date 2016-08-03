@@ -14,19 +14,30 @@
  * limitations under the License.
  */
 
-package th.skyousuke.libgdx.bluemoon.desktop;
+package th.skyousuke.libgdx.bluemoon.framework;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+/**
+ * Language enum.
+ * Created by S. Kyousuke <surasek@gmail.com> on 9/8/2559.
+ */
+public enum Language {
+    ENGLISH,
+    THAI;
 
-import th.skyousuke.libgdx.bluemoon.BlueMoon;
+    public static final Language[] values = Language.values();
 
-public class DesktopLauncher {
-    public static void main(String[] arg) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.resizable = false;
-        config.width = BlueMoon.SCENE_WIDTH;
-        config.height = BlueMoon.SCENE_HEIGHT;
-        new LwjglApplication(new BlueMoon(), config);
+    public static Language getValue(int ordinal) {
+        return values[ordinal];
+    }
+
+    public String toString() {
+        switch (this) {
+            case ENGLISH:
+                return I18NManager.instance.getText("english");
+            case THAI:
+                return I18NManager.instance.getText("thai");
+            default:
+                return null;
+        }
     }
 }

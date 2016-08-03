@@ -24,7 +24,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractVillager;
 public class Villager1 extends AbstractVillager {
 
     public Villager1(TiledMapTileLayer tileLayer) {
-        super(Assets.instance.villager1Altas, tileLayer);
+        super(Assets.instance.villager1Atlas, tileLayer);
     }
 
     @Override

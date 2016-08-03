@@ -23,6 +23,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.I18NBundleLoader.I18NBundleParameter;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -39,12 +40,13 @@ public class Assets implements Disposable, AssetErrorListener {
     public TextureAtlas ui;
 
     public Music music;
+    public Sound buttonSound;
 
-    public TextureAtlas johnAltas;
-    public TextureAtlas janeAltas;
+    public TextureAtlas johnAtlas;
+    public TextureAtlas janeAtlas;
 
-    public TextureAtlas villager1Altas;
-    public TextureAtlas slimeAltas;
+    public TextureAtlas villager1Atlas;
+    public TextureAtlas slimeAtlas;
 
     public TiledMap mainMap;
 
@@ -68,6 +70,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
         /* load assets here */
         manager.load("music/music.mp3", Music.class);
+        manager.load("sounds/button.mp3", Sound.class);
 
         manager.load("characters/character.atlas", TextureAtlas.class);
 
@@ -85,13 +88,14 @@ public class Assets implements Disposable, AssetErrorListener {
 
         ui = manager.get("ui/ui.atlas");
         music = manager.get("music/music.mp3");
+        buttonSound = manager.get("sounds/button.mp3");
 
-        johnAltas = manager.get("characters/character.atlas");
-        janeAltas = manager.get("characters/character.atlas");
+        johnAtlas = manager.get("characters/character.atlas");
+        janeAtlas = manager.get("characters/character.atlas");
 
-        villager1Altas = manager.get("characters/character.atlas");
+        villager1Atlas = manager.get("characters/character.atlas");
 
-        slimeAltas = manager.get("characters/character.atlas");
+        slimeAtlas = manager.get("characters/character.atlas");
 
         mainMap = manager.get("maps/main.tmx");
 

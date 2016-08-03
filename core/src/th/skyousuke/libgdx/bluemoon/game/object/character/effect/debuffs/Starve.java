@@ -16,7 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs;
 
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttribute;
@@ -120,6 +120,6 @@ public class Starve extends AbstractCharacterEffect {
 
     @Override
     public String getName() {
-        return LanguageManager.instance.getText("starve");
+        return I18NManager.instance.getText("starve");
     }
 }

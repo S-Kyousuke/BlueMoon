@@ -22,6 +22,8 @@ import com.badlogic.gdx.Screen;
 public abstract class AbstractGameScreen implements Screen {
 
     protected final Game game;
+    protected boolean pause;
+    protected boolean ready;
 
     public AbstractGameScreen(Game game) {
         this.game = game;
@@ -41,10 +43,13 @@ public abstract class AbstractGameScreen implements Screen {
 
     @Override
     public void pause() {
+        pause = true;
+        ready = false;
     }
 
     @Override
     public void resume() {
+        ready = true;
     }
 
     @Override

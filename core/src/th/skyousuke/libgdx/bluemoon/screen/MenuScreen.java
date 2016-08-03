@@ -16,50 +16,65 @@
 
 package th.skyousuke.libgdx.bluemoon.screen;
 
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class MenuScreen implements Screen {
+import th.skyousuke.libgdx.bluemoon.BlueMoon;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
+import th.skyousuke.libgdx.bluemoon.game.ui.LabelPool;
+
+public class MenuScreen extends AbstractGameScreen {
+
+    private Stage stage;
+
+    public MenuScreen(Game game) {
+        super(game);
+    }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
+        stage = new Stage(new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT));
 
+        Label label = LabelPool.obtainLabel();
+        label.setText(I18NManager.instance.getText("clickToContinue"));
+        label.pack();
+        label.setPosition(
+                stage.getWidth() / 2 - label.getWidth() / 2,
+                stage.getHeight() / 2 - label.getHeight() / 2);
+
+        stage.addActor(label);
     }
 
     @Override
     public void render(float delta) {
-        // TODO Auto-generated method stub
+        if (Gdx.input.isTouched()) {
+            game.setScreen(new WorldScreen(game));
+            return;
+        }
 
+        if (!pause) {
+            Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            stage.act(delta);
+            stage.draw();
+        } else if (ready) {
+            pause = false;
+        }
     }
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-
+        stage.getViewport().update(width, height);
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-
+        stage.dispose();
     }
 
 }

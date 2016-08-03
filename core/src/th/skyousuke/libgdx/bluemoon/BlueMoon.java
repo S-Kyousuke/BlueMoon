@@ -22,50 +22,49 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
-import th.skyousuke.libgdx.bluemoon.framework.GamePreferencesListener;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
-import th.skyousuke.libgdx.bluemoon.screen.WorldScreen;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
+import th.skyousuke.libgdx.bluemoon.framework.Language;
+import th.skyousuke.libgdx.bluemoon.framework.Resolution;
+import th.skyousuke.libgdx.bluemoon.framework.ResolutionManager;
+import th.skyousuke.libgdx.bluemoon.screen.MenuScreen;
 
-public class BlueMoon extends Game implements GamePreferencesListener {
+public class BlueMoon extends Game {
 
     public static final int SCENE_WIDTH = 1024;
     public static final int SCENE_HEIGHT = 576;
 
     @Override
     public void create() {
+        setTitle();
+
         Assets.instance.init();
 
         GamePreferences.instance.load();
-        GamePreferences.instance.addListener(this);
-        setGameLanguage();
-        setDisplayMode();
+        ResolutionManager.instance.setResolution(Resolution.getValue(GamePreferences.instance.resolution));
+        I18NManager.instance.setCurrentLanguage(Language.getValue(GamePreferences.instance.language));
 
         setGlobalInput();
-        setScreen(new WorldScreen(this));
+        setScreen(new MenuScreen(this));
+    }
+
+    private void setTitle() {
+        Properties gameProperties = new Properties();
+        try {
+            gameProperties.load(Gdx.files.internal("version.properties").read());
+        } catch (IOException e) {
+            return;
+        }
+        Gdx.graphics.setTitle("Blue Moon" + ' ' + gameProperties.getProperty("gameVersion"));
     }
 
     @Override
     public void dispose() {
         Assets.instance.dispose();
-    }
-
-    private void setGameLanguage() {
-        LanguageManager.instance.setCurrentLanguage(GamePreferences.instance.language);
-    }
-
-    private void setDisplayMode( ) {
-        if (GamePreferences.instance.fullscreen)
-            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        else
-            Gdx.graphics.setWindowedMode(SCENE_WIDTH, SCENE_HEIGHT);
-    }
-
-    @Override
-    public void onGamePreferencesChange() {
-        setGameLanguage();
-        setDisplayMode();
     }
 
     private InputAdapter getDesktopInput() {
@@ -82,29 +81,9 @@ public class BlueMoon extends Game implements GamePreferencesListener {
         };
     }
 
-    private InputAdapter getHtmlInput() {
-        return new InputAdapter() {
-            @Override
-            public boolean keyUp(int keycode) {
-                switch (keycode) {
-                    case Keys.ESCAPE:
-                        if (GamePreferences.instance.fullscreen) {
-                            GamePreferences.instance.fullscreen = false;
-                            GamePreferences.instance.save();
-                        }
-                        break;
-                }
-                return true;
-            }
-        };
-    }
-
     private void setGlobalInput() {
         final InputMultiplexer inputMultiplexer = new InputMultiplexer();
         switch (Gdx.app.getType()) {
-            case WebGL:
-                inputMultiplexer.addProcessor(getHtmlInput());
-                break;
             case Desktop:
                 inputMultiplexer.addProcessor(getDesktopInput());
                 break;

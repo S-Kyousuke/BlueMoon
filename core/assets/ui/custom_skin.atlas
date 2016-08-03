@@ -5,36 +5,36 @@ filter: Linear,Linear
 repeat: none
 thai_24
   rotate: false
-  xy: 1, 59
+  xy: 1, 55
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: 0
+select_bg
+  rotate: false
+  xy: 1, 35
+  size: 19, 18
+  split: 5, 13, 1, 1
+  orig: 19, 18
+  offset: 0, 0
+  index: -1
 scroll_bg
   rotate: false
-  xy: 1, 41
+  xy: 259, 295
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 scroll_knob
   rotate: false
-  xy: 259, 299
+  xy: 1, 17
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
-select_bg
-  rotate: false
-  xy: 1, 21
-  size: 14, 18
-  split: 1, 12, 1, 1
-  orig: 14, 18
-  offset: 0, 0
-  index: -1
 window_bg
   rotate: false
-  xy: 259, 267
+  xy: 259, 263
   size: 1, 30
   split: 0, 0, 24, 0
   orig: 1, 30
@@ -42,63 +42,63 @@ window_bg
   index: -1
 check_off
   rotate: false
-  xy: 19, 43
+  xy: 22, 39
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 check_on
   rotate: false
-  xy: 277, 301
+  xy: 277, 297
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 tree_minus
   rotate: false
-  xy: 1, 5
+  xy: 1, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 tree_plus
   rotate: false
-  xy: 35, 43
+  xy: 38, 39
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 slider_knob
   rotate: false
-  xy: 262, 281
+  xy: 262, 277
   size: 6, 16
   orig: 6, 16
   offset: 0, 0
   index: -1
 plus
   rotate: false
-  xy: 293, 307
+  xy: 293, 303
   size: 8, 8
   orig: 8, 8
   offset: 0, 0
   index: -1
 minus
   rotate: false
-  xy: 1, 1
+  xy: 22, 35
   size: 8, 2
   orig: 8, 2
   offset: 0, 0
   index: -1
 slider_bg
   rotate: false
-  xy: 51, 50
+  xy: 19, 26
   size: 2, 7
   orig: 2, 7
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 259, 264
+  xy: 259, 260
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

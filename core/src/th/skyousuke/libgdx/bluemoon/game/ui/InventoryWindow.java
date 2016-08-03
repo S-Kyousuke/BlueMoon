@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.Inventory;
 
@@ -49,10 +49,10 @@ public class InventoryWindow extends Window {
     public void setCharacter(AbstractCharacter character) {
         inventory = character.getInventory();
         update();
-        setTitle(LanguageManager.instance.getFormattedText("inventoryWindowTitle", character.getName()));
+        setTitle(I18NManager.instance.getFormattedText("inventoryWindowTitle", character.getName()));
     }
 
-    public void initContent() {
+    public void init() {
     }
 
     private void update() {
@@ -63,9 +63,9 @@ public class InventoryWindow extends Window {
                 final boolean firstColumn = (slotCount % ITEMS_PER_ROW == 0);
                 if (firstColumn) {
                     row().padTop(10f);
-                    add(new ItemSlot(style.itemSlot));
+                    add(new ItemSlot(style.itemSlot)).size(ItemSlot.SIZE);
                 } else {
-                    add(new ItemSlot(style.itemSlot)).padLeft(10f);
+                    add(new ItemSlot(style.itemSlot)).size(ItemSlot.SIZE).padLeft(10f);
                 }
                 ++slotCount;
             }
@@ -83,8 +83,6 @@ public class InventoryWindow extends Window {
 
         public ItemSlot(Drawable drawable) {
             super(drawable);
-            drawable.setMinHeight(SIZE);
-            drawable.setMinWidth(SIZE);
             setSize(SIZE, SIZE);
         }
 

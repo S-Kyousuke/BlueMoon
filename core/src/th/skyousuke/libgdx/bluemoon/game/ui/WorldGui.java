@@ -21,13 +21,15 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import th.skyousuke.libgdx.bluemoon.BlueMoon;
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
+import th.skyousuke.libgdx.bluemoon.framework.Language;
 import th.skyousuke.libgdx.bluemoon.framework.LanguageListener;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
 import th.skyousuke.libgdx.bluemoon.game.WorldListener;
 import th.skyousuke.libgdx.bluemoon.game.WorldTime;
@@ -54,7 +56,7 @@ public class WorldGui extends InputAdapter implements Disposable,
     private AttributeWindow attributeWindow;
     private InventoryWindow inventoryWindow;
     private SettingWindow settingWindow;
-    private HelpWindow helpWindow;
+    private HelpDialog helpDialog;
 
     private TimeHud timeHud;
     private MenuHud menuHud;
@@ -67,40 +69,32 @@ public class WorldGui extends InputAdapter implements Disposable,
         player = worldController.controlledPlayer;
         this.worldController = worldController;
 
-        statusWindow = new StatusWindow(Assets.instance.customSkin);
-        attributeWindow = new AttributeWindow(Assets.instance.customSkin);
-        inventoryWindow = new InventoryWindow(Assets.instance.customSkin);
-        timeHud = new TimeHud(Assets.instance.customSkin);
-        settingWindow = new SettingWindow(Assets.instance.customSkin);
-        helpWindow = new HelpWindow(Assets.instance.customSkin);
+        final Skin skin = Assets.instance.customSkin;
+        statusWindow = new StatusWindow(skin);
+        attributeWindow = new AttributeWindow(skin);
+        inventoryWindow = new InventoryWindow(skin);
+        settingWindow = new SettingWindow(skin);
+        helpDialog = new HelpDialog(skin);
+        characterHud = new CharacterHud(skin);
+        timeHud = new TimeHud(skin);
+        menuHud = new MenuHud();
 
         FpsLabel fpsLabel = new FpsLabel(LabelPool.obtainLabel());
 
-        characterHud = new CharacterHud();
         characterHud.setPosition(0, stage.getHeight() - characterHud.getHeight());
 
-        menuHud = new MenuHud();
         menuHud.setPosition(stage.getWidth() - menuHud.getWidth(), 0);
         menuHud.setCharacterWindow(attributeWindow);
         menuHud.setInventoryWindow(inventoryWindow);
         menuHud.setSettingWindow(settingWindow);
-        menuHud.setHelpWindow(helpWindow);
+        menuHud.setHelpWindow(helpDialog);
 
-        initGuiContent();
         hideWindow();
-
-        statusWindow.setY(40);
-        attributeWindow.setPosition(BlueMoon.SCENE_WIDTH - attributeWindow.getWidth(), 0);
-        inventoryWindow.setPosition(BlueMoon.SCENE_WIDTH / 2 - inventoryWindow.getWidth() / 2, 0);
-        timeHud.setPosition(
-                BlueMoon.SCENE_WIDTH - timeHud.getWidth(),
-                BlueMoon.SCENE_HEIGHT - timeHud.getHeight());
-        settingWindow.setPosition(0, 330);
         fpsLabel.setX(5);
 
         listenToPlayer();
         worldController.addListener(this);
-        LanguageManager.instance.addListener(this);
+        I18NManager.instance.addListener(this);
 
         stage.addActor(statusWindow);
         stage.addActor(attributeWindow);
@@ -109,13 +103,15 @@ public class WorldGui extends InputAdapter implements Disposable,
         stage.addActor(inventoryWindow);
         stage.addActor(settingWindow);
         stage.addActor(fpsLabel);
-        stage.addActor(helpWindow);
+        stage.addActor(helpDialog);
         stage.addActor(menuHud);
         stage.addActor(characterHud);
         //stage.setDebugAll(true);
 
         multiplexer = (InputMultiplexer) (Gdx.input.getInputProcessor());
         multiplexer.addProcessor(stage);
+
+        initGui();
     }
 
     private void hideWindow() {
@@ -123,7 +119,7 @@ public class WorldGui extends InputAdapter implements Disposable,
         attributeWindow.setVisible(false);
         inventoryWindow.setVisible(false);
         settingWindow.setVisible(false);
-        helpWindow.setVisible(false);
+        helpDialog.setVisible(false);
     }
 
     public void update(float deltaTime) {
@@ -149,9 +145,9 @@ public class WorldGui extends InputAdapter implements Disposable,
 
     @Override
     public void dispose() {
-        multiplexer.removeProcessor(stage);
+        I18NManager.instance.removeListener(this);
         worldController.removeListener(this);
-        LanguageManager.instance.removeListener(this);
+        multiplexer.removeProcessor(stage);
         stage.dispose();
     }
 
@@ -190,18 +186,18 @@ public class WorldGui extends InputAdapter implements Disposable,
         inventoryWindow.setCharacter(player);
     }
 
-    private void initGuiContent() {
-        statusWindow.initContent();
-        attributeWindow.initContent();
-        inventoryWindow.initContent();
-        timeHud.initContent();
-        settingWindow.initContent();
-        initHelpWindow();
+    private void initGui() {
+        statusWindow.init();
+        attributeWindow.init();
+        inventoryWindow.init();
+        timeHud.init();
+        settingWindow.init();
+        initHelpDialog();
         initPlayerContent();
     }
 
-    public void initHelpWindow() {
-        helpWindow.initContent();
+    public void initHelpDialog() {
+        helpDialog.init();
     }
 
     @Override
@@ -232,8 +228,7 @@ public class WorldGui extends InputAdapter implements Disposable,
     }
 
     @Override
-    public void onLanguageChange(int currentLanguage) {
-        initGuiContent();
+    public void onLanguageChange(Language currentLanguage) {
+        initGui();
     }
-
 }

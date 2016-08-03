@@ -19,18 +19,18 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.players;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
 
 public class John extends AbstractPlayer {
 
     public John(TiledMapTileLayer tileLayer) {
-        super(Assets.instance.johnAltas, tileLayer);
+        super(Assets.instance.johnAtlas, tileLayer);
     }
 
     @Override
     public String getName() {
-        return LanguageManager.instance.getText("john");
+        return I18NManager.instance.getText("john");
     }
 
 }

@@ -23,25 +23,27 @@ import com.badlogic.gdx.utils.I18NBundle;
  * Language manager class for localization.
  * Created by S.Kyousuke <surasek@gmail.com> on 15/7/2559.
  */
-public class LanguageManager {
+public class I18NManager implements GamePreferencesListener {
 
-    public static final LanguageManager instance = new LanguageManager();
+    public static final I18NManager instance = new I18NManager();
 
     public Array<LanguageListener> listeners;
 
-    private int currentLanguage;
+    private Language currentLanguage;
     private I18NBundle currentBundle;
 
-    private LanguageManager() {
+    private I18NManager() {
         listeners = new Array<>();
-        setCurrentLanguage(Languages.THAI);
+        setCurrentLanguage(Language.THAI);
+
+        GamePreferences.instance.addListener(this);
     }
 
-    public int getCurrentLanguage() {
+    public Language getCurrentLanguage() {
         return currentLanguage;
     }
 
-    public void setCurrentLanguage(int language) {
+    public void setCurrentLanguage(Language language) {
         if (currentLanguage != language) {
             currentLanguage = language;
             updateCurrentBundle();
@@ -61,14 +63,14 @@ public class LanguageManager {
 
     private void updateCurrentBundle() {
         switch (currentLanguage) {
-            case Languages.ENGLISH:
+            case ENGLISH:
                 currentBundle = Assets.instance.englishLanguage;
                 break;
-            case Languages.THAI:
+            case THAI:
                 currentBundle = Assets.instance.thaiLanguage;
                 break;
             default:
-                throw new IllegalStateException("Language not found: " + Languages.toString(currentLanguage));
+                throw new IllegalStateException("Language not found: " + currentLanguage);
         }
     }
 
@@ -80,4 +82,8 @@ public class LanguageManager {
         listeners.removeValue(listener, true);
     }
 
+    @Override
+    public void onGamePreferencesChange() {
+        setCurrentLanguage(Language.getValue(GamePreferences.instance.language));
+    }
 }

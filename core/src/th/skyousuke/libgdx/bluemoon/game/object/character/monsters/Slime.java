@@ -19,18 +19,18 @@ package th.skyousuke.libgdx.bluemoon.game.object.character.monsters;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractMonster;
 
 public class Slime extends AbstractMonster {
 
     public Slime(TiledMapTileLayer tileLayer) {
-        super(Assets.instance.slimeAltas, tileLayer);
+        super(Assets.instance.slimeAtlas, tileLayer);
     }
 
     @Override
     public String getName() {
-        return LanguageManager.instance.getText("slime");
+        return I18NManager.instance.getText("slime");
     }
 
     @Override

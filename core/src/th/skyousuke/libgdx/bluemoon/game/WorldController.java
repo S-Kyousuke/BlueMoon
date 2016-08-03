@@ -53,6 +53,7 @@ public class WorldController extends InputAdapter {
         messageManager.addListener(level.slime, MessageType.SAY_MSG);
 
         controlledPlayer = level.john;
+        cameraHelper.setTarget(controlledPlayer);
     }
 
     private void handleInputCamera(float deltaTime) {
@@ -80,6 +81,13 @@ public class WorldController extends InputAdapter {
             handleInputCamera(deltaTime);
         else
             handleInputPlayer();
+
+        if (Gdx.input.isKeyJustPressed(Keys.F2)) {
+            if (!cameraHelper.hasTarget()) {
+                cameraHelper.setTarget(controlledPlayer);
+            }
+            else cameraHelper.setTarget(null);
+        }
     }
 
     public void update(float deltaTime) {

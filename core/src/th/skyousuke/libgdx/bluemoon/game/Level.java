@@ -16,7 +16,6 @@
 
 package th.skyousuke.libgdx.bluemoon.game;
 
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -30,6 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Comparator;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.MusicManager.Musics;
 import th.skyousuke.libgdx.bluemoon.game.object.AbstractGameObject;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractMonster;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractPlayer;
@@ -39,8 +39,8 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.players.John;
 
 public class Level {
 
-    public Music music;
     public TiledMap map;
+    public int music;
 
     public AbstractPlayer john;
     public AbstractPlayer jane;
@@ -51,8 +51,7 @@ public class Level {
 
     public Level() {
         map = Assets.instance.mainMap;
-        music = Assets.instance.music;
-        music.setLooping(true);
+        music = Musics.MUSIC_1;
 
         allObjects = new Array<>();
         zOrderComparator = new ZOrderComparator();

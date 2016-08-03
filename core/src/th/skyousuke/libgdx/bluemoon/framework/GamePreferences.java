@@ -13,8 +13,7 @@ public class GamePreferences {
     public static final GamePreferences instance = new GamePreferences();
 
     public int language;
-    public boolean controlPlayer;
-    public boolean fullscreen;
+    public int resolution;
     public boolean sound;
     public boolean music;
     public float soundVolume;
@@ -37,9 +36,8 @@ public class GamePreferences {
     }
 
     public void load() {
-        language = preferences.getInteger("language", Languages.THAI);
-        controlPlayer = preferences.getBoolean("controlPlayer", true);
-        fullscreen = preferences.getBoolean("fullscreen", false);
+        language = preferences.getInteger("language", Language.THAI.ordinal());
+        resolution = preferences.getInteger("resolution", Resolution.GAME_WORD.ordinal());
         sound = preferences.getBoolean("sound", true);
         music = preferences.getBoolean("music", true);
         soundVolume = preferences.getFloat("soundVolume", 1.0f);
@@ -48,8 +46,7 @@ public class GamePreferences {
 
     public void save() {
         preferences.putInteger("language", language);
-        preferences.putBoolean("controlPlayer", controlPlayer);
-        preferences.putBoolean("fullscreen", fullscreen);
+        preferences.putInteger("resolution", resolution);
         preferences.putBoolean("sound", sound);
         preferences.putBoolean("music", music);
         preferences.putFloat("soundVolume", soundVolume);

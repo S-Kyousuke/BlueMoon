@@ -16,7 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.others;
 
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
@@ -50,6 +50,6 @@ public class Running extends AbstractCharacterEffect {
 
     @Override
     public String getName() {
-        return LanguageManager.instance.getText("running");
+        return I18NManager.instance.getText("running");
     }
 }

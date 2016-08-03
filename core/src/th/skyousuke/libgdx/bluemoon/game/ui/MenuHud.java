@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
+import th.skyousuke.libgdx.bluemoon.framework.SoundManager;
+import th.skyousuke.libgdx.bluemoon.framework.SoundManager.Sounds;
 
 /**
  * Menu head-up display.
@@ -62,7 +64,7 @@ public class MenuHud extends Table {
         buttonStyle.down = buttonStyle.up;
         settingIcon = new Button(buttonStyle);
 
-        setBackground(Assets.instance.customSkin.getDrawable("darkGrayDraw"));
+        setBackground(Assets.instance.customSkin.getDrawable("uiBackgroundDraw"));
         row().pad(5);
         add(characterIcon).padLeft(10);
         add(inventoryIcon);
@@ -72,27 +74,28 @@ public class MenuHud extends Table {
     }
 
     public void setCharacterWindow(Window window) {
-        setWindowToIcon(characterIcon, window);
+        addWindowToggleListener(characterIcon, window);
     }
 
     public void setInventoryWindow(Window window) {
-        setWindowToIcon(inventoryIcon, window);
+        addWindowToggleListener(inventoryIcon, window);
     }
 
     public void setHelpWindow(Window window) {
-        setWindowToIcon(helpIcon, window);
+        addWindowToggleListener(helpIcon, window);
     }
 
     public void setSettingWindow(Window window) {
-        setWindowToIcon(settingIcon, window);
+        addWindowToggleListener(settingIcon, window);
     }
 
-    private void setWindowToIcon(Button button, final Window window) {
+    private void addWindowToggleListener(Button button, final Window window) {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 window.setVisible(!window.isVisible());
                 window.toFront();
+                SoundManager.instance.play(Sounds.BUTTON);
             }
         });
     }

@@ -25,37 +25,34 @@ import th.skyousuke.libgdx.bluemoon.game.ui.LabelPool.PooledLabel;
 
 /**
  * A pool of custom skin LibGDX text label that can be reused to avoid allocation.
- * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
+ * @author S.Kyousuke <surasek@gmail.com>
  */
 public class LabelPool extends Pool<PooledLabel> {
 
     private static final LabelPool pool = new LabelPool();
     private static final LabelStyle labelStyle = Assets.instance.customSkin.get(LabelStyle.class);
 
-    private LabelPool() {
-    }
-
     public static PooledLabel obtainLabel() {
         return obtainLabel("");
     }
 
     public static PooledLabel obtainLabel(CharSequence text) {
-        return pool.obtain(text);
-    }
-
-    @Override
-    protected PooledLabel newObject() {
-        return new PooledLabel(labelStyle);
-    }
-
-    public PooledLabel obtain(CharSequence text) {
-        PooledLabel label = super.obtain();
+        PooledLabel label = pool.obtain();
+        label.clear();
         if (label.getStyle() != labelStyle) {
             label.setStyle(labelStyle);
         }
         label.setPosition(0, 0);
         label.setText(text);
         return label;
+    }
+
+    private LabelPool() {
+    }
+
+    @Override
+    protected PooledLabel newObject() {
+        return new PooledLabel(labelStyle);
     }
 
     public class PooledLabel extends Label {

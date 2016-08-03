@@ -1,22 +1,23 @@
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
-import th.skyousuke.libgdx.bluemoon.framework.Languages;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
+import th.skyousuke.libgdx.bluemoon.framework.Language;
+import th.skyousuke.libgdx.bluemoon.framework.Resolution;
 
 /**
  * Option window class.
@@ -24,9 +25,10 @@ import th.skyousuke.libgdx.bluemoon.framework.Languages;
  */
 public class SettingWindow extends Window {
 
-    private Label languageLabel;
-    private Label controlPlayerLabel;
-    private Label fullscreenLabel;
+    private Label languageTitle;
+    private Label resolutionTitle;
+    private SelectBox<Language> language;
+    private SelectBox<Resolution> resolution;
     private CheckBox soundCheckBox;
     private CheckBox musicCheckBox;
     private Slider soundSlider;
@@ -34,17 +36,25 @@ public class SettingWindow extends Window {
     private TextButton okButton;
     private TextButton cancelButton;
 
-    private int languageSetting;
-    private boolean controlPlayerSetting;
-    private boolean fullscreenSetting;
+    private Resolution oldResolution;
 
     public SettingWindow(Skin skin) {
-        super("", skin);
-        setColor(1, 1, 1, 0.8f);
+        super(skin);
 
-        languageLabel = LabelPool.obtainLabel();
-        controlPlayerLabel = LabelPool.obtainLabel();
-        fullscreenLabel = LabelPool.obtainLabel();
+        languageTitle = LabelPool.obtainLabel();
+        resolutionTitle = LabelPool.obtainLabel();
+
+        language = new SelectBox<>(skin);
+        final Array<Language> languages = new Array<>();
+        languages.add(Language.ENGLISH);
+        languages.add(Language.THAI);
+        language.setItems(languages);
+
+        resolution = new SelectBox<>(skin);
+        final Array<Resolution> resolutions = new Array<>();
+        resolutions.add(Resolution.FULLSCREEN);
+        resolutions.add(Resolution.GAME_WORD);
+        resolution.setItems(resolutions);
 
         musicCheckBox = new CheckBox("", skin);
         soundCheckBox = new CheckBox("", skin);
@@ -53,191 +63,115 @@ public class SettingWindow extends Window {
         okButton = new TextButton("", skin);
         cancelButton = new TextButton("", skin);
 
-        addListenerToLabel();
         addListenerToButton();
 
-        row().align(Align.left).padTop(5f);
-        add(languageLabel);
-        row().align(Align.left);
-        add(controlPlayerLabel).align(Align.left).row();
-        row().align(Align.left);
-        add(fullscreenLabel);
-        row().align(Align.left);
-        add(createSoundSetting()).expandX().fillX();
-        row().align(Align.left);
-        add(createMusicSetting()).expandX().fillX();
-        row().padTop(10f);
+        padLeft(20);
+        padRight(20);
+        padBottom(20);
+        row().expandX().padTop(20);
+        add(createDisplaySetting());
+        row().expandX().padTop(12);
+        add(createAudioSetting());
+        row().expandX().padTop(12);
         add(createButtons());
-
-        padLeft(10f);
-        padRight(10f);
-        padBottom(10f);
     }
 
-    public void initContent() {
-        okButton.setText(LanguageManager.instance.getText("ok"));
-        cancelButton.setText(LanguageManager.instance.getText("cancel"));
-        setTitle(LanguageManager.instance.getText("settingWindowTitle"));
-
+    public void init() {
         updateLabel();
         pack();
+        alignToStage(getStage(), Align.center);
     }
 
     @Override
     public void setVisible(boolean visible) {
-        if (visible) readSettings();
+        if (visible) {
+            readSettings();
+            alignToStage(getStage(), Align.center);
+        }
         super.setVisible(visible);
     }
 
     public void readSettings() {
         final GamePreferences preferences = GamePreferences.instance;
-        languageSetting = preferences.language;
-        controlPlayerSetting = preferences.controlPlayer;
-        fullscreenSetting = preferences.fullscreen;
+        language.setSelected(Language.getValue(preferences.language));
+        resolution.setSelected(Resolution.getValue(GamePreferences.instance.resolution));
         soundCheckBox.setChecked(preferences.sound);
         musicCheckBox.setChecked(preferences.music);
         soundSlider.setValue(preferences.soundVolume);
         musicSlider.setValue(preferences.musicVolume);
-        updateLabel();
+        oldResolution = resolution.getSelected();
     }
 
     private void saveSettings() {
         GamePreferences preferences = GamePreferences.instance;
-        preferences.language = languageSetting;
-        preferences.controlPlayer = controlPlayerSetting;
-        preferences.fullscreen = fullscreenSetting;
+        final Resolution currentResolution =  resolution.getSelected();
+        preferences.language = language.getSelected().ordinal();
+        preferences.resolution = currentResolution.ordinal();
         preferences.sound = soundCheckBox.isChecked();
         preferences.music = musicCheckBox.isChecked();
         preferences.soundVolume = soundSlider.getValue();
         preferences.musicVolume = musicSlider.getValue();
         preferences.save();
-    }
-
-    private void addListenerToLabel() {
-        addListenerToLanguageLabel();
-        addListenerToControlPlayerLabel();
-        addListenerToFullscreenLabel();
+        if (currentResolution != oldResolution) {
+            ResolutionConfirmDialog confirmDialog =
+                    new ResolutionConfirmDialog(Assets.instance.customSkin, this, oldResolution);
+            confirmDialog.alignToStage(getStage(), Align.center);
+            getStage().addActor(confirmDialog);
+        }
     }
 
     private void addListenerToButton() {
-        okButton.addListener(new ClickListener() {
+        okButton.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 saveSettings();
                 setVisible(false);
             }
         });
-        cancelButton.addListener(new ClickListener() {
+        cancelButton.addListener(new ChangeListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void changed(ChangeEvent event, Actor actor) {
                 setVisible(false);
-            }
-        });
-    }
-
-    private void addListenerToLanguageLabel() {
-        addHoverEffectTo(languageLabel);
-        languageLabel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (languageSetting == Languages.ENGLISH) {
-                    languageSetting = Languages.THAI;
-                } else languageSetting = Languages.ENGLISH;
-                updateLanguageLabel();
-                return true;
-            }
-        });
-    }
-
-    private void addListenerToControlPlayerLabel() {
-        addHoverEffectTo(controlPlayerLabel);
-        controlPlayerLabel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                controlPlayerSetting = !controlPlayerSetting;
-                updateControlPlayerLabel();
-                return true;
-            }
-        });
-    }
-
-    private void addListenerToFullscreenLabel() {
-        addHoverEffectTo(fullscreenLabel);
-        fullscreenLabel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                fullscreenSetting = !fullscreenSetting;
-                updateFullscreenLabel();
-                return true;
-            }
-        });
-    }
-
-    private void addHoverEffectTo(final Label label) {
-        label.addListener(new InputListener() {
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                label.setColor(Color.GOLD);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                label.setColor(Color.WHITE);
             }
         });
     }
 
     public void updateLabel() {
-        updateLanguageLabel();
-        updateControlPlayerLabel();
-        updateFullscreenLabel();
-        updateSoundCheckBox();
-        updateMusicCheckBox();
+        final I18NManager i18n = I18NManager.instance;
+        setTitle(i18n.getText("settingWindowTitle"));
+        languageTitle.setText(i18n.getText("language"));
+        resolutionTitle.setText(i18n.getText("resolution"));
+        soundCheckBox.setText(' ' + i18n.getText("soundSetting"));
+        musicCheckBox.setText(' ' + i18n.getText("musicSetting"));
+        okButton.setText(i18n.getText("ok"));
+        cancelButton.setText(i18n.getText("cancel"));
     }
 
-    private void updateLanguageLabel() {
-        languageLabel.setText(LanguageManager.instance.getText("languageSettingLabel")
-                + ": " + Languages.toString(languageSetting));
+    private Table createDisplaySetting() {
+        Table displaySetting = new Table();
+        displaySetting.row().expandX().align(Align.left);
+        displaySetting.add(languageTitle).padRight(10);
+        displaySetting.add(language).width(100).expandX();
+        displaySetting.row().expandX().align(Align.left).padTop(8);
+        displaySetting.add(resolutionTitle).padRight(10);
+        displaySetting.add(resolution).width(100).expandX();
+        return displaySetting;
     }
 
-    // @formatter:off
-    private void updateControlPlayerLabel() {
-        controlPlayerLabel.setText(LanguageManager.instance.getText("controlSettingLabel")
-                + ": " + (controlPlayerSetting ? LanguageManager.instance.getText("player")
-                                               : LanguageManager.instance.getText("camera")));
-    }
-
-    private void updateFullscreenLabel() {
-        fullscreenLabel.setText(LanguageManager.instance.getText("fullscreenSettingLabel")
-                + ": " + (fullscreenSetting ? LanguageManager.instance.getText("turnOn")
-                                            : LanguageManager.instance.getText("turnOff")));
-    }
-
-    private void updateSoundCheckBox() {
-        soundCheckBox.setText(' ' + LanguageManager.instance.getText("soundSetting"));
-    }
-
-    private void updateMusicCheckBox() {
-        musicCheckBox.setText(' ' + LanguageManager.instance.getText("musicSetting"));
-    }
-
-    private Table createSoundSetting() {
-        Table soundSetting = new Table();
-        soundSetting.add(soundCheckBox).padRight(10f);
-        soundSetting.add(soundSlider).width(100).expandX().align(Align.right);
-        return soundSetting;
-    }
-
-    private Table createMusicSetting() {
-        Table musicSetting = new Table();
-        musicSetting.add(musicCheckBox).padRight(10f);
-        musicSetting.add(musicSlider).width(100).expandX().align(Align.right);
-        return musicSetting;
+    private Table createAudioSetting() {
+        Table audioSetting = new Table();
+        audioSetting.row().expandX().align(Align.left);
+        audioSetting.add(soundCheckBox).padRight(10);
+        audioSetting.add(soundSlider).width(100).expandX();
+        audioSetting.row().expandX().align(Align.left);
+        audioSetting.add(musicCheckBox).padRight(10);
+        audioSetting.add(musicSlider).width(100).expandX();
+        return audioSetting;
     }
 
     private Table createButtons() {
         Table buttons = new Table();
-        buttons.add(okButton).width(60f).padRight(10f);
+        buttons.add(okButton).width(60f).padRight(12f);
         buttons.add(cancelButton).width(60f);
         return buttons;
     }

@@ -27,13 +27,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
+import static com.badlogic.gdx.utils.Align.bottom;
+import static com.badlogic.gdx.utils.Align.left;
+import static com.badlogic.gdx.utils.Align.right;
+import static com.badlogic.gdx.utils.Align.top;
+
 /**
- * Window class that more lightweight than LibGDX window.
+ * Custom game window that more lightweight than LibGDX window.
  * Created by S.Kyousuke <surasek@gmail.com> on 8/7/2559.
  */
 public class Window extends Table {
 
-    private final Label titleLabel;
+    public static class WindowStyle {
+        public Drawable background;
+    }
+
+    private Label titleLabel;
     private boolean keepWithinStage;
     private boolean movable;
     private boolean dragging;
@@ -119,7 +128,17 @@ public class Window extends Table {
         this.movable = movable;
     }
 
-    public static class WindowStyle {
-        public Drawable background;
+    public void alignToStage(Stage stage, int alignment) {
+        if ((alignment & right) != 0)
+            setX(stage.getWidth() - getWidth());
+        else if ((alignment & left) == 0)
+            setX(stage.getWidth() / 2 - getWidth() / 2);
+        else setX(0);
+
+        if ((alignment & top) != 0)
+            setY(stage.getHeight() - getHeight());
+        else if ((alignment & bottom) == 0) //
+            setY(stage.getHeight() / 2 - getHeight() / 2);
+        else setY(0);
     }
 }

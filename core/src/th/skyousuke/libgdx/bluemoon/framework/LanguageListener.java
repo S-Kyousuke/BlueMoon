@@ -16,12 +16,13 @@
 
 package th.skyousuke.libgdx.bluemoon.framework;
 
+
 /**
  * Detect language change.
  * Created by S.Kyousuke <surasek@gmail.com> on 15/7/2559.
  */
 public interface LanguageListener {
 
-    void onLanguageChange(int currentLanguage);
+    void onLanguageChange(Language currentLanguage);
 
 }

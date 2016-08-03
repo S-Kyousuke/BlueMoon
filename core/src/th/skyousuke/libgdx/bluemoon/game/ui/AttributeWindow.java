@@ -29,7 +29,7 @@ import com.google.common.base.CaseFormat;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.framework.NumberFormat;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterAttribute;
@@ -120,11 +120,11 @@ public class AttributeWindow extends Window {
         add(derivedAttributePane).fill().expand();
     }
 
-    public void initContent() {
+    public void init() {
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
             derivedAttributeLabels
                     .get(derivedAttribute)
-                    .setText(LanguageManager.instance
+                    .setText(I18NManager.instance
                             .getText(CaseFormat.UPPER_UNDERSCORE
                                     .to(CaseFormat.LOWER_CAMEL, derivedAttribute.name())));
             pack();
@@ -134,9 +134,9 @@ public class AttributeWindow extends Window {
 
         for (CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
             String attributeName = primaryAttribute.name().toLowerCase();
-            primaryAttributeLabels.get(primaryAttribute).setText(LanguageManager.instance.getText(attributeName));
+            primaryAttributeLabels.get(primaryAttribute).setText(I18NManager.instance.getText(attributeName));
         }
-        derivedAttributeTitleLabel.setText(LanguageManager.instance.getText("derivedAttribute") + ':');
+        derivedAttributeTitleLabel.setText(I18NManager.instance.getText("derivedAttribute") + ':');
     }
 
     public void setCharacter(AbstractCharacter character) {
@@ -147,7 +147,7 @@ public class AttributeWindow extends Window {
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
             updateDerivedAttribute(derivedAttribute);
         }
-        setTitle(LanguageManager.instance.getFormattedText("attributeWindowTitle", character.getName()));
+        setTitle(I18NManager.instance.getFormattedText("attributeWindowTitle", character.getName()));
     }
 
     public void updatePrimaryAttribute(CharacterPrimaryAttribute primaryAttribute) {

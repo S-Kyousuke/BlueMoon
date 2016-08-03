@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.EnumMap;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.framework.NumberFormat;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
@@ -102,8 +102,8 @@ public class StatusWindow extends Window {
         row();
     }
 
-    public void initContent() {
-        effectPaneLabel.setText(LanguageManager.instance.getText("effect") + ':');
+    public void init() {
+        effectPaneLabel.setText(I18NManager.instance.getText("effect") + ':');
         pack();
         setWidth(240f);
         setHeight(260f);
@@ -115,7 +115,7 @@ public class StatusWindow extends Window {
             updateStatus(statusType);
         }
         updateEffect();
-        setTitle(LanguageManager.instance.getFormattedText("statusWindowTitle", character.getName()));
+        setTitle(I18NManager.instance.getFormattedText("statusWindowTitle", character.getName()));
     }
 
     public void updateStatus(CharacterStatusType statusType) {
@@ -135,7 +135,7 @@ public class StatusWindow extends Window {
                 break;
         }
         statusLabels.get(statusType)
-                .setText(LanguageManager.instance.getText(statusType.name().toLowerCase()) + ": "
+                .setText(I18NManager.instance.getText(statusType.name().toLowerCase()) + ": "
                         + NumberFormat.formatFloat(character.getStatus().getValue(statusType), 1) + '/'
                         + NumberFormat.formatFloat(maxStatusValue, 1));
     }

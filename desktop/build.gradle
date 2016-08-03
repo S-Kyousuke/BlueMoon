@@ -23,6 +23,10 @@ task dist(type: Jar) {
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
+
+    archiveName = "bluemoon.jar"
+    def file = new File('' + destinationDir + '/' + "version.json")
+    file.write(String.format('{"version":"%s"}', getVersion()))
 }
 
 dist.dependsOn classes

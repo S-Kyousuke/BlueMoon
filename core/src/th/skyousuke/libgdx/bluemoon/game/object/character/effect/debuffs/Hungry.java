@@ -16,7 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.debuffs;
 
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.effect.AbstractCharacterEffect;
@@ -101,7 +101,7 @@ public class Hungry extends Starve {
 
     @Override
     public String getName() {
-        return LanguageManager.instance.getText("hungry") + ' ' + Integer.toString(level);
+        return I18NManager.instance.getText("hungry") + ' ' + Integer.toString(level);
     }
 
 }

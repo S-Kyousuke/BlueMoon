@@ -18,22 +18,19 @@ package th.skyousuke.libgdx.bluemoon.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 
-import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
-import th.skyousuke.libgdx.bluemoon.framework.GamePreferencesListener;
+import th.skyousuke.libgdx.bluemoon.framework.MusicManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldController;
 import th.skyousuke.libgdx.bluemoon.game.WorldRenderer;
 import th.skyousuke.libgdx.bluemoon.game.ui.WorldGui;
 
-public class WorldScreen extends AbstractGameScreen implements GamePreferencesListener {
+public class WorldScreen extends AbstractGameScreen {
 
     private WorldController worldController;
     private WorldRenderer worldRenderer;
     private WorldGui worldGui;
-
-    private boolean pause;
-    private boolean ready;
 
     public WorldScreen(Game game) {
         super(game);
@@ -41,19 +38,20 @@ public class WorldScreen extends AbstractGameScreen implements GamePreferencesLi
 
     @Override
     public void show() {
-        pause = false;
-
         worldController = new WorldController();
         worldRenderer = new WorldRenderer(worldController);
         worldGui = new WorldGui(worldController);
 
-        GamePreferences.instance.addListener(this);
-        applyControlSetting();
-        applyMusicSetting();
+        MusicManager.instance.play(worldController.level.music, true);
     }
 
     @Override
     public void render(float deltaTime) {
+        if (Gdx.input.isKeyJustPressed(Keys.F1)) {
+            game.setScreen(new MenuScreen(game));
+            return;
+        }
+
         if (!pause) {
             Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -78,42 +76,7 @@ public class WorldScreen extends AbstractGameScreen implements GamePreferencesLi
     public void hide() {
         worldRenderer.dispose();
         worldGui.dispose();
-        GamePreferences.instance.removeListener(this);
-    }
-
-    @Override
-    public void pause() {
-        pause = true;
-        ready = false;
-    }
-
-    @Override
-    public void resume() {
-        ready = true;
-    }
-
-    @Override
-    public void onGamePreferencesChange( ) {
-        applyControlSetting();
-        applyMusicSetting();
-        worldGui.initHelpWindow();
-    }
-
-    private void applyControlSetting( ) {
-        if (GamePreferences.instance.controlPlayer)
-            worldController.cameraHelper.setTarget(worldController.controlledPlayer);
-        else
-            worldController.cameraHelper.setTarget(null);
-    }
-
-    private void applyMusicSetting( ) {
-        GamePreferences preferences = GamePreferences.instance;
-        if (preferences.music) {
-            worldController.level.music.play();
-        }
-        else
-            worldController.level.music.stop();
-        worldController.level.music.setVolume(preferences.musicVolume);
+        MusicManager.instance.stop();
     }
 
 }

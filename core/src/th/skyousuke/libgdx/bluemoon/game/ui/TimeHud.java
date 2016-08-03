@@ -20,16 +20,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 
 import th.skyousuke.libgdx.bluemoon.framework.Assets;
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.WorldTime;
 
 /**
  * Game time window class
  * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
-public class TimeHud extends Table {
+public class TimeHud extends Window {
 
     private Image timeIcon;
     private Label dayLabel;
@@ -40,11 +41,10 @@ public class TimeHud extends Table {
     private int minutes;
 
     public TimeHud(Skin skin) {
-        super(skin);
+        super(skin, "noTitle");
 
         setBackground(Assets.instance.customSkin.getDrawable("uiBackgroundDraw"));
-        timeIcon = new Image(Assets.instance.ui.findRegion("time_icon"));
-
+        timeIcon = ImagePool.obtainImage(Assets.instance.ui.findRegion("time_icon"));
         timeLabel = LabelPool.obtainLabel();
         dayLabel = LabelPool.obtainLabel();
 
@@ -61,11 +61,12 @@ public class TimeHud extends Table {
         add(table).padTop(5).padBottom(5).expandX().fillX();
     }
 
-    public void initContent() {
+    public void init() {
         updateDayLabel();
         updateTimeLabel();
         pack();
         setWidth(110);
+        alignToStage(getStage(), Align.topRight);
     }
 
     public void setTime(WorldTime time) {
@@ -85,7 +86,7 @@ public class TimeHud extends Table {
     }
 
     private void updateDayLabel() {
-        dayLabel.setText(LanguageManager.instance.getFormattedText("day", days));
+        dayLabel.setText(I18NManager.instance.getFormattedText("day", days));
     }
 
     private void updateTimeLabel() {

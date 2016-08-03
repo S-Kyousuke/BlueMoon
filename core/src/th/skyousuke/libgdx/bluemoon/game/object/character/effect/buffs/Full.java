@@ -16,7 +16,7 @@
 
 package th.skyousuke.libgdx.bluemoon.game.object.character.effect.buffs;
 
-import th.skyousuke.libgdx.bluemoon.framework.LanguageManager;
+import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterDerivedAttribute;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatusType;
@@ -78,6 +78,6 @@ public class Full extends AbstractCharacterEffect {
 
     @Override
     public String getName() {
-        return LanguageManager.instance.getText("full");
+        return I18NManager.instance.getText("full");
     }
 }
