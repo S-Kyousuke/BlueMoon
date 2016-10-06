@@ -24,8 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import th.skyousuke.libgdx.bluemoon.BlueMoon;
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
-import th.skyousuke.libgdx.bluemoon.game.ui.LabelPool;
 
 public class MenuScreen extends AbstractGameScreen {
 
@@ -39,7 +39,7 @@ public class MenuScreen extends AbstractGameScreen {
     public void show() {
         stage = new Stage(new FitViewport(BlueMoon.SCENE_WIDTH, BlueMoon.SCENE_HEIGHT));
 
-        Label label = LabelPool.obtainLabel();
+        Label label = new Label("", Assets.instance.customSkin);
         label.setText(I18NManager.instance.getText("clickToContinue"));
         label.pack();
         label.setPosition(

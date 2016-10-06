@@ -85,7 +85,6 @@ public class Assets implements Disposable, AssetErrorListener {
         manager.finishLoading();
 
         /* get assets here */
-
         ui = manager.get("ui/ui.atlas");
         music = manager.get("music/music.mp3");
         buttonSound = manager.get("sounds/button.mp3");

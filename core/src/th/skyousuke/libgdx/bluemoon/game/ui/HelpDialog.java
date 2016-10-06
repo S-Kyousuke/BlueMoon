@@ -17,6 +17,8 @@
 package th.skyousuke.libgdx.bluemoon.game.ui;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
@@ -41,25 +43,25 @@ public class HelpDialog extends Window {
         final TextureAtlas uiAtlas = Assets.instance.ui;
         final I18NManager i18n = I18NManager.instance;
         Table table = new Table();
-        table.add(ImagePool.obtainImage(uiAtlas.findRegion("button_up"))).colspan(3);
+        table.add(new Image(uiAtlas.findRegion("button_up"))).colspan(3);
         table.row().padTop(5);
-        table.add(ImagePool.obtainImage(uiAtlas.findRegion("button_left")));
-        table.add(ImagePool.obtainImage(uiAtlas.findRegion("button_down"))).padLeft(5);
-        table.add(ImagePool.obtainImage(uiAtlas.findRegion("button_right"))).padLeft(5);
+        table.add(new Image(uiAtlas.findRegion("button_left")));
+        table.add(new Image(uiAtlas.findRegion("button_down"))).padLeft(5);
+        table.add(new Image(uiAtlas.findRegion("button_right"))).padLeft(5);
         add(table).padRight(16);
-        add(LabelPool.obtainLabel(i18n.getText("moveCharacter"))).align(Align.left);
+        add(new Label(i18n.getText("moveCharacter"), Assets.instance.customSkin)).align(Align.left);
         row().padTop(10);
-        add(ImagePool.obtainImage(uiAtlas.findRegion("button_z"))).padRight(16);
-        add(LabelPool.obtainLabel(i18n.getText("run"))).align(Align.left);
+        add(new Image(uiAtlas.findRegion("button_z"))).padRight(16);
+        add(new Label(i18n.getText("run"), Assets.instance.customSkin)).align(Align.left);
         row().padTop(10);
-        add(ImagePool.obtainImage(uiAtlas.findRegion("button_x"))).padRight(16);
-        add(LabelPool.obtainLabel(i18n.getText("interact"))).align(Align.left);
+        add(new Image(uiAtlas.findRegion("button_x"))).padRight(16);
+        add(new Label(i18n.getText("interact"), Assets.instance.customSkin)).align(Align.left);
         row().padTop(10);
-        add(ImagePool.obtainImage(uiAtlas.findRegion("button_c"))).padRight(16);
-        add(LabelPool.obtainLabel(i18n.getText("attack"))).align(Align.left);
+        add(new Image(uiAtlas.findRegion("button_c"))).padRight(16);
+        add(new Label(i18n.getText("attack"), Assets.instance.customSkin)).align(Align.left);
         row().padTop(10);
-        add(ImagePool.obtainImage(uiAtlas.findRegion("button_space"))).padRight(16);
-        add(LabelPool.obtainLabel(i18n.getText("swapCharacter"))).align(Align.left);
+        add(new Image(uiAtlas.findRegion("button_space"))).padRight(16);
+        add(new Label(i18n.getText("swapCharacter"), Assets.instance.customSkin)).align(Align.left);
         pack();
         alignToStage(getStage(), Align.center);
     }

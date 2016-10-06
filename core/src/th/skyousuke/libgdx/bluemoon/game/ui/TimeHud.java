@@ -44,9 +44,9 @@ public class TimeHud extends Window {
         super(skin, "noTitle");
 
         setBackground(Assets.instance.customSkin.getDrawable("uiBackgroundDraw"));
-        timeIcon = ImagePool.obtainImage(Assets.instance.ui.findRegion("time_icon"));
-        timeLabel = LabelPool.obtainLabel();
-        dayLabel = LabelPool.obtainLabel();
+        timeIcon = new Image(Assets.instance.ui.findRegion("time_icon"));
+        timeLabel = new Label("", skin);
+        dayLabel = new Label("", skin);
 
         Table table = new Table();
         table.row();

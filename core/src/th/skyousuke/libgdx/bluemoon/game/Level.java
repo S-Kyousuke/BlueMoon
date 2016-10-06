@@ -69,9 +69,10 @@ public class Level {
         allObjects.add(slime);
     }
 
+
     public void update(float deltaTime) {
-        for (AbstractGameObject o : allObjects) {
-            o.update(deltaTime);
+        for (AbstractGameObject object : allObjects) {
+            object.update(deltaTime);
         }
         allObjects.sort(zOrderComparator);
     }
@@ -87,7 +88,7 @@ public class Level {
         batch.end();
 
         // for debugging only
-        //drawDebug(shapeRenderer);
+        drawDebug(shapeRenderer);
     }
 
     private void drawDebug(ShapeRenderer shapeRenderer) {

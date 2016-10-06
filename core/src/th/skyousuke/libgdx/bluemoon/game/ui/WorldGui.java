@@ -21,6 +21,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -53,7 +54,7 @@ public class WorldGui extends InputAdapter implements Disposable,
     private WorldController worldController;
 
     private StatusWindow statusWindow;
-    private AttributeWindow attributeWindow;
+    private OldAttributeWindow oldAttributeWindow;
     private InventoryWindow inventoryWindow;
     private SettingWindow settingWindow;
     private HelpDialog helpDialog;
@@ -71,7 +72,7 @@ public class WorldGui extends InputAdapter implements Disposable,
 
         final Skin skin = Assets.instance.customSkin;
         statusWindow = new StatusWindow(skin);
-        attributeWindow = new AttributeWindow(skin);
+        oldAttributeWindow = new OldAttributeWindow(skin);
         inventoryWindow = new InventoryWindow(skin);
         settingWindow = new SettingWindow(skin);
         helpDialog = new HelpDialog(skin);
@@ -79,12 +80,12 @@ public class WorldGui extends InputAdapter implements Disposable,
         timeHud = new TimeHud(skin);
         menuHud = new MenuHud();
 
-        FpsLabel fpsLabel = new FpsLabel(LabelPool.obtainLabel());
+        FpsLabel fpsLabel = new FpsLabel(new Label("", skin));
 
         characterHud.setPosition(0, stage.getHeight() - characterHud.getHeight());
 
         menuHud.setPosition(stage.getWidth() - menuHud.getWidth(), 0);
-        menuHud.setCharacterWindow(attributeWindow);
+        menuHud.setCharacterWindow(oldAttributeWindow);
         menuHud.setInventoryWindow(inventoryWindow);
         menuHud.setSettingWindow(settingWindow);
         menuHud.setHelpWindow(helpDialog);
@@ -97,7 +98,7 @@ public class WorldGui extends InputAdapter implements Disposable,
         I18NManager.instance.addListener(this);
 
         stage.addActor(statusWindow);
-        stage.addActor(attributeWindow);
+        stage.addActor(oldAttributeWindow);
         stage.addActor(timeHud);
         stage.addActor(inventoryWindow);
         stage.addActor(inventoryWindow);
@@ -116,7 +117,7 @@ public class WorldGui extends InputAdapter implements Disposable,
 
     private void hideWindow() {
         statusWindow.setVisible(false);
-        attributeWindow.setVisible(false);
+        oldAttributeWindow.setVisible(false);
         inventoryWindow.setVisible(false);
         settingWindow.setVisible(false);
         helpDialog.setVisible(false);
@@ -130,7 +131,7 @@ public class WorldGui extends InputAdapter implements Disposable,
             statusWindow.setVisible(!statusWindow.isVisible());
         }
         if (Gdx.input.isKeyJustPressed(Keys.F8)) {
-            attributeWindow.setVisible(!attributeWindow.isVisible());
+            oldAttributeWindow.setVisible(!oldAttributeWindow.isVisible());
         }
 
     }
@@ -182,13 +183,13 @@ public class WorldGui extends InputAdapter implements Disposable,
     private void initPlayerContent() {
         statusWindow.setCharacter(player);
         characterHud.setCharacter(player);
-        attributeWindow.setCharacter(player);
+        oldAttributeWindow.setCharacter(player);
         inventoryWindow.setCharacter(player);
     }
 
     private void initGui() {
         statusWindow.init();
-        attributeWindow.init();
+        oldAttributeWindow.init();
         inventoryWindow.init();
         timeHud.init();
         settingWindow.init();
@@ -207,12 +208,12 @@ public class WorldGui extends InputAdapter implements Disposable,
 
     @Override
     public void onPrimaryAttributeChange(CharacterPrimaryAttribute primaryAttribute, int oldValue, int newValue) {
-        attributeWindow.updatePrimaryAttribute(primaryAttribute);
+        oldAttributeWindow.updatePrimaryAttribute(primaryAttribute);
     }
 
     @Override
     public void onDerivedAttributeChange(CharacterDerivedAttribute derivedAttribute, float oldValue, float newValue) {
-        attributeWindow.updateDerivedAttribute(derivedAttribute);
+        oldAttributeWindow.updateDerivedAttribute(derivedAttribute);
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.NumberFormat;
 import th.skyousuke.libgdx.bluemoon.game.object.character.AbstractCharacter;
 import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterStatus;
@@ -57,7 +58,7 @@ public class CharacterHud extends Table {
     public CharacterHud(Skin skin) {
         final Drawable background = skin.getDrawable("uiBackgroundDraw");
 
-        nameLabel = LabelPool.obtainLabel();
+        nameLabel = new Label("", skin);
         nameLabel.setAlignment(Align.top);
         image = new Image(background);
         experienceBar =  new StatusBar(EXP_BAR_WIDTH, EXP_BAR_HEIGHT, background, skin.getDrawable("emeraldDraw"));
@@ -129,7 +130,7 @@ public class CharacterHud extends Table {
         final float health = status.getValue(CharacterStatusType.HEALTH);
         final float maxHealth = status.getMaxValue(CharacterStatusType.HEALTH);
 
-        healthBar.setText(NumberFormat.formatFloat(health, 1) + '/' + NumberFormat.formatFloat(maxHealth, 1));
+        healthBar.setText(NumberFormat.formatDecimal(health, 1) + '/' + NumberFormat.formatDecimal(maxHealth, 1));
         healthBar.setBarPercent(health / maxHealth);
     }
 
@@ -137,7 +138,7 @@ public class CharacterHud extends Table {
         final float mana = status.getValue(CharacterStatusType.MANA);
         final float maxMana = status.getMaxValue(CharacterStatusType.MANA);
 
-        manaBar.setText(NumberFormat.formatFloat(mana, 1) + '/' + NumberFormat.formatFloat(maxMana, 1));
+        manaBar.setText(NumberFormat.formatDecimal(mana, 1) + '/' + NumberFormat.formatDecimal(maxMana, 1));
         manaBar.setBarPercent(mana / maxMana);
     }
 
@@ -145,7 +146,7 @@ public class CharacterHud extends Table {
         final float stamina = status.getValue(CharacterStatusType.STAMINA);
         final float maxStamina = status.getMaxValue(CharacterStatusType.STAMINA);
 
-        staminaBar.setText(NumberFormat.formatFloat(stamina, 1) + '/' + NumberFormat.formatFloat(maxStamina, 1));
+        staminaBar.setText(NumberFormat.formatDecimal(stamina, 1) + '/' + NumberFormat.formatDecimal(maxStamina, 1));
         staminaBar.setBarPercent(stamina / maxStamina);
     }
 
@@ -153,7 +154,7 @@ public class CharacterHud extends Table {
         final float fullness = status.getValue(CharacterStatusType.FULLNESS);
         final float maxFullness = status.getMaxValue(CharacterStatusType.FULLNESS);
 
-        fullnessBar.setText(NumberFormat.formatFloat(fullness, 1) + '/' + NumberFormat.formatFloat(maxFullness, 1));
+        fullnessBar.setText(NumberFormat.formatDecimal(fullness, 1) + '/' + NumberFormat.formatDecimal(maxFullness, 1));
         fullnessBar.setBarPercent(fullness / maxFullness);
     }
 
@@ -168,7 +169,7 @@ public class CharacterHud extends Table {
             bars.add(new Image(emptyBar)).height(height);
             bars.pack();
 
-            label = LabelPool.obtainLabel();
+            label = new Label("", Assets.instance.customSkin);
             label.setAlignment(Align.center);
 
             setSize(width, height);

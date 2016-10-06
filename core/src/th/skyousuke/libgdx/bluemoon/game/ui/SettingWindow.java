@@ -41,8 +41,8 @@ public class SettingWindow extends Window {
     public SettingWindow(Skin skin) {
         super(skin);
 
-        languageTitle = LabelPool.obtainLabel();
-        resolutionTitle = LabelPool.obtainLabel();
+        languageTitle = new Label("", skin);
+        resolutionTitle = new Label("", skin);
 
         language = new SelectBox<>(skin);
         final Array<Language> languages = new Array<>();

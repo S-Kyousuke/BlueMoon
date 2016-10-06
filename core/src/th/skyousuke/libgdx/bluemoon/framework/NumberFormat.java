@@ -18,18 +18,18 @@ package th.skyousuke.libgdx.bluemoon.framework;
 
 /**
  * The utility class contains any objects that use for changing any number to specific strings.
- * Created by S.Kyousuke <surasek@gmail.com> on 17/7/2559.
+ * @author S.Kyousuke <surasek@gmail.com>
  */
 public class NumberFormat {
 
     private NumberFormat() {
     }
 
-    public static String formatFloat(float value, int places) {
+    public static String formatDecimal(float value, int places) {
         return trimDecimalPlaces(Float.toString(value), places);
     }
 
-    public static String formatDouble(double value, int places) {
+    public static String formatDecimal(double value, int places) {
         return trimDecimalPlaces(Double.toString(value), places);
     }
 

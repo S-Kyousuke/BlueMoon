@@ -60,7 +60,7 @@ public class StatusWindow extends Window {
         subtractStatusButtons = new EnumMap<>(CharacterStatusType.class);
 
         for (final CharacterStatusType statusType : CharacterStatusType.values()) {
-            statusLabels.put(statusType, LabelPool.obtainLabel());
+            statusLabels.put(statusType, new Label("", skin));
             addStatusButtons.put(statusType, new ImageButton(Assets.instance.customSkin, "plus"));
             addStatusButtons.get(statusType).addListener(new ClickListener() {
                 @Override
@@ -79,8 +79,8 @@ public class StatusWindow extends Window {
 
         effectTable = new Table();
         effectTable.align(Align.top);
-        effectPane = new ScrollPane(effectTable, Assets.instance.customSkin, "dimBackground");
-        effectPaneLabel = LabelPool.obtainLabel();
+        effectPane = new ScrollPane(effectTable, skin, "dimBackground");
+        effectPaneLabel = new Label("", skin);
         effectPane.setFadeScrollBars(false);
         effectPane.setForceScroll(false, true);
         effectPane.addListener(new FocusScrollListener(effectPane));
@@ -136,8 +136,8 @@ public class StatusWindow extends Window {
         }
         statusLabels.get(statusType)
                 .setText(I18NManager.instance.getText(statusType.name().toLowerCase()) + ": "
-                        + NumberFormat.formatFloat(character.getStatus().getValue(statusType), 1) + '/'
-                        + NumberFormat.formatFloat(maxStatusValue, 1));
+                        + NumberFormat.formatDecimal(character.getStatus().getValue(statusType), 1) + '/'
+                        + NumberFormat.formatDecimal(maxStatusValue, 1));
     }
 
     public void updateEffect() {
@@ -145,7 +145,7 @@ public class StatusWindow extends Window {
         final Array<AbstractCharacterEffect> effects = character.getEffect().getAll();
         for (int i = 0; i < effects.size; ++i) {
             effectTable.row().expandX().align(Align.left);
-            effectTable.add(LabelPool.obtainLabel(effects.get(i).getName()));
+            effectTable.add(new Label(effects.get(i).getName(), Assets.instance.customSkin));
         }
     }
 

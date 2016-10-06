@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import th.skyousuke.libgdx.bluemoon.framework.Assets;
 import th.skyousuke.libgdx.bluemoon.framework.GamePreferences;
 import th.skyousuke.libgdx.bluemoon.framework.I18NManager;
 import th.skyousuke.libgdx.bluemoon.framework.Resolution;
@@ -74,8 +75,8 @@ public class ResolutionConfirmDialog extends Window {
         timeRemaining = DURATION;
 
         final I18NManager i18n = I18NManager.instance;
-        confirmQuestion = LabelPool.obtainLabel(I18NManager.instance.getText("resolutionConfirm"));
-        countDown = LabelPool.obtainLabel();
+        confirmQuestion = new Label(I18NManager.instance.getText("resolutionConfirm"), Assets.instance.customSkin);
+        countDown = new Label("", Assets.instance.customSkin);
         yesButton = new TextButton(i18n.getText("yes"), skin);
         noButton = new TextButton(i18n.getText("no"), skin);
 
@@ -108,7 +109,6 @@ public class ResolutionConfirmDialog extends Window {
         noButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clearActions();
                 addAction(revertResolution);
             }
         });

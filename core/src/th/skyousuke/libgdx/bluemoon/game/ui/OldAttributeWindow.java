@@ -40,7 +40,7 @@ import th.skyousuke.libgdx.bluemoon.game.object.character.CharacterPrimaryAttrib
  * Character Attribute window class.
  * Created by S.Kyousuke <surasek@gmail.com> on 12/7/2559.
  */
-public class AttributeWindow extends Window {
+public class OldAttributeWindow extends Window {
 
     private AbstractCharacter character;
 
@@ -50,7 +50,7 @@ public class AttributeWindow extends Window {
     private EnumMap<CharacterDerivedAttribute, Label> derivedAttributeLabels;
     private Label derivedAttributeTitleLabel;
 
-    public AttributeWindow(Skin skin) {
+    public OldAttributeWindow(Skin skin) {
         super(skin);
         setColor(1, 1, 1, 0.8f);
         align(Align.topLeft);
@@ -63,11 +63,11 @@ public class AttributeWindow extends Window {
         derivedAttributeNumberLabels = new EnumMap<>(CharacterDerivedAttribute.class);
         primaryAttributeLabels = new EnumMap<>(CharacterPrimaryAttribute.class);
         derivedAttributeLabels = new EnumMap<>(CharacterDerivedAttribute.class);
-        derivedAttributeTitleLabel = LabelPool.obtainLabel();
+        derivedAttributeTitleLabel = new Label("", skin);
 
         for (final CharacterPrimaryAttribute primaryAttribute : CharacterPrimaryAttribute.values()) {
-            Label attributeLabel = LabelPool.obtainLabel();
-            Label attributeNumberLabel = LabelPool.obtainLabel();
+            Label attributeLabel = new Label("", skin);
+            Label attributeNumberLabel = new Label("", skin);
 
             ImageButton plusButton = new ImageButton(Assets.instance.customSkin, "plus");
             ImageButton minusButton = new ImageButton(Assets.instance.customSkin, "minus");
@@ -98,8 +98,8 @@ public class AttributeWindow extends Window {
         Table derivedAttributeTable = new Table();
 
         for (CharacterDerivedAttribute derivedAttribute : CharacterDerivedAttribute.values()) {
-            Label attributeLabel = LabelPool.obtainLabel();
-            Label attributeNumberLabel = LabelPool.obtainLabel();
+            Label attributeLabel = new Label("", skin);
+            Label attributeNumberLabel = new Label("", skin);
 
             derivedAttributeLabels.put(derivedAttribute, attributeLabel);
             derivedAttributeNumberLabels.put(derivedAttribute, attributeNumberLabel);
@@ -162,8 +162,8 @@ public class AttributeWindow extends Window {
         final CharacterAttribute attribute = character.getAttribute();
         derivedAttributeNumberLabels
                 .get(derivedAttribute)
-                .setText(NumberFormat.formatFloat(attribute.getBaseDerived(derivedAttribute), 1) + " (+"
-                        + NumberFormat.formatFloat(attribute.getAdditionalDerived(derivedAttribute), 1) + ')');
+                .setText(NumberFormat.formatDecimal(attribute.getBaseDerived(derivedAttribute), 1) + " (+"
+                        + NumberFormat.formatDecimal(attribute.getAdditionalDerived(derivedAttribute), 1) + ')');
     }
 
 }
