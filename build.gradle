@@ -57,3 +57,15 @@ project(":core") {
         compile "com.google.guava:guava:19.0"
     }
 }
+
+
+project(":network") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.google.code.gson:gson:2.7"
+    }
+}
